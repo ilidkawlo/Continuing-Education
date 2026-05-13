@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>身強體壯功教練｜回訓與制度入口</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --white: #ffffff;
+      --text: #29292d;
+      --muted: #7a7b82;
+      --line: rgba(90,76,130,.10);
+      --blue: #53b9df;
+      --blue-soft: rgba(83,185,223,.12);
+      --purple: #b56fe8;
+      --gold: #efe879;
+      --green: #8ee7d6;
+      --red: #c93434;
+      --glass: rgba(255,255,255,.68);
+      --shadow: 0 22px 70px rgba(119, 91, 160, .10);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background:
+        linear-gradient(90deg, rgba(238,232,255,.55) 0 0) 0 15vh / 72px 20px no-repeat,
+        linear-gradient(90deg, rgba(249,239,109,.55), rgba(145,231,245,.58), rgba(206,122,236,.48)) 28% 31vh / 180px 28px no-repeat,
+        linear-gradient(90deg, rgba(131,236,227,.60), rgba(203,121,230,.55)) 73% 24vh / 140px 24px no-repeat,
+        linear-gradient(90deg, rgba(246,236,84,.55), rgba(131,218,239,.42)) 92% 58vh / 130px 18px no-repeat,
+        radial-gradient(circle at 8% 0%, rgba(181,111,232,.14), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(142,231,214,.14), transparent 26%),
+        linear-gradient(180deg, #fbfbfd 0%, #f7f8fb 48%, #ffffff 100%);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(92%, var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: saturate(180%) blur(18px);
+      background: rgba(255,255,255,.72);
+      border-bottom: 1px solid rgba(181,111,232,.10);
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 13px 0;
+    }
+
+    .brand {
+      font-size: .96rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #8ee7d6, #b56fe8 55%, #efe879);
+      box-shadow: 0 8px 24px rgba(181,111,232,.22);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .91rem;
+      transition: .2s ease;
+    }
+
+    .nav a:hover { background: rgba(0,0,0,.04); color: var(--text); }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 72px 0 48px;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(28px);
+      opacity: .75;
+      pointer-events: none;
+      transform: translateY(var(--parallaxY, 0px));
+    }
+
+    .orb-one {
+      width: 560px;
+      height: 560px;
+      left: -170px;
+      top: -160px;
+      background: radial-gradient(circle, rgba(181,111,232,.22), transparent 65%);
+    }
+
+    .orb-two {
+      width: 460px;
+      height: 460px;
+      right: -130px;
+      top: 110px;
+      background: radial-gradient(circle, rgba(142,231,214,.24), transparent 67%);
+      transform: translateY(calc(var(--parallaxY, 0px) * -0.55));
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      border-radius: 50%;
+      opacity: .72;
+      mix-blend-mode: multiply;
+    }
+
+    .hero::before {
+      width: min(58vw, 720px);
+      height: min(58vw, 720px);
+      right: 5vw;
+      top: 18vh;
+      border: 3px solid rgba(142,231,214,.72);
+      box-shadow: 0 0 0 90px rgba(239,232,255,.12) inset;
+      transform: rotate(calc(18deg + var(--parallaxY, 0px) * .02));
+    }
+
+    .hero::after {
+      width: min(43vw, 560px);
+      height: min(68vw, 760px);
+      right: 12vw;
+      top: 12vh;
+      border: 3px solid rgba(181,111,232,.58);
+      transform: rotate(calc(-32deg - var(--parallaxY, 0px) * .018));
+    }
+
+    .hero-card {
+      position: relative;
+      z-index: 2;
+      border-radius: 42px;
+      padding: clamp(30px, 5vw, 64px);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.56));
+      border: 1px solid rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(26px);
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "CHANGE";
+      position: absolute;
+      left: 42px;
+      top: 52%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: left center;
+      font-size: clamp(2rem, 4vw, 4rem);
+      letter-spacing: .08em;
+      color: rgba(41,41,45,.06);
+      font-weight: 500;
+      pointer-events: none;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      left: 10%;
+      bottom: 12%;
+      width: 180px;
+      height: 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(239,232,89,.55), rgba(142,231,214,.45), rgba(181,111,232,.38));
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: .95rem;
+      font-weight: 750;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 6.8rem);
+      line-height: .96;
+      letter-spacing: -.07em;
+      max-width: 1040px;
+    }
+
+    .hero-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: rise .85s ease forwards;
+    }
+
+    .hero-line:nth-child(2) { animation-delay: .15s; }
+    .hero-line:nth-child(3) { animation-delay: .3s; }
+
+    .hero-desc {
+      max-width: 850px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.8vw, 1.2rem);
+      opacity: 0;
+      transform: translateY(22px);
+      animation: rise .9s ease .46s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      opacity: 0;
+      transform: translateY(22px);
+      animation: rise .9s ease .58s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 13px 20px;
+      font-weight: 650;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: .2s ease;
+      font-size: .98rem;
+    }
+
+    .btn-primary { background: linear-gradient(135deg, #53b9df, #b56fe8); color: white; }
+    .btn-primary:hover { filter: brightness(.98); transform: translateY(-1px); box-shadow: 0 12px 26px rgba(181,111,232,.22); }
+    .btn-secondary { background: rgba(255,255,255,.86); border-color: rgba(181,111,232,.14); }
+    .btn-secondary:hover { background: white; transform: translateY(-1px); }
+
+    .scroll-hint {
+      margin-top: 34px;
+      color: var(--muted);
+      font-size: .93rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: rise .85s ease .72s forwards;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      animation: pulse 1.65s infinite;
+    }
+
+    section { padding: 42px 0; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: all .8s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .section-head { margin-bottom: 22px; }
+    .section-title {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 4.2rem);
+      line-height: 1.02;
+      letter-spacing: -.06em;
+    }
+
+    .section-subtitle {
+      margin: 0;
+      max-width: 840px;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .grid { display: grid; gap: 22px; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 18px;
+      right: 24px;
+      top: 20px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(239,232,89,.28), rgba(142,231,214,.28), rgba(181,111,232,.22));
+      filter: blur(10px);
+      opacity: .7;
+      pointer-events: none;
+    }
+
+    .card-solid { background: white; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: .9rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      letter-spacing: -.03em;
+    }
+
+    .card p, .card li { color: var(--muted); margin: 0; }
+
+    .manifesto {
+      text-align: center;
+      padding: clamp(36px, 6vw, 72px);
+      background: linear-gradient(135deg, rgba(255,255,255,.88), rgba(238,232,255,.58));
+      color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .manifesto:before {
+      content: "";
+      position: absolute;
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(0,113,227,.32), transparent 68%);
+      filter: blur(16px);
+    }
+
+    .manifesto > * { position: relative; z-index: 2; }
+    .manifesto h2 {
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 5.4rem);
+      line-height: 1;
+      letter-spacing: -.06em;
+    }
+
+    .manifesto p {
+      margin: 20px auto 0;
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .key-sentence {
+      font-size: clamp(1.8rem, 4vw, 4rem);
+      line-height: 1.06;
+      letter-spacing: -.055em;
+      margin: 0;
+      color: var(--text);
+    }
+
+    .key-card { min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; }
+
+    .timeline { display: grid; gap: 16px; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      align-items: center;
+      gap: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 8px 26px rgba(0,0,0,.04);
+      border-radius: 24px;
+      padding: 20px;
+    }
+
+    .date {
+      color: var(--blue);
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .timeline-item h3 { margin: 0 0 6px; font-size: 1.2rem; }
+    .timeline-item p { margin: 0; color: var(--muted); }
+
+    .pathway {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .path-step {
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 24px;
+      padding: 20px;
+      min-height: 208px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .path-step:after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--blue-soft);
+    }
+
+    .path-step span {
+      display: inline-flex;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #53b9df, #b56fe8);
+      color: white;
+      font-size: .84rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .path-step h3 { margin: 0 0 8px; font-size: 1.08rem; }
+    .path-step p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .levels-panel { display: grid; gap: 14px; }
+    .level-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 22px;
+      background: rgba(255,255,255,.76);
+      padding: 20px 18px;
+      cursor: pointer;
+      transition: .22s ease;
+      color: var(--text);
+      box-shadow: 0 8px 22px rgba(0,0,0,.04);
+    }
+
+    .level-btn:hover { transform: translateY(-1px); background: white; }
+    .level-btn.active {
+      background: linear-gradient(180deg, rgba(0,113,227,.12), rgba(255,255,255,.96));
+      border-color: rgba(0,113,227,.22);
+      box-shadow: 0 16px 32px rgba(0,113,227,.10);
+    }
+
+    .level-btn .stage { display: block; color: var(--muted); font-size: .86rem; margin-bottom: 4px; }
+    .level-btn .name { display: block; font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+    .level-btn .meta { color: var(--muted); font-size: .92rem; }
+
+    .detail-stage {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: rgba(0,0,0,.04);
+      font-weight: 750;
+      font-size: .9rem;
+      margin-bottom: 12px;
+    }
+
+    .detail-title { margin: 0 0 10px; font-size: clamp(2rem, 3vw, 3.2rem); letter-spacing: -.05em; line-height: 1.05; }
+    .detail-desc { margin: 0 0 18px; color: var(--muted); }
+    .detail-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+    .detail-box { background: rgba(0,0,0,.025); border: 1px solid rgba(0,0,0,.05); border-radius: 18px; padding: 16px; }
+    .detail-box strong { display: block; margin-bottom: 8px; }
+    .detail-box ul { margin: 0; padding-left: 18px; color: var(--muted); }
+    .blueprint-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .blueprint-lead {
+      font-size: clamp(1.65rem, 3vw, 3.5rem);
+      line-height: 1.08;
+      letter-spacing: -.055em;
+      color: var(--text);
+      margin: 0 0 18px;
+    }
+
+    .concept-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .concept-item {
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .concept-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .concept-item p { color: var(--muted); margin: 0; }
+
+    .compare-table {
+      display: grid;
+      gap: 14px;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 1fr;
+      gap: 14px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 8px 22px rgba(0,0,0,.04);
+    }
+
+    .compare-row h3 { margin: 0; font-size: 1.08rem; }
+    .compare-row p { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+    .compare-label { color: var(--blue); font-weight: 800; }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 22px;
+    }
+
+    .split-card {
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .split-card .big-number {
+      font-size: clamp(3rem, 6vw, 6rem);
+      line-height: .9;
+      letter-spacing: -.06em;
+      font-weight: 800;
+      color: rgba(0,113,227,.18);
+    }
+
+    .quote-box {
+      font-size: clamp(1.4rem, 2.4vw, 2.6rem);
+      line-height: 1.18;
+      letter-spacing: -.045em;
+      margin: 0;
+      color: var(--text);
+    }
+
+    .accordion { display: grid; gap: 12px; }
+    .accordion-item {
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(0,0,0,.04);
+    }
+
+    .accordion-btn {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      gap: 16px;
+      padding: 18px 20px;
+      font-size: 1rem;
+      font-weight: 760;
+    }
+
+    .accordion-content {
+      display: none;
+      color: var(--muted);
+      padding: 0 20px 20px;
+    }
+
+    .accordion-item.active .accordion-content { display: block; }
+
+    .notice-box {
+      background: linear-gradient(180deg, rgba(201,52,52,.08), rgba(255,255,255,.9));
+      border: 1px solid rgba(201,52,52,.14);
+    }
+
+    .notice-box h3 { color: var(--red); }
+
+    footer {
+      padding: 60px 0 80px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .55; } }
+
+    @media (max-width: 1080px) {
+      .grid-3, .grid-2, .map-layout, .detail-grid, .pathway, .blueprint-grid, .split-grid, .compare-row { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; align-items: start; }
+      .path-step { min-height: auto; }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner { flex-direction: column; align-items: flex-start; }
+      .nav { gap: 4px; }
+      .hero-card, .card { padding: 22px; }
+      h1 { font-size: 2.75rem; }
+      section { padding: 34px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand"><span class="brand-mark"></span>身強體壯功教練｜回訓與制度入口</div>
+      <nav class="nav">
+        <a href="#core">核心要務</a>
+        <a href="#dates">時間日期</a>
+        <a href="#map">教練地圖</a>
+        <a href="#blueprint">重構藍圖</a>
+        <a href="#black">黑衣資格</a>
+        <a href="#faq">FAQ</a>
+        <a href="#notice">公告全文</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="orb orb-one"></div>
+      <div class="orb orb-two"></div>
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">給身強體壯功教練的回訓與制度入口網站</div>
+          <h1>
+            <span class="hero-line">教練不是頭銜。</span>
+            <span class="hero-line">是三脈報恩</span>
+            <span class="hero-line">的通路。</span>
+          </h1>
+          <p class="hero-desc">
+            血脈、靈脈、法脈，透過回訓凝聚法魂、補充光糧、校準教練水位，讓教練格成為變化氣質的修煉。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#dates">查看回訓場次</a>
+            <a class="btn btn-secondary" href="#map">查看教練地圖</a>
+          </div>
+          <div class="scroll-hint"><span class="pulse-dot"></span>向下滑動，進入回訓制度入口</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="core" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">三句話，先掌握核心。</h2>
+          <p class="section-subtitle">讓初階教練不必讀完整份公告，也能先掌握這次回訓的精神與任務。</p>
+        </div>
+        <div class="grid grid-3">
+          <div class="card key-card">
+            <div class="pill"><span class="dot"></span>核心 01</div>
+            <p class="key-sentence">教練是三脈報恩通路。</p>
+            <p>血脈、靈脈、法脈，透過教練法位成為可行、可修、可承擔的生命通路。</p>
+          </div>
+          <div class="card key-card">
+            <div class="pill"><span class="dot"></span>核心 02</div>
+            <p class="key-sentence">回訓不是補課，是補充光糧。</p>
+            <p>回訓是法位校準、法魂凝聚與教練使命義務感的年度補給。</p>
+          </div>
+          <div class="card key-card">
+            <div class="pill"><span class="dot"></span>核心 03</div>
+            <p class="key-sentence">教練格，是變化氣質的修煉。</p>
+            <p>從功法、法理、素質、實作與承擔中，讓教練格成為生命真實的變化。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="container">
+        <div class="manifesto card">
+          <h2>回訓，是教練法位的年度校準。</h2>
+          <p>班會中，大愛光老師帶領整體初階教練更新法平台，進入教練分階。每一位教練法位夥伴，一年必參與二次含以上。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="dates" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">2026 回訓時間日期。</h2>
+          <p class="section-subtitle">請依場次完成報名與付款。費用：2000 元／次。地點：桃園慈場，桃園市中山東路 29 號 13 樓。</p>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="date">05 / 23<br>週六</div>
+            <div>
+              <h3>第一場次｜第一日</h3>
+              <p>時間：14:00–17:30｜主軸：進階教練，功法分階啟動</p>
+            </div>
+            <a class="btn btn-primary" href="https://edu.hochi.org.tw/HCourseDetail.aspx?Batch=CB202604280002" target="_blank">立即報名</a>
+          </div>
+          <div class="timeline-item">
+            <div class="date">05 / 24<br>週日</div>
+            <div>
+              <h3>第一場次｜功法分階</h3>
+              <p>時間：09:00–17:30｜以十八式操練為基底，確認一至三階功法水位。</p>
+            </div>
+            <a class="btn btn-primary" href="#" onclick="alert('請替換為 05/23-24 EDU 報名連結'); return false;">立即報名</a>
+          </div>
+          <div class="timeline-item">
+            <div class="date">08 / 30<br>週日</div>
+            <div>
+              <h3>第二場次｜奠定教練格</h3>
+              <p>時間：09:00–17:30｜聚焦教練格、水位與修煉成果凝聚。</p>
+            </div>
+            <a class="btn btn-primary" href="#" onclick="alert('請替換為 08/30 EDU 報名連結'); return false;">立即報名</a>
+          </div>
+          <div class="timeline-item">
+            <div class="date">10 / 25<br>週日</div>
+            <div>
+              <h3>第三場次｜教練實務</h3>
+              <p>時間：09:00–17:30｜建構護持網，深化教練實務與法脈教練體。</p>
+            </div>
+            <a class="btn btn-primary" href="#" onclick="alert('請替換為 10/25 EDU 報名連結'); return false;">立即報名</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="path" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">教練可循路徑。</h2>
+          <p class="section-subtitle">把制度先後順序視覺化：從通過檢覈，到回訓補充光糧，最後建立教練體系。</p>
+        </div>
+        <div class="pathway card">
+          <div class="path-step"><span>01</span><h3>通過教練檢覈</h3><p>取得進入教練法位與回訓軌道的基本資格。</p></div>
+          <div class="path-step"><span>02</span><h3>進入教練分階</h3><p>一階儲備教練、二階準教練、三階初階教練依地圖定位。</p></div>
+          <div class="path-step"><span>03</span><h3>參與年度回訓</h3><p>一年至少二次，凝聚法慈場與教練使命義務感。</p></div>
+          <div class="path-step"><span>04</span><h3>變化氣質教練格</h3><p>以儀軌、素質、點線面體、意氣力愛光提升武格報親恩。</p></div>
+          <div class="path-step"><span>05</span><h3>建構教練體系</h3><p>共同運作身強體壯功學程與晨光玉成下半場課程。</p></div>
+        </div>
+      </div>
+    </section>
+    <section id="blueprint" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">成長地圖重構藍圖。</h2>
+          <p class="section-subtitle">把「功」與「責」拆開來看，讓修煉水位回歸純粹，讓組織職能回歸專業，降低能量衝突與行政耗損。</p>
+        </div>
+
+        <div class="blueprint-grid">
+          <div class="card">
+            <div class="pill"><span class="dot"></span>核心理念</div>
+            <p class="blueprint-lead">功責分離，能責對等。</p>
+            <p>本次回訓與分階制度，本質上是一場組織架構的功能解構工程。過去「個人修煉水位」與「組織法位責任」過度捆綁，容易造成能量衝突、心理壓力與人力錯置。分階的目的，是讓每位教練找到適合自己的軸線。</p>
+          </div>
+
+          <div class="card">
+            <div class="pill"><span class="dot"></span>舊制痛點</div>
+            <div class="concept-list">
+              <div class="concept-item"><strong>能責失衡</strong><p>高水位不必然等於能承擔教學、行政與數位系統管理。</p></div>
+              <div class="concept-item"><strong>行政與數位耗損</strong><p>開課、Zoom、錄音轉譯、AI 處理、報名系統等重疊義務，使教練能量分散。</p></div>
+              <div class="concept-item"><strong>心理能量過載</strong><p>若把分階看成考試，容易產生壓力、抗拒與受傷感。</p></div>
+              <div class="concept-item"><strong>組織支撐脆弱</strong><p>功能不清時，容易只靠少數核心人員支撐整體體系。</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="level-compare" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">1–7 階水位與職能對照。</h2>
+          <p class="section-subtitle">用一張表看懂：每一層不是高低標籤，而是「修煉水位」與「組織責任」的對位。</p>
+        </div>
+
+        <div class="compare-table">
+          <div class="compare-row">
+            <div><div class="compare-label">一、二階</div><h3>地基與推廣</h3></div>
+            <div><strong>修煉水位定位</strong><p>保護層。專注個人修煉、基本推廣與法脈連結，適合時間有限或目前主力不在教練路者。</p></div>
+            <div><strong>組織責任</strong><p>基礎執行義務。無須承擔複雜行政、資訊系統與高階教學義務。</p></div>
+          </div>
+          <div class="compare-row">
+            <div><div class="compare-label">三、四階</div><h3>專業教練職能</h3></div>
+            <div><strong>修煉水位定位</strong><p>核心層。具備專業教學、開課、護持與穩定對位能力。</p></div>
+            <div><strong>組織責任</strong><p>需承擔核心義務，包含 Zoom、AI 錄音轉譯、報名系統、導師與教練間行政對接。</p></div>
+          </div>
+          <div class="compare-row">
+            <div><div class="compare-label">五至七階</div><h3>傳承與請法</h3></div>
+            <div><strong>修煉水位定位</strong><p>精英層。涉及 18 式傳承特殊規格，需具備高水位感應與代表法脈功能。</p></div>
+            <div><strong>組織責任</strong><p>參與高階課程與請法機制，承擔法脈傳承、請法與高階預成責任。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="split" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">週六與週日，兩種不同任務。</h2>
+          <p class="section-subtitle">週六偏向進階／高階請法與人才辨識；週日是全體教練回訓基準日與整體分階對位。</p>
+        </div>
+
+        <div class="split-grid">
+          <div class="card split-card">
+            <div>
+              <div class="big-number">SAT</div>
+              <div class="pill"><span class="dot"></span>週六｜進階／高階</div>
+              <h3>請法與高階分階</h3>
+              <p>屬於「請法」性質，聚焦高階人才選拔、18 式傳承與進階預成。若在意晉升三、四階或更高階法位，週六參與極為關鍵。</p>
+            </div>
+            <div class="concept-list">
+              <div class="concept-item"><strong>費用 0 元的邏輯</strong><p>因請法資格需現場確認，具不確定性，為避免退費繁瑣，初期採 0 元或特定機制處理。</p></div>
+              <div class="concept-item"><strong>請法資格</strong><p>可能依現場表現、晨光出席穩定度、18 式技術表現與跑關水位評估辨識。</p></div>
+            </div>
+          </div>
+
+          <div class="card split-card">
+            <div>
+              <div class="big-number">SUN</div>
+              <div class="pill"><span class="dot"></span>週日｜一般教練</div>
+              <h3>回訓基準與整體對位</h3>
+              <p>週日是全體教練回訓基準日，側重一、二階校準、整體能量對位與基礎分階。</p>
+            </div>
+            <div class="concept-list">
+              <div class="concept-item"><strong>費用 2000 元</strong><p>屬常規回訓與分階作業，支應場地、行政與系統服務成本。</p></div>
+              <div class="concept-item"><strong>參與定位</strong><p>若未參與週六，原則上以週日的一、二階分階與基準回訓為主。</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="alignment" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">自首與自選：不是降級，是對位。</h2>
+          <p class="section-subtitle">制度提供一個客觀基準化程序，讓每位教練依生活重心、願力與職能，誠實選擇最適合的位置。</p>
+        </div>
+        <div class="grid grid-3">
+          <div class="card"><div class="pill"><span class="dot"></span>定位引導</div><h3>自認自修</h3><p>依目前家庭、事業、修煉投入與教練路願力，選擇合適階位。</p></div>
+          <div class="card"><div class="pill"><span class="dot"></span>策略性降階</div><h3>保護修煉者</h3><p>停留一、二階不是否定努力，而是免除超額行政義務，在保護層中維持個人水位。</p></div>
+          <div class="card"><div class="pill"><span class="dot"></span>客觀基準</div><h3>避免名實不符</h3><p>以規格與檢測協助辨識真實水位，減少法位執著造成的定位衝突。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="coach-script" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">總教練宣導手札。</h2>
+          <p class="section-subtitle">這一區提供給總教練、主考官與工作團隊作為溝通口徑，協助降低焦慮、統一說法。</p>
+        </div>
+        <div class="accordion">
+          <div class="accordion-item active"><button class="accordion-btn"><span>一、核心溝通心法：從「扒皮」轉為「拆解責任」</span><span>＋</span></button><div class="accordion-content">布達時請避免使用「考試」一詞，改以「分階」、「對位」或「共同操練」稱之。改制不是要扒舊人的皮，而是拆解「修煉功力」與「行政責任」，避免教練因開課、錄音、轉 AI、管系統等負擔過重，造成身體受傷或生活失衡。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>二、數學老師比喻：功力不等於教職</span><span>＋</span></button><div class="accordion-content">很會算數學，代表個人運算能力強；但能當數學老師，還需要教學、溝通、班級經營與系統操作能力。同理，高水位功力不代表必然具備開課、行政對位、護持與引領同修的教學法位。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>三、總教練執行 SOP</span><span>＋</span></button><div class="accordion-content">1. 主動詢問區內教練是否理解週六與週日差異。<br><br>2. 協助教練確認自己預計定位在哪一階。<br><br>3. 支持因生活壓力而自選一、二階者，肯定其誠實面對修煉軸線。<br><br>4. 針對週六因故缺席者，先建立未來可能有「回頭補」機制的預期，降低憤怒與焦慮。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>四、宣導總結</span><span>＋</span></button><div class="accordion-content">我們正在把「教練」從沉重名銜，轉化為清晰的成長地圖。請告訴區內同修：「上台就位，法脈就是您的靠山；選擇分階，是為了讓您走得更長久。」</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="talk" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">說明會講稿架構。</h2>
+          <p class="section-subtitle">將長篇說明會內容整理為五章，方便現場說明、內部訓練與後續查找。</p>
+        </div>
+        <div class="accordion">
+          <div class="accordion-item active"><button class="accordion-btn"><span>第一章：回歸修煉初衷，為何要改制？</span><span>＋</span></button><div class="accordion-content">本次改制的核心是「拆解責任義務」。過去教練需同時練功、打卡、行政、錄音轉 AI、管理報名系統與操作 Zoom，負擔過重。改制目標是讓大家在法脈中走通自己的路，釐清教練路是否為目前優先軸線。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>第二章：5/24 班次安排邏輯</span><span>＋</span></button><div class="accordion-content">週六屬進階／高階請法性質，因現場需經流程篩選，不一定所有人能取得請法資格，故初期以 0 元或未定方式處理。週日為一般教練回訓與基準對位，費用 2000 元，屬固定行政規費。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>第三章：分階不是考試，是職能定位</span><span>＋</span></button><div class="accordion-content">請放下「被考試」或「被挑戰」的感受，改以「分階」與「對位」理解。功力高不等於具備教學法位。分階是為了辨識誰適合專注修煉、誰適合站到第一線開課與承擔組織責任。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>第四章：自首與自選制度</span><span>＋</span></button><div class="accordion-content">鼓勵教練依據目前能投入的時間、心力與願力，自主選擇適合階位。若功力很好但目前重心不在教練路，也可選擇一、二階，執行基礎任務即可，不必勉強承擔高階職能。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>第五章：法位就位，各得其所</span><span>＋</span></button><div class="accordion-content">回訓目的不是壓迫同修，而是讓每個人清楚自己能做多少、適合做什麼，並往合適方向走。專業教練在第一線推廣，高階修煉者在更高層級帶領，最終讓法脈流動更順遂。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>Q&A 備忘要點</span><span>＋</span></button><div class="accordion-content">1. 5/24 第一場具備分階前置功能，建議務必參加。<br><br>2. 系統 0–100 分是為電腦辨識，實質上為通過與否的二元判定。<br><br>3. 即便是現有黑衣教練，若一階檢覈未過，也需回頭紮根，以確保法脈地基工程紮實。</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="map" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">身強體壯功學校地圖。</h2>
+          <p class="section-subtitle">點選階段，確認自己目前的制度位置、責任義務與修煉方向。</p>
+        </div>
+        <div class="map-layout">
+          <div class="levels-panel" id="levelButtons"></div>
+          <div class="card card-solid">
+            <div class="detail-stage" id="detailStage"></div>
+            <h3 class="detail-title" id="detailTitle"></h3>
+            <p class="detail-desc" id="detailDesc"></p>
+            <div class="detail-grid">
+              <div class="detail-box"><strong>定位</strong><ul id="detailRole"></ul></div>
+              <div class="detail-box"><strong>責任與義務</strong><ul id="detailDuty"></ul></div>
+              <div class="detail-box"><strong>制度狀態</strong><ul id="detailStatus"></ul></div>
+              <div class="detail-box"><strong>修煉方向</strong><ul id="detailPath"></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="black" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">黑衣資格，不等於修煉完成。</h2>
+          <p class="section-subtitle">取得資格是進入教練法位；修煉教練格，才是持續向上的玉成階梯。</p>
+        </div>
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="pill"><span class="dot"></span>取得資格層次</div>
+            <h3>通過檢覈，可正式穿上黑衣。</h3>
+            <p>通過功法檢覈、達標後，可正式穿上黑衣，具備以黑衣教練身分護持同修的榮幸。</p>
+          </div>
+          <div class="card">
+            <div class="pill"><span class="dot"></span>修煉教練格層次</div>
+            <h3>取得資格後，才是真正玉成的開始。</h3>
+            <p>取得資格後，仍需依教練格準則，在時間、功法、法理及個人素質上持續往上修。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="course" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">課程內容，實作導向。</h2>
+          <p class="section-subtitle">課程分兩項目，注重分級確認與建構護持網。</p>
+        </div>
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="pill"><span class="dot"></span>項目一</div>
+            <h3>功法精進｜教練分階</h3>
+            <p>延續教練檢覈新制，以十八式操練為基底，評估一至三階功法純熟力、蓄力、塑形力、成型力、流暢力。透過實況操練，對焦確認個人層級，提供量化進度反饋。</p>
+          </div>
+          <div class="card">
+            <div class="pill"><span class="dot"></span>項目二</div>
+            <h3>教練凝聚｜素質培育</h3>
+            <p>凝聚教練魂，解壓靈，提靈格，遵循法軌，建構法脈教練體，共同運作身強體壯功學程和晨光玉成下半場課程。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prepare" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">報名與準備事項。</h2>
+          <p class="section-subtitle">快速查詢。</p>
+        </div>
+        <div class="accordion">
+          <div class="accordion-item active"><button class="accordion-btn"><span>報名方式</span><span>＋</span></button><div class="accordion-content">EDU 帳號登入 → 點選「課程報名」→ 選擇「2026.05.23-24 身強體壯功初階教練回訓」、「2026.08.30 身強體壯功初階教練回訓」或「2026.10.25 身強體壯功初階教練回訓」→ 點選「加入報名清單」鈕，並完成結帳付款。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>報名資格與費用</span><span>＋</span></button><div class="accordion-content">報名資格：通過教練檢覈者。費用：2000 元／次。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>服裝</span><span>＋</span></button><div class="accordion-content">教練法服、和氣褲。十八式功法實作時，不須著鞋襪。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>攜帶物品</span><span>＋</span></button><div class="accordion-content">法筆、法位名牌、識別證。</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">FAQ。</h2>
+          <p class="section-subtitle">先回答最可能被問到的問題，降低溝通成本。</p>
+        </div>
+        <div class="accordion">
+          <div class="accordion-item active"><button class="accordion-btn"><span>為什麼一定要回訓？</span><span>＋</span></button><div class="accordion-content">因為回訓是教練法位的年度校準，也是補充光糧、凝聚法魂與更新法平台的重要軌道。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>一年至少要參加幾次？</span><span>＋</span></button><div class="accordion-content">一年必參與二次（含）以上。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>如果不足次數會怎樣？</span><span>＋</span></button><div class="accordion-content">若不足次數，經身強體壯功母團、身強體壯功考試委員會查核確認無不可抗因素時，得取消教練資格。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>誰可以報名？</span><span>＋</span></button><div class="accordion-content">通過教練檢覈者。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>回訓主要在做什麼？</span><span>＋</span></button><div class="accordion-content">精進教練格、接上法魂、進入教練分階，並透過對煉共振、跨區交流與實作確認，提升教練水位。</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="notice" class="reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">公告全文閱讀。</h2>
+          <p class="section-subtitle">以折疊／開展方式提供完整公告內容。</p>
+        </div>
+        <div class="accordion">
+          <div class="accordion-item active"><button class="accordion-btn"><span>班會宗旨</span><span>＋</span></button><div class="accordion-content">此班會是專屬「身強體壯功教練」精進靈性功法、提教練格與連接法魂，建構教練結構體，共同精研法、掌法流。擷取、萃取、整合、複製大愛光老師弘法四十二年法結晶，護持大愛光老師弘揚第二個四十年靈性大法。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>注意事項</span><span>＋</span></button><div class="accordion-content">班會中，大愛光老師帶領整體初階教練更新法平台，進入教練分階，請教練法位的每一位夥伴，一年必參與二次（含）以上。若不足次數，身強體壯功母團、身強體壯功考試委員會查核確認無不可抗因素時，得取消教練資格。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>三大目標</span><span>＋</span></button><div class="accordion-content">一、精進教練格：循階探究靈性之美與功法奧義，以功法主軸修通大愛光道路。<br><br>二、接上法魂：強化教練本質，從初心本愿出發，透過教練格修通。<br><br>三、教練分階：對煉共振，破除區域限制，交流取經，辨識功法層級。結合個人修煉的內在提升與跨區互動的外在交流，護持教練從初階教練邁向文武雙全。</div></div>
+          <div class="accordion-item"><button class="accordion-btn"><span>時間、地點與祝福</span><span>＋</span></button><div class="accordion-content">第一次：2026 年 5 月 23 日（週六）14:00–17:30；2026 年 5 月 24 日（週日）09:00–17:30。<br><br>第二次：2026 年 8 月 30 日（週日）09:00–17:30。<br><br>第三次：2026 年 10 月 25 日（週日）09:00–17:30。<br><br>地點：桃園慈場，桃園市中山東路 29 號 13 樓。<br><br>大愛光祝福您！</div></div>
+        </div>
+        <div class="card notice-box" style="margin-top:22px;">
+          <h3>年度必參提醒</h3>
+          <p>教練一年至少參與二次。若不足次數且無不可抗因素，得取消教練資格。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      身強體壯功教練｜回訓與制度入口<br>
+      教練是三脈報恩通路・回訓是補充光糧・教練格是變化氣質的修煉
+    </div>
+  </footer>
+
+  <script>
+    const levels = [
+      {
+        stage: "一階",
+        name: "儲備教練",
+        meta: "2026/03/22 已考完試並公告",
+        desc: "一階為教練地圖的起始資格層，象徵已進入教練培育軌道，開始承接教練身分所需的基本責任與義務。",
+        role: ["作為教練培育的起點", "建立對制度、儀軌與規格的基本承接", "進入修煉成果可被整理與辨識的層次"],
+        duty: ["守住一切照規格的基本原則", "持續參與回訓與玉成，不停留在通過考試", "開始累積修煉成果：接上什麼、煉出什麼、行出什麼"],
+        status: ["已於 2026 年 3 月 22 日完成考試並公告", "屬現行制度中明確開啟的第一層", "是後續二階、三階銜接的重要基礎"],
+        path: ["以儀軌、素質、點線面體、意氣力愛光為核心", "透過回訓凝聚自身水位", "將取得資格逐步走向建立教練格"]
+      },
+      {
+        stage: "二階",
+        name: "準教練",
+        meta: "尚未開課與開放考試",
+        desc: "二階是制度中的銜接層，目的在於讓教練從已取得資格，進一步朝向更穩定的教練格與承擔能力發展。",
+        role: ["扮演從儲備教練走向成熟教練的中介階段", "補足制度深度與實務承接能力", "形成更清楚的教練水位辨識"],
+        duty: ["持續校準功法、法理與修為素質", "承接回訓所凝聚出的共同標準", "為更成熟的實務護持打下穩定基礎"],
+        status: ["目前尚未開課", "目前尚未開放考試", "未來將成為地圖中重要的進階銜接層"],
+        path: ["從會做，進到會承擔、會辨識、會穩定呈現", "從資格層，走向更清楚的教練格層", "使制度分層更完整、更有地圖感"]
+      },
+      {
+        stage: "三階",
+        name: "初階教練",
+        meta: "2020–2025 年十八式功法通過者",
+        desc: "三階初階教練為 2020 至 2025 年考試通過之教練，因當時考的是十八式功法，故依地圖中的課程深度與廣度訂為三階。",
+        role: ["作為現行地圖中較成熟的已通過教練層", "承接歷年十八式功法訓練成果", "在制度中具有較高的深度與廣度代表性"],
+        duty: ["透過回訓重新凝聚並校準自身修煉成果", "依制度重新定位自己的水位與角色", "在教練格、實務與使命感上持續往上修"],
+        status: ["屬於 2020–2025 年考試通過教練", "依課程深度與廣度重新訂為三階", "須透過回訓統整舊制與新地圖之間的對位"],
+        path: ["將既有經驗重新接回制度地圖", "從歷史資格走向當代水位辨識", "深化武格報親恩與教練使命義務感"]
+      }
+    ];
+
+    const levelButtons = document.getElementById("levelButtons");
+    const detailStage = document.getElementById("detailStage");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailDesc = document.getElementById("detailDesc");
+    const detailRole = document.getElementById("detailRole");
+    const detailDuty = document.getElementById("detailDuty");
+    const detailStatus = document.getElementById("detailStatus");
+    const detailPath = document.getElementById("detailPath");
+
+    function renderList(target, items) {
+      target.innerHTML = "";
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        target.appendChild(li);
+      });
+    }
+
+    function renderDetail(level) {
+      detailStage.textContent = `${level.stage}｜${level.meta}`;
+      detailTitle.textContent = level.name;
+      detailDesc.textContent = level.desc;
+      renderList(detailRole, level.role);
+      renderList(detailDuty, level.duty);
+      renderList(detailStatus, level.status);
+      renderList(detailPath, level.path);
+    }
+
+    function setActive(index) {
+      document.querySelectorAll(".level-btn").forEach((btn, i) => btn.classList.toggle("active", i === index));
+    }
+
+    levels.forEach((level, index) => {
+      const btn = document.createElement("button");
+      btn.className = `level-btn ${index === 0 ? "active" : ""}`;
+      btn.innerHTML = `<span class="stage">${level.stage}</span><span class="name">${level.name}</span><span class="meta">${level.meta}</span>`;
+      btn.addEventListener("click", () => { setActive(index); renderDetail(level); });
+      levelButtons.appendChild(btn);
+    });
+    renderDetail(levels[0]);
+
+    document.querySelectorAll(".accordion-item").forEach(item => {
+      const btn = item.querySelector(".accordion-btn");
+      btn.addEventListener("click", () => {
+        const isActive = item.classList.contains("active");
+        item.parentElement.querySelectorAll(".accordion-item").forEach(i => i.classList.remove("active"));
+        if (!isActive) item.classList.add("active");
+      });
+    });
+
+    const reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: .12 });
+    reveals.forEach(el => observer.observe(el));
+
+    window.addEventListener("scroll", () => {
+      document.documentElement.style.setProperty("--parallaxY", `${window.scrollY * .12}px`);
+    });
+  </script>
+</body>
+</html>
