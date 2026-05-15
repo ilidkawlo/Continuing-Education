@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>身強體壯功初階教練｜回訓與制度入口</title>
+
+  <style>
+    :root {
+      --bg: #fbfbfa;
+      --white: #ffffff;
+      --text: #242424;
+      --muted: #777777;
+      --soft: #eeeeee;
+      --purple: #8b5cf6;
+      --blue: #5ecff2;
+      --pink: #f4a7ff;
+      --yellow: #fff6a5;
+      --green: #b7e6bf;
+      --glass: rgba(255, 255, 255, 0.68);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* 背景光點 */
+    .light {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(18px);
+      opacity: 0.75;
+      z-index: -1;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+
+    .light.one {
+      width: 120px;
+      height: 20px;
+      background: linear-gradient(90deg, var(--pink), var(--blue), var(--yellow));
+      top: 18%;
+      left: 2%;
+    }
+
+    .light.two {
+      width: 160px;
+      height: 24px;
+      background: linear-gradient(90deg, var(--yellow), var(--green), var(--blue));
+      top: 48%;
+      left: 30%;
+      animation-delay: 2s;
+    }
+
+    .light.three {
+      width: 150px;
+      height: 22px;
+      background: linear-gradient(90deg, var(--blue), var(--pink));
+      top: 38%;
+      right: 20%;
+      animation-delay: 4s;
+    }
+
+    .light.four {
+      width: 130px;
+      height: 20px;
+      background: linear-gradient(90deg, var(--yellow), var(--blue));
+      bottom: 14%;
+      left: 10%;
+      animation-delay: 1s;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(0) translateX(0);
+      }
+      to {
+        transform: translateY(36px) translateX(20px);
+      }
+    }
+
+    /* 導覽列 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(24px);
+      background: rgba(251, 251, 250, 0.78);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: #6d3a8f;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--purple), var(--pink), var(--blue));
+      box-shadow: 0 0 28px rgba(139, 92, 246, 0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 34px;
+      font-size: 15px;
+      color: #444;
+    }
+
+    .nav-links a {
+      opacity: 0.78;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 86vh;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 110px 28px 80px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+    }
+
+    .vertical-text {
+      position: absolute;
+      left: 20px;
+      top: 42%;
+      writing-mode: vertical-rl;
+      letter-spacing: 8px;
+      color: rgba(0,0,0,0.16);
+      font-size: 34px;
+      font-weight: 200;
+    }
+
+    .hero-label {
+      color: #6f6f6f;
+      font-size: 15px;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      font-size: clamp(54px, 8vw, 104px);
+      font-weight: 200;
+      letter-spacing: -5px;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(22px, 3vw, 34px);
+      color: #7d7d7d;
+      font-weight: 200;
+      line-height: 1.55;
+      letter-spacing: 1px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 46px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border-radius: 999px;
+      font-size: 15px;
+      transition: all 0.35s ease;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .btn-primary {
+      background: #222;
+      color: white;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.12);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.18);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.5);
+      color: #444;
+      backdrop-filter: blur(20px);
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      transform: translateY(-3px);
+    }
+
+    /* 右側光球 */
+    .orb-wrap {
+      position: relative;
+      width: min(520px, 82vw);
+      height: min(520px, 82vw);
+      margin: 0 auto;
+    }
+
+    .orb {
+      position: absolute;
+      inset: 0;
+      border-radius: 46% 54% 60% 40% / 44% 48% 52% 56%;
+      border: 4px solid transparent;
+      background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        linear-gradient(135deg, var(--blue), var(--pink), var(--yellow), var(--blue)) border-box;
+      animation: morph 9s ease-in-out infinite alternate;
+      opacity: 0.86;
+    }
+
+    .orb.second {
+      transform: rotate(62deg) scale(0.92);
+      border-width: 2px;
+      opacity: 0.45;
+      animation-delay: 1s;
+    }
+
+    .orb.third {
+      transform: rotate(-38deg) scale(0.76);
+      border-width: 1px;
+      opacity: 0.35;
+      animation-delay: 2s;
+    }
+
+    @keyframes morph {
+      from {
+        border-radius: 46% 54% 60% 40% / 44% 48% 52% 56%;
+      }
+      to {
+        border-radius: 58% 42% 40% 60% / 54% 38% 62% 46%;
+      }
+    }
+
+    /* 主要區塊 */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 28px 120px;
+    }
+
+    .section {
+      margin: 120px 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-heading .eyebrow {
+      font-size: 13px;
+      color: #999;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 200;
+      letter-spacing: -2px;
+      margin-bottom: 14px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* 玻璃卡片 */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: var(--shadow);
+      border-radius: 34px;
+      padding: 38px 32px;
+      min-height: 240px;
+      transition: all 0.45s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.09);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      margin-bottom: 24px;
+      box-shadow: 0 0 28px rgba(139,92,246,0.25);
+    }
+
+    .card h3 {
+      font-size: 22px;
+      font-weight: 300;
+      margin-bottom: 18px;
+    }
+
+    .card ul {
+      list-style: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .card li:last-child {
+      border-bottom: none;
+    }
+
+    /* 敘事區 */
+    .narrative {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .narrative-title {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 200;
+      letter-spacing: -3px;
+      line-height: 1.15;
+    }
+
+    .narrative-text {
+      color: #6f6f6f;
+      font-size: 18px;
+      line-height: 2.1;
+    }
+
+    /* 時間軸 */
+    .timeline {
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 94px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.12), transparent);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 42px;
+      position: relative;
+      padding: 28px 0;
+    }
+
+    .time {
+      text-align: right;
+      color: #8b5cf6;
+      font-weight: 300;
+      font-size: 20px;
+    }
+
+    .dot {
+      position: absolute;
+      left: 88px;
+      top: 39px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--purple);
+      box-shadow: 0 0 20px rgba(139,92,246,0.3);
+    }
+
+    .timeline-content {
+      background: rgba(255,255,255,0.56);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 26px 30px;
+      border: 1px solid rgba(255,255,255,0.75);
+    }
+
+    .timeline-content h4 {
+      font-size: 20px;
+      font-weight: 300;
+      margin-bottom: 6px;
+    }
+
+    .timeline-content p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* FAQ */
+    .accordion {
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    .accordion-item {
+      background: rgba(255,255,255,0.66);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 24px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 42px rgba(0,0,0,0.04);
+    }
+
+    .accordion-header {
+      padding: 24px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .accordion-header h3 {
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    .accordion-icon {
+      color: #999;
+      transition: transform 0.3s;
+    }
+
+    .accordion-item.active .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .accordion-item.active .accordion-content {
+      max-height: 800px;
+    }
+
+    .accordion-body {
+      padding: 0 30px 30px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .accordion-body ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 86px 30px;
+      border-radius: 46px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(244,167,255,0.20), transparent 34%),
+        radial-gradient(circle at 80% 40%, rgba(94,207,242,0.22), transparent 34%),
+        rgba(255,255,255,0.62);
+      backdrop-filter: blur(30px);
+      box-shadow: var(--shadow);
+    }
+
+    .cta h2 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 200;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+    }
+
+    .cta p {
+      color: var(--muted);
+      font-size: 18px;
+      margin-bottom: 36px;
+    }
+
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+      padding: 60px 20px;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 80px;
+        text-align: left;
+      }
+
+      .vertical-text {
+        display: none;
+      }
+
+      .hero h1 {
+        letter-spacing: -3px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .narrative {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline::before {
+        left: 68px;
+      }
+
+      .timeline-item {
+        grid-template-columns: 66px 1fr;
+        gap: 28px;
+      }
+
+      .dot {
+        left: 62px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero {
+        min-height: auto;
+        padding: 70px 22px 50px;
+      }
+
+      .hero h1 {
+        font-size: 54px;
+      }
+
+      .hero-subtitle {
+        font-size: 22px;
+      }
+
+      .orb-wrap {
+        width: 300px;
+        height: 300px;
+      }
+
+      main {
+        padding: 20px 20px 80px;
+      }
+
+      .section {
+        margin: 86px 0;
+      }
+
+      .timeline-content {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="light one"></div>
+  <div class="light two"></div>
+  <div class="light three"></div>
+  <div class="light four"></div>
+
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        和氣大愛
+      </div>
+
+      <div class="nav-links">
+        <a href="#core">核心要務</a>
+        <a href="#schedule">時間日期</a>
+        <a href="#map">教練地圖</a>
+        <a href="#faq">FAQ</a>
+        <a href="#apply">公告全文</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="vertical-text">CHANGE</div>
+
+    <div>
+      <div class="hero-label">給身強體壯功初階教練的回訓與制度入口</div>
+      <h1>
+        <span>教練不是頭銜。</span>
+        <span>是三脈報恩</span>
+      </h1>
+      <p class="hero-subtitle">
+        回到功法源頭，重新校準教練之路。<br />
+        讓身體、制度與願力，再次對齊。
+      </p>
+
+      <div class="hero-actions">
+        <a href="#apply" class="btn btn-primary">立即查看回訓資訊</a>
+        <a href="#core" class="btn btn-secondary">了解制度入口</a>
+      </div>
+    </div>
+
+    <div class="orb-wrap">
+      <div class="orb"></div>
+      <div class="orb second"></div>
+      <div class="orb third"></div>
+    </div>
+  </section>
+
+  <main>
+    <section class="section" id="core">
+      <div class="section-heading">
+        <div class="eyebrow">Course Core</div>
+        <h2>核心要務</h2>
+        <p>讓教練重新回到法、制度與服務的位置。</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon"></div>
+          <h3>回訓資格</h3>
+          <ul>
+            <li>已完成身強體壯功初階教練課程</li>
+            <li>願意持續精進與回到制度</li>
+            <li>需依公告完成報名流程</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon"></div>
+          <h3>時間地點</h3>
+          <ul>
+            <li>依基金會公告日期為準</li>
+            <li>全日課程與實作練習</li>
+            <li>請預留完整參與時間</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon"></div>
+          <h3>教練定位</h3>
+          <ul>
+            <li>不是個人頭銜，而是服務責任</li>
+            <li>不是技術展示，而是回到法脈</li>
+            <li>不是單次課程，而是長期修煉</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section narrative" id="map">
+      <div>
+        <h2 class="narrative-title">
+          回訓，<br />
+          是重新接上源頭。
+        </h2>
+      </div>
+
+      <div class="narrative-text">
+        <p>
+          教練制度不是為了建立身份感，而是讓每一位願意服務的人，
+          重新回到功法、身體與願力的校準之中。
+        </p>
+        <br />
+        <p>
+          這個頁面不只是課程公告，而是一個入口：
+          讓教練知道自己從哪裡來、要回到哪裡，
+          以及如何在制度中穩定前行。
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="schedule">
+      <div class="section-heading">
+        <div class="eyebrow">Schedule</div>
+        <h2>當日流程</h2>
+        <p>以實際公告為準，以下為建議資訊架構。</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="time">09:00</div>
+          <div class="dot"></div>
+          <div class="timeline-content">
+            <h4>報到與安定</h4>
+            <p>完成簽到、領取資料，讓身心進入課程狀態。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">10:00</div>
+          <div class="dot"></div>
+          <div class="timeline-content">
+            <h4>功法複習</h4>
+            <p>重新校準身體動線與基本動作，回到正確基礎。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">12:00</div>
+          <div class="dot"></div>
+          <div class="timeline-content">
+            <h4>午休交流</h4>
+            <p>自由用餐與休息，讓身體吸收上午課程。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">13:30</div>
+          <div class="dot"></div>
+          <div class="timeline-content">
+            <h4>制度說明</h4>
+            <p>理解教練回訓、服務、資格與後續精進路徑。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">15:00</div>
+          <div class="dot"></div>
+          <div class="timeline-content">
+            <h4>實作演練</h4>
+            <p>透過分組練習，確認動作、口令與現場帶領感。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">16:30</div>
+          <div class="dot"></div>
+          <div class="timeline-content">
+            <h4>圓滿賦歸</h4>
+            <p>完成當日回訓，帶著新的清楚回到生活與服務。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-heading">
+        <div class="eyebrow">FAQ</div>
+        <h2>常見問題</h2>
+        <p>將資訊收納，讓頁面保持乾淨與安定。</p>
+      </div>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>誰需要參加回訓？</h3>
+            <span class="accordion-icon">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              已取得身強體壯功初階教練資格，並希望持續服務、更新制度資訊、精進功法者，建議依公告參加回訓。
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>需要準備什麼？</h3>
+            <span class="accordion-icon">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              請依公告攜帶學員證、筆記用品、適合活動的服裝，並預留完整課程時間。
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>可以中途離開嗎？</h3>
+            <span class="accordion-icon">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              建議完整參與，以確保回訓內容、制度說明與實作練習皆能完整接收。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="apply">
+      <h2>準備回到源頭了嗎？</h2>
+      <p>請依基金會正式公告完成報名與確認。</p>
+      <div class="hero-actions" style="justify-content:center;">
+        <a href="#" class="btn btn-primary">查看公告全文</a>
+        <a href="#" class="btn btn-secondary">聯繫工作人員</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    HoChi Universal Love · Course Information Page
+  </footer>
+
+  <script>
+    function toggleAccordion(header) {
+      const item = header.parentElement;
+      const isActive = item.classList.contains("active");
+
+      document.querySelectorAll(".accordion-item").forEach((el) => {
+        el.classList.remove("active");
+      });
+
+      if (!isActive) {
+        item.classList.add("active");
+      }
+    }
+  </script>
+</body>
+</html>
