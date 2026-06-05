@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>啟動進度每日記錄表</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-deep: #5b21b6;
+      --ink: #22212a;
+      --muted: rgba(34, 33, 42, .62);
+      --line: rgba(124, 58, 237, .13);
+      --surface: rgba(255, 255, 255, .76);
+      --surface-strong: #ffffff;
+      --soft-violet: #ede9fe;
+      --soft-pink: #fce7f3;
+      --soft-cyan: #e0f7fa;
+      --shadow: 0 24px 70px rgba(92, 64, 142, .13);
+      --radius: 28px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(252, 231, 243, .82), transparent 32%),
+        radial-gradient(circle at 88% 14%, rgba(224, 247, 250, .9), transparent 28%),
+        linear-gradient(135deg, #fff 0%, #fbf8ff 44%, #f5fbff 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, transparent 0 54%, rgba(124, 58, 237, .055) 54% 55%, transparent 55% 100%),
+        linear-gradient(145deg, transparent 0 62%, rgba(14, 165, 233, .05) 62% 63%, transparent 63% 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, transparent 72%);
+    }
+
+    .page {
+      width: min(100% - 36px, var(--max));
+      margin: 0 auto;
+      padding: 64px 0 72px;
+      position: relative;
+    }
+
+    header {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      color: var(--primary-deep);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1, h2 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-size: clamp(34px, 6vw, 68px);
+      line-height: 1.06;
+      font-weight: 800;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid rgba(255, 255, 255, .78);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      padding: clamp(22px, 3vw, 34px);
+    }
+
+    .panel h2 {
+      font-size: 24px;
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    label, .metric-title {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 0 14px;
+      background: rgba(255, 255, 255, .82);
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+    }
+
+    input[type="date"]:focus {
+      border-color: rgba(124, 58, 237, .44);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, .08);
+    }
+
+    .metric {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .radio-group {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 7px;
+      border-radius: 18px;
+      background: rgba(124, 58, 237, .07);
+    }
+
+    .radio-item input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-item label {
+      display: grid;
+      place-items: center;
+      min-height: 46px;
+      margin: 0;
+      border-radius: 13px;
+      color: rgba(34, 33, 42, .68);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: center;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .radio-item input:checked + label {
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      color: white;
+      box-shadow: 0 10px 26px rgba(124, 58, 237, .22);
+    }
+
+    .radio-item label:hover { transform: translateY(-1px); }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 16px;
+      min-height: 48px;
+      padding: 0 18px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 8px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary-deep), #9333ea 58%, #ec4899);
+      box-shadow: 0 18px 36px rgba(124, 58, 237, .24);
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-btn {
+      min-height: 40px;
+      color: rgba(34, 33, 42, .72);
+      background: rgba(255, 255, 255, .7);
+      border: 1px solid rgba(124, 58, 237, .1);
+      font-size: 14px;
+    }
+
+    .filter-btn.active {
+      color: white;
+      background: var(--primary);
+      box-shadow: 0 12px 24px rgba(124, 58, 237, .18);
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 330px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .6);
+      border: 1px solid rgba(124, 58, 237, .1);
+      padding: 16px;
+    }
+
+    .history {
+      margin-top: 24px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: center;
+      border-bottom: 1px solid rgba(124, 58, 237, .09);
+    }
+
+    th {
+      color: var(--primary-deep);
+      background: rgba(124, 58, 237, .06);
+      font-weight: 800;
+    }
+
+    tbody tr:hover td { background: rgba(255, 255, 255, .52); }
+
+    .total {
+      color: var(--primary-deep);
+      font-weight: 900;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 28px 12px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      max-width: min(360px, calc(100vw - 44px));
+      padding: 14px 18px;
+      border-radius: 18px;
+      color: white;
+      background: rgba(91, 33, 182, .94);
+      box-shadow: 0 18px 45px rgba(91, 33, 182, .22);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .page { padding-top: 42px; }
+    }
+
+    @media (max-width: 620px) {
+      .page { width: min(100% - 24px, var(--max)); }
+      .radio-group { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chart-wrap { height: 280px; }
+      .panel { border-radius: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">每日啟動狀態</div>
+      <h1>啟動進度每日記錄表</h1>
+      <p class="lead">用八個指標記錄每日狀態，留下清楚的量化軌跡，讓週、月、年變化一眼看見。</p>
+    </header>
+
+    <section class="layout" aria-label="啟動進度記錄工具">
+      <div class="panel">
+        <h2>今日狀態輸入</h2>
+        <form id="logForm">
+          <div class="field">
+            <label for="logDate">紀錄日期</label>
+            <input type="date" id="logDate" required />
+          </div>
+          <div id="metricsContainer"></div>
+          <button class="submit-btn" type="submit">儲存今日數據</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>量化趨勢分析</h2>
+        <div class="tools" role="group" aria-label="圖表範圍">
+          <button class="filter-btn active" type="button" data-range="week">週變化</button>
+          <button class="filter-btn" type="button" data-range="month">月變化</button>
+          <button class="filter-btn" type="button" data-range="year">年變化</button>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel history" aria-label="歷史數據查找">
+      <h2>歷史數據查找</h2>
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>速度</th>
+            <th>強度</th>
+            <th>變化</th>
+            <th>溫度</th>
+            <th>開心</th>
+            <th>境界</th>
+            <th>續航力</th>
+            <th>催功</th>
+            <th>總分</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const metrics = ['速度', '強度', '變化', '溫度', '開心', '境界', '續航力', '催功'];
+    const levels = [
+      { score: 1, text: '水下下 25%' },
+      { score: 2, text: '水下 50%' },
+      { score: 3, text: '水上 75%' },
+      { score: 4, text: '水上上 100%' }
+    ];
+    const storageKey = 'progressLogs';
+    const dateInput = document.getElementById('logDate');
+    const metricsContainer = document.getElementById('metricsContainer');
+    const form = document.getElementById('logForm');
+    const tbody = document.querySelector('#historyTable tbody');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const toast = document.getElementById('toast');
+    let db = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    let chart;
+    let activeRange = 'week';
+
+    dateInput.valueAsDate = new Date();
+
+    metrics.forEach((metric) => {
+      const group = document.createElement('div');
+      group.className = 'metric';
+      group.innerHTML = `<div class="metric-title">${metric}</div><div class="radio-group"></div>`;
+      const radioGroup = group.querySelector('.radio-group');
+
+      levels.forEach((level) => {
+        const id = `${metric}-${level.score}`;
+        const item = document.createElement('div');
+        item.className = 'radio-item';
+        item.innerHTML = `
+          <input type="radio" id="${id}" name="${metric}" value="${level.score}" required>
+          <label for="${id}">${level.text}</label>
+        `;
+        radioGroup.appendChild(item);
+      });
+
+      metricsContainer.appendChild(group);
+    });
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function saveDb() {
+      localStorage.setItem(storageKey, JSON.stringify(db));
+    }
+
+    function updateTable() {
+      tbody.innerHTML = '';
+
+      if (!db.length) {
+        tbody.innerHTML = `<tr><td class="empty" colspan="10">尚無紀錄</td></tr>`;
+        return;
+      }
+
+      db.forEach((item) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          ${metrics.map((metric) => `<td>${item.scores[metric]}</td>`).join('')}
+          <td class="total">${item.total}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function getRangeSize(range) {
+      if (range === 'month') return 30;
+      if (range === 'year') return 365;
+      return 7;
+    }
+
+    function updateChart(range = activeRange) {
+      activeRange = range;
+      filterButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.range === range);
+      });
+
+      const filteredData = [...db]
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(-getRangeSize(range));
+
+      const ctx = document.getElementById('trendChart');
+      const labels = filteredData.map((item) => item.date);
+      const totals = filteredData.map((item) => item.total);
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: '每日綜合總分（滿分 32 分）',
+            data: totals,
+            borderColor: '#7c3aed',
+            backgroundColor: 'rgba(124, 58, 237, .12)',
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#7c3aed',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            fill: true,
+            tension: .38
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#22212a', font: { weight: 700 } } }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: 'rgba(34, 33, 42, .6)' } },
+            y: {
+              min: 8,
+              max: 32,
+              ticks: { stepSize: 4, color: 'rgba(34, 33, 42, .6)' },
+              grid: { color: 'rgba(124, 58, 237, .08)' }
+            }
+          }
+        }
+      });
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const date = dateInput.value;
+      const log = { date, scores: {}, total: 0 };
+
+      metrics.forEach((metric) => {
+        const value = Number(document.querySelector(`input[name="${metric}"]:checked`).value);
+        log.scores[metric] = value;
+        log.total += value;
+      });
+
+      db = db.filter((item) => item.date !== date);
+      db.push(log);
+      db.sort((a, b) => new Date(b.date) - new Date(a.date));
+      saveDb();
+      updateTable();
+      updateChart(activeRange);
+      showToast('數據儲存成功');
+    });
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => updateChart(button.dataset.range));
+    });
+
+    updateTable();
+    updateChart();
+  </script>
+</body>
+</html>
