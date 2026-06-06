@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>大愛水完全指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2d5016;
+  --primary-light: #4a7c2a;
+  --accent-blue: #1478ff;
+  --accent-cyan: #67eadc;
+  --bg: #fdfcfb;
+  --card: rgba(255,255,255,0.92);
+  --text: #243044;
+  --text-light: #718096;
+  --border: rgba(45,80,22,0.1);
+  --q-color: #e8f4e8;
+  --a-color: #eff8ff;
+  --rule-color: #fff5e8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+}
+
+/* ===== 頂部導覽 ===== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: -1px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-light);
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.tab-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== 搜尋列 ===== */
+.search-bar {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(45,80,22,0.1);
+}
+
+/* ===== 主容器 ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ===== Q&A 卡片 ===== */
+.qa-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin: 20px 0;
+}
+
+.qa-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  transition: all 0.3s;
+}
+
+.qa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+
+.qa-header {
+  background: linear-gradient(135deg, var(--q-color) 0%, var(--a-color) 100%);
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.qa-header:hover {
+  background: linear-gradient(135deg, #d8f4d8 0%, #e8f8ff 100%);
+}
+
+.qa-number {
+  background: var(--primary);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.qa-question {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.5;
+}
+
+.qa-toggle {
+  font-size: 20px;
+  color: var(--text-light);
+  transition: transform 0.3s;
+}
+
+.qa-card.open .qa-toggle {
+  transform: rotate(180deg);
+}
+
+.qa-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 18px;
+}
+
+.qa-card.open .qa-body {
+  max-height: 2000px;
+  padding: 18px;
+}
+
+.qa-answer {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.qa-answer p {
+  margin-bottom: 12px;
+}
+
+.qa-answer ul {
+  margin-left: 20px;
+  margin-bottom: 12px;
+}
+
+.qa-answer li {
+  margin-bottom: 8px;
+}
+
+.qa-category {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+/* ===== 法軌卡片 ===== */
+.rule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.rule-card {
+  background: linear-gradient(135deg, var(--rule-color) 0%, white 100%);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  transition: all 0.3s;
+}
+
+.rule-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+
+.rule-number {
+  background: var(--primary);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.rule-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 14px;
+}
+
+.rule-item {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.rule-item:last-child {
+  margin-bottom: 0;
+}
+
+.rule-item strong {
+  color: var(--primary);
+}
+
+/* ===== 不合法軌案例 ===== */
+.case-card {
+  background: linear-gradient(135deg, #fff5f5 0%, white 100%);
+  border: 2px solid #f8d7da;
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+.case-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.case-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.case-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #721c24;
+}
+
+.case-content {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.case-content p {
+  margin-bottom: 12px;
+}
+
+.case-content strong {
+  color: #721c24;
+}
+
+/* ===== 快速參考 ===== */
+.quick-ref {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-cyan) 100%);
+  color: white;
+  border-radius: 24px;
+  padding: 32px;
+  margin: 30px 0;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(20,120,255,0.15);
+}
+
+.quick-ref h2 {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.quick-ref p {
+  font-size: 18px;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+/* ===== 篩選器 ===== */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.filter-btn {
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-light);
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+}
+
+/* ===== 響應式 ===== */
+@media (max-width: 860px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .qa-grid, .rule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-ref {
+    padding: 24px;
+  }
+
+  .quick-ref h2 {
+    font-size: 24px;
+  }
+
+  .quick-ref p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 430px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .tab-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .qa-question {
+    font-size: 15px;
+  }
+
+  .rule-title {
+    font-size: 16px;
+  }
+
+  .quick-ref {
+    padding: 20px;
+  }
+
+  .quick-ref h2 {
+    font-size: 22px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 頂部導覽 -->
+<div class="header">
+  <div class="header-content">
+    <div class="logo">💧 大愛水指南</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('qa')">常見問答</button>
+      <button class="tab-btn" onclick="switchTab('rules')">法軌&守則</button>
+    </div>
+  </div>
+</div>
+
+<!-- 搜尋列 -->
+<div class="search-bar">
+  <input class="search-input" type="text" id="searchInput" placeholder="🔍 搜尋問題或關鍵字..." oninput="filterContent()">
+</div>
+
+<!-- ===== 常見問答 ===== -->
+<div id="qa" class="section active">
+  <div class="container">
+    <div class="quick-ref">
+      <h2>💡 大愛水是什麼？</h2>
+      <p>大愛水是有光團共愿、護光團結構形成後，才能請來的活體。<br>它是光網相連的生命系統，給予被護持者最高階的愛和護持。</p>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterByCategory('all')">全部</button>
+      <button class="filter-btn" onclick="filterByCategory('法理')">法理</button>
+      <button class="filter-btn" onclick="filterByCategory('請法')">請法</button>
+      <button class="filter-btn" onclick="filterByCategory('飲用')">飲用</button>
+    </div>
+
+    <div class="qa-grid" id="qaGrid">
+      <!-- Q&A 會動態生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- ===== 法軌&守則 ===== -->
+<div id="rules" class="section">
+  <div class="container">
+    <div class="quick-ref">
+      <h2>⚡ 請法的關鍵要素</h2>
+      <p>✓ 真正運作的光團母體<br>✓ 親自連接接水者<br>✓ 七體共愿與護持</p>
+    </div>
+
+    <div class="rule-grid" id="ruleGrid">
+      <!-- 規則會動態生成 -->
+    </div>
+
+    <!-- 不合法軌案例 -->
+    <div style="margin-top: 40px;">
+      <h2 style="font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 20px;">⚠️ 不合法軌的案例</h2>
+      <div id="caseGrid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Q&A 資料 =====
+const qaData = [
+  {
+    category: '法理',
+    num: 1,
+    q: '除了被護持者外，其他人可以喝大愛水嗎？',
+    a: '<strong>核心法理：</strong><p>大愛水怎麼來的？大愛水是要有光團共愿，法脈體結構形成之後，才能夠請大愛水，大愛水不是個別存在的一個個體，大愛水是一個有生命系統的活體，這是一個光網相連的活體，不是說這一瓶水很神奇，看你要不要喝它。</p>'
+  },
+  {
+    category: '法理',
+    num: 2,
+    q: '大愛水的母水，只能給請法者喝嗎？',
+    a: '<strong>答：</strong><p>這個水就叫頭等艙，意思就是最高階的一種對待、護持，所以最高階的一定就是單獨使用的，不會是所有人都可以一起來用的，完全是客製化，針對個人。</p>'
+  },
+  {
+    category: '法理',
+    num: 3,
+    q: '大愛水的本質是什麼？',
+    a: '<strong>關鍵的本質：</strong><p>大愛水就是跟愛有密切關係，這一位請法的生命，他請的不是這個水，他請的是這個七體，法脈的七體，給他足夠的愛和護持。</p>'
+  },
+  {
+    category: '請法',
+    num: 4,
+    q: '誰可以請法？',
+    a: '<strong>請法團隊規格：</strong><p>一定要母團的成員，且固定人員操作。昨天來的，就是可以請法的團隊，夥伴有需要先稟告，稟告就好了，只要稟告大愛光老師，我告訴你可以去請，這個團隊就可以去請，不需要來到桃園慈場，這個法慈場已經可以帶回去，「就是這一幫人馬」就對了。</p>'
+  },
+  {
+    category: '請法',
+    num: 5,
+    q: '請法詞怎麼說？',
+    a: '<strong>請法詞格式：</strong><p>期別-本靈光-姓名-法位</p><p><strong>重要說明：</strong>沒有法位的也不稱師兄／師姊。因為有人沒法位，所以先姓名再法位，這樣會比較順，不用套法位。</p>'
+  },
+  {
+    category: '飲用',
+    num: 15,
+    q: '大愛水可否混熱水喝？',
+    a: '<strong>飲用方式：</strong><p>含在口裡久一點再喝下去，不摻混、不做其他改變。</p>'
+  },
+  {
+    category: '飲用',
+    num: 16,
+    q: '怎樣飲用大愛水？',
+    a: '<strong>正確飲用方法：</strong><ul><li>心生感謝心，感謝區、感謝光團的愛</li><li>慢慢喝下去</li><li>會覺得光隨著水到全身每個細胞、每個分子</li></ul><p>各位也會隨著繼續製造大愛水生成大愛水，你也會覺得有很大的變化，每個人都會有很大的變化。</p>'
+  },
+  {
+    category: '飲用',
+    num: 17,
+    q: '每天可以喝多少大愛水？',
+    a: '<strong>飲用量：</strong><p>可以盡量喝，越喝越舒服。</p><p><strong>重要原則：</strong>大愛水就教我們靈性法則，一切就是要順其自然，不能有任何人為造作、勉強，只要大家真心投注護持，結果就會出來，很奇妙。那喝的量也是一樣的，自己會知道需要喝多少，所以不用拿起來猛灌。</p>'
+  },
+  {
+    category: '飲用',
+    num: 18,
+    q: '飲用大愛水的儀式？',
+    a: '<strong>飲用前的儀式：</strong><p>喝大愛水前，先頂禮（雙手捧起大愛水頂禮後，再飲用）</p>'
+  },
+  {
+    category: '飲用',
+    num: 19,
+    q: '大愛水還有其他用途嗎？',
+    a: '<strong>多重功效：</strong><p>這個大愛水還可以擦身體，身體哪裡不舒服可以抹在身上，然後再用大愛手，很好用，你會有更多靈感出來，可以怎麼用，盡量去用。</p>'
+  }
+];
+
+// ===== 規則資料 =====
+const ruleData = [
+  {
+    num: 1,
+    title: '守護體管理',
+    content: '<strong>各大區請法的規格是守護體要掌管的，要看大家有沒有在規格中運作。</strong><p>為什麼可以就大區法位？每個月一次盤點，如果沒有好好幹，就不能再進行擔任請法資格，這就是守護體要管控的。（每月10日進行盤點）</p>'
+  },
+  {
+    num: 2,
+    title: '稟告申請',
+    content: '<strong>申請方式：</strong><p>一、寄送郵件<br>收件者：大愛光老師、機要團、守護體趙忠君&黃銀珠&張芮瑀、區內相關人員</p><p>二、信件內容<br>（一）接水者：姓名、病、苦、困的現況<br>（二）請法團隊：七體成員、請法日期、時間、請法地點</p><p>三、稟告呈師核可後，始可進行請法</p>'
+  },
+  {
+    num: 3,
+    title: '先備流程',
+    content: '<strong>三個重要條件：</strong><ul><li>七體光團共愿，護光團護區護大區中的每一位靈子</li><li>已親自與他連接，對這位靈子的病、苦、困已有相當的直接了解與互信</li><li>真心想要救這一位請法靈子</li></ul>'
+  },
+  {
+    num: 4,
+    title: '七體光團',
+    content: '<strong>光團層級：</strong><ul><li>分三個層級，光團、區、大區都可以</li><li>真正的七體光團，真的有這個共愿</li><li>平常真正在一起的人，哪個層級的母團都可以</li></ul>'
+  },
+  {
+    num: 5,
+    title: '七體頭的重要性',
+    content: '<strong>組織結構：</strong><p>七體有組合狀況，但七體一定要有一位他是真正的那個頭，七體的頭。</p>'
+  },
+  {
+    num: 6,
+    title: '生成子水數量',
+    content: '<strong>規範：</strong><ul><li>首次接法的團，第一次生成子水時，先以一瓶為主</li><li>確保生成的子水是與母水的百分比相同</li><li>第二次起，可以至多三瓶</li><li>要加至四瓶時，需要呈師稟告</li></ul>'
+  }
+];
+
+// ===== 不合法軌案例 =====
+const caseData = [
+  {
+    num: 1,
+    title: '❌ 非請水人喝子水',
+    issue: '生成子水時，流程少了步驟，忘記倒入母水，就開始生成子水。',
+    mistake: '非請法者一起喝了倒出來的子水，因為反正是多出來的，丟掉也可惜。',
+    correct: '✅ 依軌道，此子水是請水人的處方，非請水人不應喝。'
+  },
+  {
+    num: 2,
+    title: '❌ 子水喝法錯誤',
+    issue: '請水人提出，因平時習慣喝溫水，所以提問，是否可以將子水加入熱水後，再喝。',
+    mistake: '想要改變飲用方式。',
+    correct: '✅ 這層級的法，須照原訂規則，不去摻混、不做其他改變。可以含在口裡久一點，再喝。有法界在管。'
+  },
+  {
+    num: 3,
+    title: '❌ 請法團規格不符',
+    issue: '團的組成，未依請法規格組成「七體真光團」，以湊團方式接法。',
+    mistake: '師須重新處理團的成分問題、真假問題，以致傳法時間拖延狀況嚴重。',
+    correct: '✅ 當日，法界在等候，師法體受損。守護體、總領須把關。'
+  }
+];
+
+// ===== 切換標籤頁 =====
+function switchTab(tabName) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== 渲染 Q&A =====
+function renderQA() {
+  const grid = document.getElementById('qaGrid');
+  grid.innerHTML = qaData.map(item => `
+    <div class="qa-card" data-category="${item.category}">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div style="flex: 1;">
+          <div class="qa-category">${item.category}</div>
+          <div class="qa-question">Q${item.num}. ${item.q}</div>
+        </div>
+        <span class="qa-toggle">▼</span>
+      </div>
+      <div class="qa-body">
+        <div class="qa-answer">${item.a}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== 切換 Q&A =====
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ===== 渲染規則 =====
+function renderRules() {
+  const grid = document.getElementById('ruleGrid');
+  grid.innerHTML = ruleData.map(item => `
+    <div class="rule-card">
+      <div class="rule-number">${item.num}</div>
+      <div class="rule-title">${item.title}</div>
+      <div class="rule-item">${item.content}</div>
+    </div>
+  `).join('');
+
+  // 渲染案例
+  const caseGrid = document.getElementById('caseGrid');
+  caseGrid.innerHTML = caseData.map(c => `
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-icon">⚠️</span>
+        <div class="case-title">${c.title}</div>
+      </div>
+      <div class="case-content">
+        <p><strong>狀況：</strong>${c.issue}</p>
+        <p><strong>錯誤：</strong>${c.mistake}</p>
+        <p><strong>${c.correct}</strong></p>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== 搜尋與篩選 =====
+function filterContent() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('#qa .qa-card');
+  
+  cards.forEach(card => {
+    const q = card.querySelector('.qa-question').textContent.toLowerCase();
+    const a = card.querySelector('.qa-answer').textContent.toLowerCase();
+    const matches = q.includes(query) || a.includes(query) || query === '';
+    card.style.display = matches ? 'block' : 'none';
+  });
+}
+
+function filterByCategory(category) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const cards = document.querySelectorAll('#qa .qa-card');
+  cards.forEach(card => {
+    const cardCategory = card.dataset.category;
+    card.style.display = (category === 'all' || cardCategory === category) ? 'block' : 'none';
+  });
+}
+
+// ===== 初始化 =====
+renderQA();
+renderRules();
+</script>
+
+</body>
+</html>
