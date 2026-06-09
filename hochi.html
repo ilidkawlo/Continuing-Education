@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>本靈吉光和氣百日築基 Web App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f5f0;--card:rgba(255,255,255,.82);--purple:#6a2c70;--purple-soft:#7e62b3;
+  --pink:#c47fa2;--gold:#f5d46b;--blue:#3d78d8;--mist:#e8eef2;--text:#382d35;
+  --muted:#8f8790;--line:rgba(106,44,112,.16);--shadow:rgba(106,44,112,.12);
+  --weather-1:#fff8dc;--weather-2:#f5d46b;--weather-3:#f8b778;--ok:#2e7d60;--danger:#b24a5a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;background:radial-gradient(circle at top right,var(--weather-1),transparent 34%),linear-gradient(135deg,#fff,var(--bg));
+  color:var(--text);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
+}
+.app{width:min(1240px,94%);margin:auto;padding:24px 0 88px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:18px}
+.icon-placeholder{
+  width:92px;height:92px;border-radius:30px;background:radial-gradient(circle at 35% 20%,#8b4b95,#6a2c70 62%,#4f1559);
+  color:#fff;display:grid;place-items:center;font-size:42px;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;font-weight:900;box-shadow:0 16px 40px var(--shadow)
+}
+.title h1{color:var(--purple);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;font-weight:900;font-size:clamp(30px,4.5vw,56px);letter-spacing:2px;line-height:1.1}
+.title p{color:var(--muted);margin-top:8px}
+.date-box{text-align:right;color:var(--muted);font-size:15px;display:grid;gap:10px;justify-items:end}
+select,input,textarea{font-family:inherit}
+.weather-select,.date-input{
+  border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:9px 14px;font-size:15px;max-width:230px
+}
+.top-nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 24px}
+.nav-btn,.tab,.btn{
+  cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:11px 16px;background:rgba(255,255,255,.72);color:var(--purple);font-weight:700
+}
+.nav-btn.active,.tab.active,.btn{background:var(--purple);color:#fff;box-shadow:0 12px 28px rgba(106,44,112,.18)}
+.btn.secondary{background:#fff;color:var(--purple);box-shadow:none}.btn.danger{background:var(--danger)}
+.dashboard{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-bottom:24px}
+.panel,.form-card,.history-card{
+  background:var(--card);border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:0 18px 50px rgba(106,44,112,.08);backdrop-filter:blur(18px)
+}
+.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px}
+.panel-title h2,.form-card h2,.history-card h2{color:var(--purple);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;font-weight:900;font-size:26px}
+.small-note{color:var(--muted);font-size:14px}.stage-pill{display:inline-flex;gap:8px;align-items:center;background:rgba(245,212,107,.28);border:1px solid rgba(245,212,107,.6);color:var(--purple);padding:9px 13px;border-radius:999px;font-weight:700}
+.progress-wrap{display:grid;gap:14px}
+.progress-meta{display:flex;justify-content:space-between;color:var(--muted)}
+.progress-bar{height:16px;border-radius:999px;background:#eee;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--purple-soft),var(--gold));border-radius:999px;transition:.35s ease}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:22px;padding:16px;text-align:center}
+.kpi strong{display:block;color:var(--purple);font-size:24px}.kpi span{color:var(--muted);font-size:13px}
+.today-score{display:grid;place-items:center;text-align:center;min-height:280px}
+.score-circle{width:184px;height:184px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--purple-soft) 0deg,var(--gold) 0deg,#eee 0deg 360deg);position:relative;margin-bottom:18px;box-shadow:0 18px 45px var(--shadow)}
+.score-circle::after{content:"";position:absolute;inset:16px;border-radius:50%;background:#fff}
+.score-content{position:relative;z-index:2}.score-content strong{display:block;font-size:42px;color:var(--purple)}.score-content span{color:var(--muted)}
+.message{color:var(--purple);font-weight:700;font-size:18px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.form-area{display:grid;grid-template-columns:1fr .82fr;gap:22px}
+.daily-grid{display:grid;gap:16px;margin-top:16px}
+.upload-box{border:2px dashed rgba(106,44,112,.28);border-radius:24px;padding:18px;background:rgba(255,255,255,.58)}
+.preview{margin-top:14px;display:none}.preview img{width:100%;max-height:300px;object-fit:cover;border-radius:20px;border:1px solid var(--line)}
+textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:20px;padding:14px;background:#fff;color:var(--text);font-size:16px;resize:vertical}
+.sync-input{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:#fff;color:var(--text);font-size:14px;margin-top:10px}
+.sync-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.sync-box{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.68);padding:16px}
+.sync-box strong{display:block;color:#050505;margin-bottom:6px}
+.script-code{width:100%;min-height:260px;margin-top:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;line-height:1.45;white-space:pre;overflow:auto}
+.sync-status{margin-top:12px;color:var(--muted);font-size:14px}
+.counter{font-size:13px;color:var(--muted);text-align:right;margin-top:6px}
+.group-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 18px}
+.item-list{display:grid;gap:16px;margin-top:22px}.record-item{border:1px solid var(--line);border-radius:24px;padding:18px;background:rgba(255,255,255,.64);transition:.25s ease}
+.record-item.completed-75{background:linear-gradient(135deg,rgba(245,212,107,.22),rgba(255,255,255,.78));border-color:rgba(245,212,107,.7)}
+.record-item.completed-100{background:linear-gradient(135deg,rgba(126,98,179,.18),rgba(245,212,107,.24));border-color:rgba(106,44,112,.28);box-shadow:0 12px 30px rgba(245,212,107,.18)}
+.item-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.item-name{font-size:20px;font-weight:700}.item-status{color:var(--muted);font-size:14px}
+.water-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.water-btn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:18px;padding:12px 8px;text-align:center;transition:.22s ease;cursor:pointer}
+.water-btn strong{display:block;color:var(--blue);font-size:17px}.water-btn span{display:block;font-size:12px}.water-btn.active{background:var(--purple);color:#fff;transform:translateY(-2px)}.water-btn.active strong{color:#fff}
+.water-btn[data-value="75"].active{background:linear-gradient(135deg,#c47fa2,#f5d46b)}.water-btn[data-value="100"].active{background:linear-gradient(135deg,#6a2c70,#f5d46b)}
+.check-panel h3{color:var(--purple);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;font-weight:900;font-size:25px;margin-bottom:16px}.check-list{display:grid;gap:12px}
+.check{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.62);border:1px solid var(--line);color:var(--muted)}
+.check.done{color:var(--purple);background:rgba(245,212,107,.18)}.mark{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--mist);font-size:13px}.check.done .mark{background:var(--gold);color:var(--purple)}
+.chart{height:120px;display:flex;align-items:end;gap:8px;border-bottom:1px solid var(--line);padding-top:16px;overflow-x:auto}.chart-bar{min-width:26px;background:linear-gradient(180deg,var(--purple-soft),var(--gold));border-radius:12px 12px 0 0;position:relative}.chart-bar span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted)}
+.history-list{display:grid;gap:12px;margin-top:18px}.history-item{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.7);padding:14px;display:grid;gap:8px}
+.history-top{display:flex;justify-content:space-between;gap:12px;color:var(--purple);font-weight:700}.history-note{color:var(--muted);font-size:14px}.history-img{width:90px;height:70px;object-fit:cover;border-radius:14px;border:1px solid var(--line)}
+.full-table{margin-top:24px}details{background:rgba(255,255,255,.64);border:1px solid var(--line);border-radius:24px;padding:20px}summary{cursor:pointer;color:var(--purple);font-weight:700;font-size:18px}.table-wrap{overflow-x:auto;margin-top:18px}table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden}th,td{padding:14px;border:1px solid rgba(106,44,112,.12);text-align:center;min-width:110px}th{background:#f3edf4;color:var(--purple)}td:first-child{color:var(--blue);font-weight:900}
+.toast{position:fixed;right:24px;bottom:24px;width:min(360px,calc(100% - 48px));padding:20px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:0 24px 70px rgba(106,44,112,.2);transform:translateY(160%);opacity:0;transition:.35s ease;z-index:20}.toast.show{transform:translateY(0);opacity:1}.toast h4{color:var(--purple);font-size:20px;margin-bottom:6px}.toast p{color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:900px){.header,.dashboard,.form-area{grid-template-columns:1fr;display:grid}.date-box{text-align:left;justify-items:start}.water-options,.kpi-grid{grid-template-columns:repeat(2,1fr)}.brand{align-items:flex-start}.icon-placeholder{width:72px;height:72px;border-radius:22px;font-size:32px}}
+@media(max-width:900px){.sync-grid{grid-template-columns:1fr}.script-code{min-height:220px}}
+
+/* === 質感黑體／近台電字體風格調整 === */
+:root{
+  --bg:#f7f9fb;--card:rgba(255,255,255,.78);--purple:#111827;--purple-soft:#0b63ce;
+  --pink:#3fb7c7;--gold:#48d6c8;--blue:#0068d9;--mist:#eef4f8;--text:#111827;
+  --muted:#64748b;--line:rgba(15,23,42,.10);--shadow:rgba(0,104,217,.16);
+  --weather-1:#eaf6ff;--weather-2:#0b74e5;--weather-3:#3fd7c8;
+}
+body{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
+  font-weight:500;
+  letter-spacing:-.02em;
+  background:
+    radial-gradient(circle at 78% 0%,rgba(47,214,200,.46),transparent 28%),
+    radial-gradient(circle at 54% -8%,rgba(0,104,217,.44),transparent 30%),
+    linear-gradient(135deg,#ffffff 0%,#f7f9fb 58%,#eef6ff 100%);
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.11;background-image:radial-gradient(#0f172a .55px,transparent .55px);background-size:4px 4px;mix-blend-mode:multiply}
+.app{padding-top:34px}
+.title h1{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif!important;
+  font-weight:900!important;
+  color:#050505;
+  letter-spacing:-.06em;
+  line-height:.98;
+  font-size:clamp(40px,6.5vw,84px);
+}
+.title p,.small-note,.date-box,.history-note{letter-spacing:-.01em;color:#64748b}
+.icon-placeholder{
+  background:conic-gradient(from 90deg,#0074ff,#18c7d1,#0074ff);
+  border-radius:50%;font-size:0;box-shadow:none;width:36px;height:36px;position:relative;
+}
+.icon-placeholder::after{content:"光";position:absolute;inset:5px;border-radius:50%;background:#fff;color:#0068d9;display:grid;place-items:center;font-size:16px;font-weight:900}
+.header{align-items:center;margin-bottom:34px}
+.panel,.form-card,.history-card,details{
+  border-radius:34px;
+  background:rgba(255,255,255,.74);
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 24px 80px rgba(15,23,42,.08);
+}
+.panel-title h2,.form-card h2,.history-card h2,.check-panel h3{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif!important;
+  font-weight:900!important;color:#050505;letter-spacing:-.045em;
+}
+.nav-btn,.tab,.btn,.weather-select,.date-input{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
+  font-weight:900;letter-spacing:-.02em;
+}
+.nav-btn,.tab{background:rgba(255,255,255,.68);color:#111827;border-color:rgba(15,23,42,.1);transition:transform .22s ease,box-shadow .22s ease,background .22s ease}
+.nav-btn:hover,.tab:hover,.btn:hover,.water-btn:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(0,104,217,.16)}
+.nav-btn.active,.tab.active,.btn{background:#050505;color:#fff;box-shadow:0 16px 38px rgba(15,23,42,.18)}
+.btn.secondary{background:#fff;color:#050505}.btn.danger{background:#d43f57;color:#fff}
+.stage-pill{background:#050505;color:#fff;border:0}
+.progress-fill,.chart-bar{background:linear-gradient(90deg,#0068d9,#28d6c4)}
+.kpi strong,.score-content strong,td:first-child,.water-btn strong{color:#0068d9;font-weight:900}
+.score-circle{background:conic-gradient(#0068d9 0deg,#28d6c4 0deg,#e5e7eb 0deg 360deg);box-shadow:0 22px 60px rgba(0,104,217,.14)}
+.message{color:#050505;font-weight:900;letter-spacing:-.03em}
+.record-item{background:rgba(255,255,255,.72)}
+.water-btn.active{background:#050505;color:#fff}.water-btn[data-value="75"].active,.water-btn[data-value="100"].active{background:linear-gradient(135deg,#0068d9,#28d6c4)}
+th{background:#f1f5f9;color:#050505;font-weight:900}
+.toast{border-radius:28px;box-shadow:0 28px 80px rgba(15,23,42,.18)}
+.toast h4{color:#050505;font-weight:900;letter-spacing:-.04em}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="brand">
+      <div class="icon-placeholder">光</div>
+      <div class="title">
+        <h1>本靈吉光<br>和氣百日築基</h1>
+        <p>每日照片、百字心得、三組指標、百日曲線，一次完成。</p>
+      </div>
+    </div>
+    <div class="date-box">
+      <div id="todayText">今日</div>
+      <input class="date-input" type="date" id="startDate" title="百日開始日">
+      <select class="weather-select" id="weatherSelect">
+        <option value="sunny">晴天｜暖金色</option><option value="rainy">雨天｜霧藍色</option><option value="cloudy">多雲｜柔黃色</option><option value="overcast">陰天｜淡紫灰</option><option value="foggy">霧天｜霧白綠</option>
+      </select>
+    </div>
+  </header>
+
+  <nav class="top-nav">
+    <button class="nav-btn active" onclick="showView('today')">今日築基</button>
+    <button class="nav-btn" onclick="showView('metrics')">水位評分</button>
+    <button class="nav-btn" onclick="showView('history')">歷史紀錄</button>
+    <button class="nav-btn" onclick="showView('export')">備份資料</button>
+  </nav>
+
+  <section class="dashboard">
+    <div class="panel">
+      <div class="panel-title">
+        <h2>百日啟動進度</h2>
+        <span class="stage-pill" id="stageText">第 1 天｜7–14 天</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-meta"><span id="dayText">Day 1 / 100</span><span id="progressPercent">1%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><strong id="totalRecords">0</strong><span>已記錄天數</span></div>
+        <div class="kpi"><strong id="photoCount">0</strong><span>照片上傳</span></div>
+        <div class="kpi"><strong id="noteCount">0</strong><span>心得完成</span></div>
+        <div class="kpi"><strong id="avgAll">0%</strong><span>總平均水位</span></div>
+      </div>
+      <div class="chart" id="miniChart"></div>
+    </div>
+    <div class="panel today-score">
+      <div class="score-circle" id="scoreCircle"><div class="score-content"><strong id="averageScore">0%</strong><span>今日水位</span></div></div>
+      <div class="message" id="dailyMessage">開始今日記錄，讓水位慢慢上升。</div>
+      <div class="actions">
+        <button class="btn" onclick="showView('today')">開始今日記錄</button>
+        <button class="btn secondary" onclick="saveRecord()">儲存今日</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="todayView">
+    <div class="form-area">
+      <div class="form-card">
+        <h2>今日任務</h2>
+        <p class="small-note">每天固定：煉和氣後照片一張、100字內心得、三組指標評分。</p>
+        <div class="daily-grid">
+          <label class="upload-box">
+            <strong>上傳今日煉和氣後照片</strong>
+            <input type="file" id="photoInput" accept="image/*" style="display:block;margin-top:12px">
+            <div class="preview" id="photoPreview"><img id="photoImg" alt="今日照片預覽"></div>
+          </label>
+          <div>
+            <div class="panel-title" style="margin-bottom:8px">
+              <h2 style="font-size:22px">100字內心得</h2>
+              <button class="btn secondary" onclick="startVoice()">🎙 語音輸入</button>
+            </div>
+            <textarea id="noteInput" maxlength="100" placeholder="今天煉完和氣後，我觀察到……"></textarea>
+            <div class="counter"><span id="noteCountText">0</span>/100 字</div>
+          </div>
+        </div>
+      </div>
+      <aside class="form-card check-panel">
+        <h3>今日防呆檢核</h3>
+        <div class="check-list">
+          <div class="check done" id="checkDate"><span class="mark">✓</span><span>日期是今天</span></div>
+          <div class="check" id="checkPhoto"><span class="mark">・</span><span>已上傳煉和氣後照片</span></div>
+          <div class="check" id="checkNote"><span class="mark">・</span><span>心得已填寫且 100 字內</span></div>
+          <div class="check" id="checkAll"><span class="mark">・</span><span>十七項皆有水位</span></div>
+          <div class="check" id="checkSaved"><span class="mark">・</span><span>今日紀錄已儲存</span></div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="showView('metrics')">填寫水位評分</button>
+          <button class="btn secondary" onclick="saveRecord()">儲存今日</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="metricsView" class="hidden">
+    <div class="group-tabs" id="groupTabs"></div>
+    <div class="form-area">
+      <div class="form-card">
+        <h2 id="groupTitle">啟動進度</h2>
+        <p id="groupHint">用水位看見今日狀態。</p>
+        <div class="item-list" id="itemList"></div>
+      </div>
+      <aside class="form-card check-panel">
+        <h3>水位說明</h3>
+        <table>
+          <tbody>
+            <tr><td>4</td><td>水上上</td><td>100%</td></tr>
+            <tr><td>3</td><td>水上</td><td>75%</td></tr>
+            <tr><td>2</td><td>水下</td><td>50%</td></tr>
+            <tr><td>1</td><td>水下下</td><td>25%</td></tr>
+          </tbody>
+        </table>
+        <div class="actions">
+          <button class="btn" onclick="nextGroup()">下一組</button>
+          <button class="btn secondary" onclick="showFullTable()">完整17項表格</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="historyView" class="hidden">
+    <div class="history-card">
+      <div class="panel-title">
+        <h2>歷史紀錄</h2>
+        <button class="btn secondary" onclick="renderHistory()">重新整理</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </div>
+  </section>
+
+  <section id="exportView" class="hidden">
+    <div class="form-card">
+      <h2>資料備份與雲端同步</h2>
+      <p class="small-note">這份 HTML 會先存在手機/瀏覽器 localStorage；設定 Google Apps Script Web App URL 後，可同步到 Google Sheets 當後台。</p>
+      <div class="actions">
+        <button class="btn" onclick="exportData()">匯出 JSON 備份</button>
+        <button class="btn secondary" onclick="document.getElementById('importFile').click()">匯入 JSON 備份</button>
+        <button class="btn danger" onclick="clearToday()">清除今日資料</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json" class="hidden">
+      <div class="upload-box" style="margin-top:18px">
+        <strong>Google Sheets 後台設定</strong>
+        <p class="small-note" style="margin-top:8px">貼上 Google Apps Script 部署後的 Web App URL。照片會存到 Google Drive，試算表會保存日期、心得、各項分數與照片連結。</p>
+        <input class="sync-input" id="sheetUrlInput" type="url" placeholder="https://script.google.com/macros/s/......../exec">
+        <div class="actions">
+          <button class="btn" onclick="saveSheetUrl()">儲存後台 URL</button>
+          <button class="btn secondary" onclick="syncTodayToSheet()">同步今日</button>
+          <button class="btn secondary" onclick="syncAllToSheet()">同步全部</button>
+          <button class="btn secondary" onclick="fetchFromSheet()">從雲端取回</button>
+        </div>
+        <div class="sync-status" id="syncStatus">尚未設定 Google Sheets 後台。</div>
+      </div>
+      <div class="sync-grid">
+        <div class="sync-box">
+          <strong>建立 Google Sheets 後台</strong>
+          <p class="small-note">1. 建立一份 Google Sheets。2. 擴充功能 → Apps Script。3. 貼上右側程式並部署成 Web App。4. 存取權選「任何知道連結的人」。5. 把 Web App URL 貼回上方。</p>
+        </div>
+        <div class="sync-box">
+          <strong>Apps Script 程式碼</strong>
+          <textarea id="appsScriptCode" class="script-code" readonly></textarea>
+          <div class="actions">
+            <button class="btn secondary" onclick="copyAppsScript()">複製程式碼</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="full-table">
+    <details id="fullTableDetails">
+      <summary>展開完整十七項記錄表</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>水位</th><th>覺知</th><th>病痛消失</th><th>症狀消失</th><th>身靈活</th><th>心開放</th><th>靈覺醒</th><th>速度</th><th>強度</th><th>變化</th><th>溫度</th><th>開心</th><th>境界</th><th>續航</th><th>催功</th><th>各法新法能</th><th>生活專長新功能</th><th>工作職能新功能</th></tr></thead>
+          <tbody>
+            <tr><td>4<br>水上上<br>100%</td><td colspan="17">本日狀態飽滿，收下一枚光印。</td></tr>
+            <tr><td>3<br>水上<br>75%</td><td colspan="17">能量穩定，已有清楚啟動。</td></tr>
+            <tr><td>2<br>水下<br>50%</td><td colspan="17">已看見自己，持續累積。</td></tr>
+            <tr><td>1<br>水下下<br>25%</td><td colspan="17">今日需要溫柔陪伴，不責備。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+</div>
+
+<div class="toast" id="toast"><h4 id="toastTitle">水位上升</h4><p id="toastText">你已經看見自己，這就是啟動。</p></div>
+
+<script>
+const STORAGE_KEY="foundation100_records_v1";
+const START_KEY="foundation100_start_date";
+const SHEET_URL_KEY="foundation100_sheet_web_app_url";
+const LAST_SYNC_KEY="foundation100_last_sheet_sync";
+const groups=[
+ {name:"啟動進度",hint:"對應速度、強度、變化、溫度、開心、境界、續航、催功。",items:["速度","強度","變化","溫度","開心","境界","續航","催功"]},
+ {name:"身心靈轉化",hint:"對應覺知、病痛消失、症狀消失、身靈活、心開放、靈覺醒。",items:["覺知","病痛消失","症狀消失","身靈活","心開放","靈覺醒"]},
+ {name:"功能成長",hint:"對應各法新法能、生活專長新功能、工作職能新功能。",items:["各法新法能","生活專長新功能","工作職能新功能"]}
+];
+const values=[{label:"水下下",value:25,score:1,icon:"🌫"},{label:"水下",value:50,score:2,icon:"🌧"},{label:"水上",value:75,score:3,icon:"🌤"},{label:"水上上",value:100,score:4,icon:"🌞"}];
+const APPS_SCRIPT_CODE=`const SHEET_NAME = '百日築基紀錄';
+const PHOTO_FOLDER_NAME = '百日築基照片';
+const METRIC_HEADERS = ['覺知','病痛消失','症狀消失','身靈活','心開放','靈覺醒','速度','強度','變化','溫度','開心','境界','續航','催功','各法新法能','生活專長新功能','工作職能新功能'];
+const HEADERS = ['date','day','stage','note','average','photoUrl','savedAt','syncedAt','metricsJson'].concat(METRIC_HEADERS);
+
+function doGet(e) {
+  const data = listRecords_();
+  const callback = e && e.parameter && e.parameter.callback;
+  const body = callback
+    ? callback + '(' + JSON.stringify(data) + ')'
+    : JSON.stringify(data);
+  return ContentService.createTextOutput(body).setMimeType(
+    callback ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON
+  );
+}
+
+function doPost(e) {
+  const payload = JSON.parse(e.postData.contents || '{}');
+  if (payload.action === 'syncAll') {
+    (payload.records || []).forEach(function(record) { upsertRecord_(record); });
+  } else {
+    upsertRecord_(payload.record || payload);
+  }
+  return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function listRecords_() {
+  const sheet = getSheet_();
+  const rows = sheet.getDataRange().getValues();
+  const records = {};
+  if (rows.length < 2) return { records: records };
+  const headers = rows[0];
+  rows.slice(1).forEach(function(row) {
+    const item = {};
+    headers.forEach(function(header, index) { item[header] = row[index]; });
+    if (!item.date) return;
+    const metrics = item.metricsJson ? JSON.parse(item.metricsJson) : {};
+    records[item.date] = {
+      date: item.date,
+      day: Number(item.day || 1),
+      stage: item.stage || '',
+      note: item.note || '',
+      photo: item.photoUrl || '',
+      metrics: metrics,
+      savedAt: item.savedAt || ''
+    };
+  });
+  return { records: records };
+}
+
+function upsertRecord_(record) {
+  if (!record || !record.date) return;
+  const sheet = getSheet_();
+  const photoUrl = savePhoto_(record);
+  const metrics = record.metrics || {};
+  const average = average_(Object.keys(metrics).map(function(key) { return metrics[key]; }));
+  const row = [
+    record.date,
+    record.day || '',
+    record.stage || '',
+    record.note || '',
+    average,
+    photoUrl || record.photo || '',
+    record.savedAt || '',
+    new Date().toISOString(),
+    JSON.stringify(metrics)
+  ].concat(METRIC_HEADERS.map(function(header) { return metrics[header] || ''; }));
+  const existingRow = findDateRow_(sheet, record.date);
+  if (existingRow) {
+    sheet.getRange(existingRow, 1, 1, row.length).setValues([row]);
+  } else {
+    sheet.appendRow(row);
+  }
+}
+
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
+  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+  return sheet;
+}
+
+function findDateRow_(sheet, date) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+  const values = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  for (let i = 0; i < values.length; i++) {
+    if (String(values[i][0]) === String(date)) return i + 2;
+  }
+  return 0;
+}
+
+function savePhoto_(record) {
+  if (!record.photo || String(record.photo).indexOf('data:image/') !== 0) return record.photo || '';
+  const folder = getPhotoFolder_();
+  const match = String(record.photo).match(new RegExp('^data:(image/[^;]+);base64,(.+)$'));
+  if (!match) return '';
+  const extension = match[1].split('/')[1].replace('jpeg', 'jpg');
+  const blob = Utilities.newBlob(Utilities.base64Decode(match[2]), match[1], record.date + '.' + extension);
+  const file = folder.createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return 'https://drive.google.com/thumbnail?id=' + file.getId() + '&sz=w1000';
+}
+
+function getPhotoFolder_() {
+  const folders = DriveApp.getFoldersByName(PHOTO_FOLDER_NAME);
+  return folders.hasNext() ? folders.next() : DriveApp.createFolder(PHOTO_FOLDER_NAME);
+}
+
+function average_(nums) {
+  const clean = nums.map(Number).filter(function(n) { return n > 0; });
+  if (!clean.length) return 0;
+  return Math.round(clean.reduce(function(sum, n) { return sum + n; }, 0) / clean.length);
+}`;
+let currentGroup=0,saved=false,photoData="";
+const today=new Date(); const todayKey=formatDate(today);
+const allItems=groups.flatMap(g=>g.items);
+let records=loadRecords();
+let state=records[todayKey]?.metrics || {};
+
+document.getElementById("todayText").textContent=`${today.getFullYear()} 年 ${String(today.getMonth()+1).padStart(2,"0")} 月 ${String(today.getDate()).padStart(2,"0")} 日`;
+const startDateInput=document.getElementById("startDate");
+startDateInput.value=localStorage.getItem(START_KEY)||todayKey;
+startDateInput.addEventListener("change",()=>{localStorage.setItem(START_KEY,startDateInput.value);renderDashboard();});
+
+if(records[todayKey]){
+  document.getElementById("noteInput").value=records[todayKey].note||"";
+  photoData=records[todayKey].photo||"";
+  saved=true;
+  if(photoData) showPhoto(photoData);
+}
+document.getElementById("noteInput").addEventListener("input",()=>{saved=false;updateNoteCounter();renderAverage();});
+document.getElementById("photoInput").addEventListener("change",handlePhoto);
+document.getElementById("importFile").addEventListener("change",importData);
+document.getElementById("sheetUrlInput").value=localStorage.getItem(SHEET_URL_KEY)||"";
+document.getElementById("appsScriptCode").value=APPS_SCRIPT_CODE;
+renderSyncStatus();
+
+function formatDate(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
+function loadRecords(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
+function persistRecords(){localStorage.setItem(STORAGE_KEY,JSON.stringify(records));}
+function showView(view){
+  ["today","metrics","history","export"].forEach(v=>document.getElementById(v+"View").classList.toggle("hidden",v!==view));
+  document.querySelectorAll(".nav-btn").forEach(btn=>btn.classList.remove("active"));
+  const index={today:0,metrics:1,history:2,export:3}[view]; document.querySelectorAll(".nav-btn")[index].classList.add("active");
+  if(view==="history") renderHistory();
+}
+function getDayInfo(){
+  const start=new Date(startDateInput.value+"T00:00:00"); const now=new Date(todayKey+"T00:00:00");
+  const day=Math.max(1,Math.min(100,Math.floor((now-start)/(1000*60*60*24))+1));
+  let stage="7–14 天｜起始覺察期";
+  if(day>=14&&day<21) stage="14–21 天｜穩定成形期";
+  else if(day>=21&&day<35) stage="28–35 天｜深化調整期";
+  else if(day>=35) stage="35–100 天｜長程築基期";
+  return{day,stage};
+}
+function renderDashboard(){
+  const info=getDayInfo(); const pct=Math.round(info.day/100*100);
+  document.getElementById("stageText").textContent=`第 ${info.day} 天｜${info.stage}`;
+  document.getElementById("dayText").textContent=`Day ${info.day} / 100`;
+  document.getElementById("progressPercent").textContent=pct+"%";
+  document.getElementById("progressFill").style.width=pct+"%";
+  const arr=Object.values(records); document.getElementById("totalRecords").textContent=arr.length;
+  document.getElementById("photoCount").textContent=arr.filter(r=>r.photo).length;
+  document.getElementById("noteCount").textContent=arr.filter(r=>r.note).length;
+  const avgs=arr.map(r=>avg(Object.values(r.metrics||{}))).filter(Boolean);
+  document.getElementById("avgAll").textContent=(avgs.length?Math.round(avg(avgs)):0)+"%";
+  renderMiniChart(arr.slice(-14));
+}
+function renderMiniChart(arr){
+  const chart=document.getElementById("miniChart"); chart.innerHTML="";
+  if(!arr.length){chart.innerHTML='<span class="small-note">儲存後會出現趨勢圖。</span>';return}
+  arr.forEach(r=>{const a=Math.round(avg(Object.values(r.metrics||{}))||0);const bar=document.createElement("div");bar.className="chart-bar";bar.style.height=Math.max(8,a)+"%";bar.title=`${r.date}｜${a}%`;bar.innerHTML=`<span>${new Date(r.date).getDate()}</span>`;chart.appendChild(bar)});
+}
+function avg(nums){const clean=nums.filter(n=>Number(n)>0); return clean.length?clean.reduce((a,b)=>a+b,0)/clean.length:0}
+function renderTabs(){
+  const tabs=document.getElementById("groupTabs");tabs.innerHTML="";
+  groups.forEach((group,index)=>{const b=document.createElement("button");b.className="tab"+(index===currentGroup?" active":"");b.textContent=group.name;b.onclick=()=>{currentGroup=index;renderAll()};tabs.appendChild(b)});
+}
+function renderItems(){
+  const group=groups[currentGroup]; document.getElementById("groupTitle").textContent=group.name; document.getElementById("groupHint").textContent=group.hint;
+  const itemList=document.getElementById("itemList");itemList.innerHTML="";
+  group.items.forEach(item=>{const currentValue=state[item]; const card=document.createElement("div");card.className="record-item"; if(currentValue>=100)card.classList.add("completed-100"); else if(currentValue>=75)card.classList.add("completed-75");
+    card.innerHTML=`<div class="item-head"><div class="item-name">${item}</div><div class="item-status">${currentValue?currentValue+"%":"尚未填寫"}</div></div>`;
+    const wrap=document.createElement("div");wrap.className="water-options";
+    values.forEach(opt=>{const btn=document.createElement("button");btn.className="water-btn"+(currentValue===opt.value?" active":"");btn.dataset.value=opt.value;btn.innerHTML=`<strong>${opt.score}｜${opt.value}%</strong><span>${opt.label}</span>`;btn.onclick=()=>{state[item]=opt.value;saved=false;renderAll();reward(opt.value,item)};wrap.appendChild(btn)});
+    card.appendChild(wrap); itemList.appendChild(card);
+  });
+}
+function renderAverage(){
+  const filled=allItems.filter(item=>state[item]); const average=filled.length?Math.round(filled.reduce((s,item)=>s+state[item],0)/filled.length):0;
+  document.getElementById("averageScore").textContent=average+"%"; const deg=Math.round(average/100*360);
+  document.getElementById("scoreCircle").style.background=`conic-gradient(var(--purple-soft) 0deg,var(--weather-2) ${deg}deg,#eee ${deg}deg 360deg)`;
+  const msg=document.getElementById("dailyMessage");
+  msg.textContent=average>=100?"本日吉光完成，收下一枚光印。":average>=75?"水位已上升，今日能量穩定。":average>=50?"你已經看見自己，這就是啟動。":average>0?"慢慢來，今日需要的是陪伴，不是責備。":"開始今日記錄，讓水位慢慢上升。";
+  updateChecks(filled); renderDashboard();
+}
+function updateChecks(filled){
+  setCheck("checkPhoto",!!photoData); setCheck("checkNote",document.getElementById("noteInput").value.trim().length>0); setCheck("checkAll",filled.length===allItems.length); setCheck("checkSaved",saved);
+}
+function setCheck(id,done){const el=document.getElementById(id); if(!el)return; el.classList.toggle("done",done); el.querySelector(".mark").textContent=done?"✓":"・";}
+function reward(value,item){if(value===50)showToast("已經看見自己",`${item} 來到 50%，這就是今日啟動。`); if(value===75)showToast("水位上升",`${item} 已到水上，今日能量正在穩定。`); if(value===100)showToast("吉光印記完成",`${item} 到達水上上，收下一枚今日光印。`)}
+function showToast(title,text){const toast=document.getElementById("toast");document.getElementById("toastTitle").textContent=title;document.getElementById("toastText").textContent=text;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2600)}
+function nextGroup(){currentGroup=(currentGroup+1)%groups.length;renderAll();document.getElementById("metricsView").scrollIntoView({behavior:"smooth"})}
+function showFullTable(){document.getElementById("fullTableDetails").open=true;document.getElementById("fullTableDetails").scrollIntoView({behavior:"smooth"})}
+function updateNoteCounter(){document.getElementById("noteCountText").textContent=document.getElementById("noteInput").value.length}
+function handlePhoto(e){
+  const file=e.target.files[0]; if(!file)return;
+  resizePhoto(file).then(src=>{photoData=src;saved=false;showPhoto(photoData);renderAverage();showToast("照片已放入","今日煉和氣後照片已準備儲存。")})
+    .catch(()=>{const reader=new FileReader(); reader.onload=()=>{photoData=reader.result;saved=false;showPhoto(photoData);renderAverage();showToast("照片已放入","今日煉和氣後照片已準備儲存。")}; reader.readAsDataURL(file)});
+}
+function resizePhoto(file){
+  return new Promise((resolve,reject)=>{
+    const img=new Image(); const reader=new FileReader();
+    reader.onload=()=>{img.onload=()=>{
+      const max=1400; let {width,height}=img;
+      if(width>max||height>max){const ratio=Math.min(max/width,max/height);width=Math.round(width*ratio);height=Math.round(height*ratio)}
+      const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
+      canvas.getContext("2d").drawImage(img,0,0,width,height);
+      resolve(canvas.toDataURL("image/jpeg",.78));
+    }; img.onerror=reject; img.src=reader.result;};
+    reader.onerror=reject; reader.readAsDataURL(file);
+  });
+}
+function showPhoto(src){document.getElementById("photoPreview").style.display="block";document.getElementById("photoImg").src=src}
+function startVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showToast("此瀏覽器不支援語音輸入","可先用手機鍵盤的麥克風輸入。");return}
+  const rec=new SR(); rec.lang="zh-TW"; rec.interimResults=false; rec.maxAlternatives=1;
+  rec.onresult=e=>{const text=e.results[0][0].transcript; const area=document.getElementById("noteInput"); area.value=(area.value+" "+text).trim().slice(0,100); saved=false;updateNoteCounter();renderAverage();};
+  rec.start(); showToast("語音輸入啟動","請開始說今日心得，系統會轉成文字。");
+}
+function saveRecord(){
+  const note=document.getElementById("noteInput").value.trim(); const missing=allItems.filter(item=>!state[item]);
+  if(!photoData){showToast("還缺今日照片","請先上傳一張煉和氣後照片。");return}
+  if(!note){showToast("還缺今日心得","請輸入 100 字內心得。");return}
+  if(missing.length){showToast("還有水位尚未完成",`目前還有 ${missing.length} 項未填，可以慢慢補上。`);return}
+  records[todayKey]={date:todayKey,day:getDayInfo().day,stage:getDayInfo().stage,photo:photoData,note,metrics:{...state},savedAt:new Date().toISOString()};
+  persistRecords(); saved=true; renderAll(); showToast("今日紀錄已儲存","本日吉光已留下紀錄，明天再一起看見變化。");
+  if(getSheetUrl()) syncRecordToSheet(records[todayKey],"今日紀錄已同步到 Google Sheets。",true);
+}
+function renderHistory(){
+  const box=document.getElementById("historyList"); const arr=Object.values(records).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!arr.length){box.innerHTML='<p class="small-note">尚未有歷史紀錄，完成今日儲存後會出現在這裡。</p>';return}
+  box.innerHTML=arr.map(r=>{const a=Math.round(avg(Object.values(r.metrics||{}))||0);return `<div class="history-item"><div class="history-top"><span>Day ${r.day}｜${r.date}</span><span>${a}%</span></div><div style="display:flex;gap:12px;align-items:center">${r.photo?`<img class="history-img" src="${r.photo}" alt="紀錄照片">`:""}<div><div class="history-note">${r.note||""}</div><div class="small-note">${r.stage||""}</div></div></div></div>`}).join("");
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify({startDate:startDateInput.value,records},null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`百日築基備份_${todayKey}.json`;a.click();URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const file=e.target.files[0]; if(!file)return; const reader=new FileReader();
+  reader.onload=()=>{try{const data=JSON.parse(reader.result); if(data.startDate){startDateInput.value=data.startDate;localStorage.setItem(START_KEY,data.startDate)} if(data.records){records=data.records;persistRecords();showToast("匯入完成","備份資料已放回本機。");renderAll();renderHistory()}}catch(err){showToast("匯入失敗","檔案格式不是正確 JSON。")}};
+  reader.readAsText(file);
+}
+function getSheetUrl(){return (localStorage.getItem(SHEET_URL_KEY)||"").trim()}
+function saveSheetUrl(){
+  const input=document.getElementById("sheetUrlInput"); const url=input.value.trim();
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(url)){showToast("URL 格式不完整","請貼上 Apps Script 部署後，以 /exec 結尾的 Web App URL。");return}
+  localStorage.setItem(SHEET_URL_KEY,url); renderSyncStatus(); showToast("後台 URL 已儲存","之後儲存今日紀錄時，會自動同步到 Google Sheets。");
+}
+function renderSyncStatus(text){
+  const el=document.getElementById("syncStatus"); if(!el)return;
+  const url=getSheetUrl(); const last=localStorage.getItem(LAST_SYNC_KEY);
+  el.textContent=text || (url ? `後台已設定${last?"｜上次同步："+last:"｜尚未同步"}` : "尚未設定 Google Sheets 後台。");
+}
+function setSyncStatus(text){renderSyncStatus(text)}
+function syncTodayToSheet(){
+  const record=records[todayKey];
+  if(!record){showToast("今日尚未儲存","請先完成並儲存今日紀錄。");return}
+  syncRecordToSheet(record,"今日紀錄已同步到 Google Sheets。",false);
+}
+function syncAllToSheet(){
+  const url=getSheetUrl(); if(!url){showToast("尚未設定後台","請先貼上 Google Apps Script Web App URL。");return}
+  const arr=Object.values(records);
+  if(!arr.length){showToast("沒有可同步資料","儲存紀錄後再同步。");return}
+  setSyncStatus(`正在同步 ${arr.length} 筆紀錄到 Google Sheets...`);
+  postToSheet({action:"syncAll",records:arr,startDate:startDateInput.value}).then(()=>markSynced(`已送出 ${arr.length} 筆紀錄到 Google Sheets。`)).catch(syncFailed);
+}
+function syncRecordToSheet(record,successText,quiet){
+  const url=getSheetUrl(); if(!url){if(!quiet)showToast("尚未設定後台","請先貼上 Google Apps Script Web App URL。");return}
+  setSyncStatus(`正在同步 ${record.date} 到 Google Sheets...`);
+  postToSheet({action:"upsertRecord",record,startDate:startDateInput.value}).then(()=>markSynced(successText)).catch(syncFailed);
+}
+function postToSheet(payload){
+  return fetch(getSheetUrl(),{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+}
+function markSynced(text){
+  const stamp=new Date().toLocaleString("zh-TW",{hour12:false});
+  localStorage.setItem(LAST_SYNC_KEY,stamp); renderSyncStatus(text); showToast("同步已送出",text);
+}
+function syncFailed(){
+  setSyncStatus("同步失敗。請確認 Web App URL、部署權限與網路連線。");
+  showToast("同步失敗","請確認 Google Apps Script Web App URL 與部署權限。");
+}
+function fetchFromSheet(){
+  const url=getSheetUrl(); if(!url){showToast("尚未設定後台","請先貼上 Google Apps Script Web App URL。");return}
+  const callbackName="foundationSheetCallback_"+Date.now();
+  setSyncStatus("正在從 Google Sheets 取回資料...");
+  window[callbackName]=data=>{
+    try{
+      if(data&&data.records){records={...records,...data.records}; persistRecords(); if(records[todayKey]){state=records[todayKey].metrics||{};document.getElementById("noteInput").value=records[todayKey].note||"";photoData=records[todayKey].photo||"";if(photoData)showPhoto(photoData)} renderAll(); renderHistory(); markSynced("已從 Google Sheets 取回並合併資料。")}
+      else throw new Error("empty");
+    }catch(err){syncFailed()}
+    finally{delete window[callbackName]; script.remove()}
+  };
+  const script=document.createElement("script");
+  script.onerror=()=>{delete window[callbackName];script.remove();syncFailed()};
+  script.src=url+(url.includes("?")?"&":"?")+"action=list&callback="+callbackName+"&t="+Date.now();
+  document.body.appendChild(script);
+}
+function copyAppsScript(){
+  const code=document.getElementById("appsScriptCode");
+  code.select(); code.setSelectionRange(0,99999);
+  navigator.clipboard?.writeText(code.value).then(()=>showToast("已複製","Apps Script 程式碼已複製。")).catch(()=>document.execCommand("copy")&&showToast("已複製","Apps Script 程式碼已複製。"));
+}
+function clearToday(){if(!confirm("確定清除今日資料？"))return; delete records[todayKey]; persistRecords(); state={};photoData="";saved=false;document.getElementById("noteInput").value="";document.getElementById("photoPreview").style.display="none";renderAll();showToast("今日已清除","可以重新填寫今日資料。")}
+document.getElementById("weatherSelect").addEventListener("change",e=>{const themes={sunny:["#fff8dc","#f5d46b","#f8b778"],rainy:["#e8eef2","#a8bfd1","#9a8faa"],cloudy:["#f8f5f0","#f5d46b","#a8bfd1"],overcast:["#efedf0","#c9b8c9","#d8c3a5"],foggy:["#f4f6f2","#b8c7b1","#d9ddd4"]}; const t=themes[e.target.value]; const root=document.documentElement; root.style.setProperty("--weather-1",t[0]);root.style.setProperty("--weather-2",t[1]);root.style.setProperty("--weather-3",t[2]); showToast("天氣色彩已切換","今日記錄會使用新的天氣光感。")});
+function renderAll(){renderTabs();renderItems();updateNoteCounter();renderAverage();renderDashboard()}
+renderAll();
+</script>
+</body>
+</html>
