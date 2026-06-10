@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060913">
+  <title>聖域軌道站｜今日航行</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --ink: #f4f6ff;
+      --ink-soft: #bdc5db;
+      --muted: #79839d;
+      --bg: #050812;
+      --panel: rgba(11, 16, 32, 0.72);
+      --panel-solid: #0b1020;
+      --line: rgba(169, 189, 255, 0.13);
+      --line-hot: rgba(112, 230, 255, 0.42);
+      --cyan: #72e7ff;
+      --cyan-soft: rgba(114, 231, 255, 0.13);
+      --violet: #9881ff;
+      --violet-soft: rgba(152, 129, 255, 0.14);
+      --gold: #ffc875;
+      --green: #73edb2;
+      --red: #ff7d8b;
+      --radius: 22px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 78% 4%, rgba(89, 78, 255, 0.12), transparent 28rem),
+        linear-gradient(180deg, #050812 0%, #080c18 45%, #050812 100%);
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+      font-synthesis: none;
+    }
+
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+    ::selection { color: #05101a; background: var(--cyan); }
+
+    .noise, .grid, .orb {
+      position: fixed;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .noise {
+      inset: 0;
+      opacity: 0.19;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+    .grid {
+      inset: 0;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(114, 231, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(114, 231, 255, 0.08) 1px, transparent 1px);
+      background-size: 88px 88px;
+      mask-image: linear-gradient(to bottom, transparent, #000 22%, transparent 82%);
+    }
+    .orb {
+      width: 34rem;
+      height: 34rem;
+      right: -12rem;
+      top: 38rem;
+      border: 1px solid rgba(114, 231, 255, 0.14);
+      border-radius: 50%;
+      box-shadow: 0 0 120px rgba(86, 82, 255, 0.09), inset 0 0 80px rgba(114, 231, 255, 0.04);
+    }
+
+    .shell {
+      width: min(1500px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 8, 18, 0.72);
+      backdrop-filter: blur(22px) saturate(130%);
+    }
+    .topbar-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 38px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      position: relative;
+      border: 1px solid rgba(114, 231, 255, 0.35);
+      border-radius: 50%;
+      box-shadow: inset 0 0 18px rgba(114, 231, 255, 0.12);
+    }
+    .brand-mark::before, .brand-mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(152, 129, 255, 0.58);
+    }
+    .brand-mark::before { inset: 7px; }
+    .brand-mark::after {
+      width: 4px;
+      height: 4px;
+      background: var(--cyan);
+      border: 0;
+      box-shadow: 0 0 12px var(--cyan);
+    }
+    .eyebrow {
+      font: 600 10px/1.2 "Space Grotesk", sans-serif;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .brand-name {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .top-status {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+    .status-date { text-align: right; }
+    .status-date strong {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+    }
+    .status-date span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .sync-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      color: var(--green);
+      border: 1px solid rgba(115, 237, 178, 0.2);
+      border-radius: 999px;
+      background: rgba(115, 237, 178, 0.06);
+      font: 600 10px/1 "Space Grotesk", sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .sync-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+      animation: breathe 2.4s ease-in-out infinite;
+    }
+
+    .hero {
+      min-height: 550px;
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background: #050812 url("assets/sanctuary-orbit-hero.png") center right / cover no-repeat;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(5, 8, 18, 0.99) 0%, rgba(5, 8, 18, 0.88) 32%, rgba(5, 8, 18, 0.18) 68%, rgba(5, 8, 18, 0.2) 100%),
+        linear-gradient(0deg, #050812 0%, transparent 34%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      z-index: -1;
+      border: 1px solid rgba(180, 203, 255, 0.08);
+      clip-path: polygon(0 0, 12% 0, 12% 1px, 88% 1px, 88% 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .hero-content {
+      width: min(670px, 58%);
+      padding: 86px 0 92px;
+    }
+    .signal {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      color: var(--cyan);
+      font: 600 11px/1 "Space Grotesk", sans-serif;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .signal::before {
+      content: "";
+      width: 36px;
+      height: 1px;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+    }
+    h1 {
+      max-width: 620px;
+      margin: 0;
+      font-size: clamp(48px, 6.2vw, 92px);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+    }
+    h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(202, 217, 255, 0.6);
+    }
+    .hero-copy {
+      max-width: 520px;
+      margin: 24px 0 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .primary-button, .ghost-button, .icon-button {
+      border: 0;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+    }
+    .primary-button {
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 8px;
+      color: #06121c;
+      background: var(--cyan);
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 0 34px rgba(114, 231, 255, 0.17);
+    }
+    .primary-button:hover { transform: translateY(-2px); background: #a7efff; }
+    .ghost-button {
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink-soft);
+      background: rgba(8, 14, 29, 0.46);
+    }
+    .ghost-button:hover { color: var(--ink); border-color: var(--line-hot); }
+    .mission-readout {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(110px, 1fr));
+      width: min(610px, 100%);
+      margin-top: 46px;
+      border-top: 1px solid var(--line);
+    }
+    .readout {
+      position: relative;
+      padding: 18px 18px 4px 0;
+    }
+    .readout + .readout { padding-left: 20px; border-left: 1px solid var(--line); }
+    .readout-value {
+      font: 600 28px/1 "Space Grotesk", sans-serif;
+      letter-spacing: -0.04em;
+    }
+    .readout-label {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(310px, 0.72fr);
+      gap: 22px;
+      padding: 42px 0 70px;
+    }
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 28px;
+      width: 82px;
+      height: 1px;
+      background: var(--cyan);
+      box-shadow: 0 0 14px var(--cyan);
+    }
+    .panel-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px 28px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-kicker {
+      color: var(--cyan);
+      font: 600 10px/1 "Space Grotesk", sans-serif;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 8px 0 0;
+      font-size: clamp(23px, 3vw, 32px);
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+    }
+    .panel-count {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .panel-count strong { color: var(--ink); font-size: 18px; }
+
+    .composer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 145px auto;
+      gap: 10px;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.018);
+    }
+    .field, .select {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--ink);
+      background: rgba(4, 8, 18, 0.7);
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+    .field { padding: 0 15px; }
+    .field::placeholder { color: #66718a; }
+    .field:hover, .select:hover { border-color: rgba(169, 189, 255, 0.25); }
+    .select { padding: 0 34px 0 12px; color: var(--ink-soft); }
+    .composer .primary-button { min-height: 46px; }
+
+    .filters {
+      display: flex;
+      gap: 7px;
+      padding: 17px 28px 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter {
+      flex: 0 0 auto;
+      min-height: 32px;
+      padding: 0 12px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .filter:hover { color: var(--ink); }
+    .filter.active {
+      color: var(--cyan);
+      border-color: rgba(114, 231, 255, 0.23);
+      background: var(--cyan-soft);
+    }
+
+    .mission-list {
+      display: grid;
+      gap: 9px;
+      padding: 12px 20px 24px;
+    }
+    .mission {
+      --accent: var(--violet);
+      position: relative;
+      display: grid;
+      grid-template-columns: 8px minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 15px;
+      min-height: 84px;
+      padding: 13px 15px 13px 12px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.026);
+      transition: transform 170ms ease, border-color 170ms ease, background 170ms ease, opacity 250ms ease;
+    }
+    .mission:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 27%, transparent);
+      background: rgba(255, 255, 255, 0.043);
+    }
+    .mission.urgent { --accent: var(--red); }
+    .mission.meeting { --accent: var(--cyan); }
+    .mission.policy { --accent: var(--gold); }
+    .mission.training { --accent: var(--green); }
+    .mission.community { --accent: var(--violet); }
+    .mission.done {
+      opacity: 0;
+      transform: translateX(18px) scale(0.98);
+    }
+    .threat {
+      width: 3px;
+      height: 42px;
+      justify-self: center;
+      border-radius: 10px;
+      background: var(--accent);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 50%, transparent);
+    }
+    .mission-main { min-width: 0; }
+    .mission-title {
+      overflow: hidden;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mission-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .type-tag {
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .reward {
+      color: var(--gold);
+      font: 600 12px/1 "Space Grotesk", sans-serif;
+      white-space: nowrap;
+    }
+    .complete-button {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--ink-soft);
+      background: rgba(4, 8, 18, 0.5);
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+    .complete-button:hover {
+      color: #06121c;
+      border-color: var(--cyan);
+      background: var(--cyan);
+      transform: scale(1.06);
+    }
+    .complete-button svg { width: 16px; height: 16px; }
+
+    .empty {
+      display: none;
+      padding: 58px 24px 68px;
+      text-align: center;
+    }
+    .empty.show { display: block; }
+    .empty-ring {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 20px;
+      position: relative;
+      border: 1px solid rgba(114, 231, 255, 0.35);
+      border-radius: 50%;
+      box-shadow: 0 0 32px rgba(114, 231, 255, 0.11);
+    }
+    .empty-ring::before {
+      content: "";
+      position: absolute;
+      inset: 13px;
+      border: 1px solid var(--violet);
+      border-radius: inherit;
+    }
+    .empty h3 { margin: 0; font-size: 20px; }
+    .empty p { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+
+    .completed {
+      padding: 0 28px 26px;
+      border-top: 1px solid var(--line);
+    }
+    .completed-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 13px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .text-button {
+      padding: 0;
+      border: 0;
+      color: var(--cyan);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .done-list { display: grid; gap: 7px; }
+    .done-item {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 0 11px;
+      border-radius: 9px;
+      color: var(--muted);
+      background: rgba(115, 237, 178, 0.035);
+      font-size: 11px;
+    }
+    .done-item .check { color: var(--green); }
+    .done-item .done-name {
+      overflow: hidden;
+      text-decoration: line-through;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .undo-button {
+      padding: 4px 7px;
+      border: 0;
+      border-radius: 6px;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .side-stack { display: grid; align-content: start; gap: 22px; }
+    .profile { padding: 28px; }
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .avatar {
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      border: 1px solid rgba(114, 231, 255, 0.24);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(114, 231, 255, 0.17), rgba(152, 129, 255, 0.04) 55%, transparent 57%);
+      font: 600 18px/1 "Space Grotesk", sans-serif;
+    }
+    .avatar::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border: 1px dashed rgba(152, 129, 255, 0.31);
+      border-radius: 50%;
+      animation: rotate 18s linear infinite;
+    }
+    .profile-name { margin: 0; font-size: 18px; }
+    .profile-role { margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .level-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 28px;
+    }
+    .level {
+      font: 600 42px/0.9 "Space Grotesk", sans-serif;
+      letter-spacing: -0.06em;
+    }
+    .level small { color: var(--muted); font-size: 12px; letter-spacing: 0; }
+    .total-exp { color: var(--gold); font: 600 13px/1 "Space Grotesk", sans-serif; }
+    .xp-track {
+      height: 4px;
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .xp-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      box-shadow: 0 0 12px var(--cyan);
+      transition: width 600ms cubic-bezier(.2, .7, .2, 1);
+    }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 23px;
+    }
+    .resource {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .resource-label { color: var(--muted); font-size: 9px; letter-spacing: 0.12em; }
+    .resource-value { margin-top: 6px; font: 600 17px/1 "Space Grotesk", sans-serif; }
+
+    .domains { padding: 28px; }
+    .domain-orbit {
+      width: min(220px, 82%);
+      aspect-ratio: 1;
+      position: relative;
+      margin: 30px auto 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(114, 231, 255, 0.16);
+      border-radius: 50%;
+      box-shadow: inset 0 0 65px rgba(75, 84, 255, 0.06);
+    }
+    .domain-orbit::before, .domain-orbit::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(152, 129, 255, 0.15);
+      border-radius: 50%;
+    }
+    .domain-orbit::before { inset: 22%; }
+    .domain-orbit::after { inset: 40%; background: rgba(114, 231, 255, 0.12); box-shadow: 0 0 30px rgba(114, 231, 255, 0.2); }
+    .completion-number {
+      position: relative;
+      z-index: 2;
+      font: 600 34px/1 "Space Grotesk", sans-serif;
+    }
+    .completion-number small { display: block; margin-top: 7px; color: var(--muted); font-size: 8px; letter-spacing: 0.16em; text-align: center; }
+    .domain-node {
+      --node-color: var(--cyan);
+      width: 13px;
+      height: 13px;
+      position: absolute;
+      border: 3px solid var(--panel-solid);
+      border-radius: 50%;
+      background: var(--node-color);
+      box-shadow: 0 0 13px var(--node-color);
+      transform: translate(-50%, -50%);
+      transition: transform 220ms ease;
+    }
+    .domain-node:hover { transform: translate(-50%, -50%) scale(1.35); }
+    .domain-node:nth-of-type(1) { left: 50%; top: 0; }
+    .domain-node:nth-of-type(2) { left: 97%; top: 36%; --node-color: var(--red); }
+    .domain-node:nth-of-type(3) { left: 79%; top: 91%; --node-color: var(--gold); }
+    .domain-node:nth-of-type(4) { left: 21%; top: 91%; --node-color: var(--green); }
+    .domain-node:nth-of-type(5) { left: 3%; top: 36%; --node-color: var(--violet); }
+    .domain-list { display: grid; gap: 15px; }
+    .domain-row {
+      display: grid;
+      grid-template-columns: 9px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+    }
+    .domain-color { width: 5px; height: 5px; border-radius: 50%; background: var(--domain-color); box-shadow: 0 0 8px var(--domain-color); }
+    .domain-name { font-size: 11px; }
+    .domain-progress { color: var(--muted); font: 500 10px/1 "Space Grotesk", sans-serif; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid rgba(114, 231, 255, 0.24);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(7, 13, 27, 0.92);
+      box-shadow: 0 14px 50px rgba(0, 0, 0, 0.42);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 18px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      backdrop-filter: blur(18px);
+      font-size: 12px;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .toast::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+
+    @keyframes breathe { 50% { opacity: 0.35; transform: scale(0.78); } }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    @media (max-width: 1040px) {
+      .hero-content { width: min(650px, 76%); }
+      .dashboard { grid-template-columns: 1fr; }
+      .side-stack { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 24px, 1500px); }
+      .topbar-inner { min-height: 64px; }
+      .sync-pill { display: none; }
+      .status-date span { display: none; }
+      .hero {
+        min-height: 640px;
+        align-items: end;
+        background-position: 64% center;
+      }
+      .hero::before {
+        background:
+          linear-gradient(0deg, #050812 0%, rgba(5, 8, 18, 0.88) 42%, rgba(5, 8, 18, 0.17) 78%),
+          linear-gradient(90deg, rgba(5, 8, 18, 0.72), transparent);
+      }
+      .hero-content { width: 100%; padding: 230px 0 58px; }
+      h1 { font-size: clamp(48px, 15vw, 72px); }
+      .hero-copy { font-size: 14px; line-height: 1.75; }
+      .hero-actions { align-items: stretch; flex-direction: column; width: min(100%, 360px); }
+      .mission-readout { margin-top: 36px; }
+      .readout { padding-right: 9px; }
+      .readout + .readout { padding-left: 11px; }
+      .readout-value { font-size: 23px; }
+      .dashboard { padding-top: 24px; }
+      .panel-head { align-items: flex-start; padding: 24px 20px 18px; }
+      .composer { grid-template-columns: 1fr auto; padding: 16px 20px; }
+      .composer .select { grid-column: 1; }
+      .composer .primary-button { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; }
+      .filters { padding-inline: 20px; }
+      .mission-list { padding-inline: 12px; }
+      .mission { grid-template-columns: 6px minmax(0, 1fr) auto; gap: 10px; padding-right: 10px; }
+      .reward { display: none; }
+      .completed { padding-inline: 20px; }
+      .side-stack { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 430px) {
+      .brand .eyebrow { display: none; }
+      .brand-name { margin: 0; font-size: 12px; }
+      .status-date strong { font-size: 11px; }
+      .hero::after { inset: 8px; }
+      .signal { letter-spacing: 0.13em; }
+      .mission-readout { grid-template-columns: 1fr 1fr; }
+      .readout:nth-child(3) { display: none; }
+      .composer { grid-template-columns: 1fr; }
+      .composer .select, .composer .primary-button { grid-column: 1; grid-row: auto; }
+      .panel-count { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="grid" aria-hidden="true"></div>
+  <div class="orb" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <div class="eyebrow">Sanctuary orbital command</div>
+          <div class="brand-name">聖域軌道站 · 旖力 ILID</div>
+        </div>
+      </div>
+      <div class="top-status">
+        <div class="status-date">
+          <strong id="today-label">今日航行</strong>
+          <span id="full-date"></span>
+        </div>
+        <div class="sync-pill"><span class="sync-dot"></span>System synchronized</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell">
+        <div class="hero-content">
+          <div class="signal">Transmission 07 · Online</div>
+          <h1>穿越今日<span>抵達更遠之境</span></h1>
+          <p class="hero-copy">每一項完成，都在校準你的軌道。聚焦當下最重要的一件事，讓聖域的五個領域重新同步。</p>
+          <div class="hero-actions">
+            <button class="primary-button" type="button" id="focus-mission">啟動今日任務</button>
+            <button class="ghost-button" type="button" id="scroll-domains">查看領域同步</button>
+          </div>
+          <div class="mission-readout" aria-label="今日任務摘要">
+            <div class="readout">
+              <div class="readout-value" id="hero-rate">0%</div>
+              <div class="readout-label">航行完成率</div>
+            </div>
+            <div class="readout">
+              <div class="readout-value" id="hero-exp">0</div>
+              <div class="readout-label">今日獲得 EXP</div>
+            </div>
+            <div class="readout">
+              <div class="readout-value" id="hero-remain">0</div>
+              <div class="readout-label">待處理訊號</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="shell dashboard">
+      <section class="panel" id="missions-panel">
+        <div class="panel-head">
+          <div>
+            <div class="section-kicker">Mission sequence</div>
+            <h2>今日任務序列</h2>
+          </div>
+          <div class="panel-count">尚有 <strong id="mission-count">0</strong> 項</div>
+        </div>
+
+        <form class="composer" id="mission-form">
+          <input class="field" id="mission-input" maxlength="48" autocomplete="off" placeholder="輸入下一項任務..." aria-label="任務名稱">
+          <select class="select" id="mission-type" aria-label="任務分類">
+            <option value="task">支線任務</option>
+            <option value="meeting">召集議會</option>
+            <option value="urgent">緊急訊號</option>
+            <option value="policy">頒布聖令</option>
+            <option value="training">講師培育</option>
+            <option value="community">跨域協作</option>
+          </select>
+          <button class="primary-button" type="submit">加入序列</button>
+        </form>
+
+        <nav class="filters" aria-label="任務篩選">
+          <button class="filter active" type="button" data-filter="all">全部</button>
+          <button class="filter" type="button" data-filter="urgent">緊急</button>
+          <button class="filter" type="button" data-filter="meeting">議會</button>
+          <button class="filter" type="button" data-filter="task">支線</button>
+          <button class="filter" type="button" data-filter="policy">聖令</button>
+          <button class="filter" type="button" data-filter="training">培育</button>
+          <button class="filter" type="button" data-filter="community">跨域</button>
+        </nav>
+
+        <div class="mission-list" id="mission-list"></div>
+        <div class="empty" id="empty-state">
+          <div class="empty-ring" aria-hidden="true"></div>
+          <h3>今日軌道已淨空</h3>
+          <p>所有訊號皆已回應。現在可以停泊、呼吸，等待下一次啟航。</p>
+        </div>
+
+        <div class="completed" id="completed-section" hidden>
+          <div class="completed-head">
+            <span>已完成任務</span>
+            <button class="text-button" type="button" id="reset-today">重設今日紀錄</button>
+          </div>
+          <div class="done-list" id="done-list"></div>
+        </div>
+      </section>
+
+      <aside class="side-stack">
+        <section class="panel profile">
+          <div class="section-kicker">Guardian profile</div>
+          <div class="profile-top">
+            <div class="avatar" aria-hidden="true">IL</div>
+            <div>
+              <h2 class="profile-name">旖力 Ilid</h2>
+              <div class="profile-role">靈境大守護者 · 動功負責人</div>
+            </div>
+          </div>
+          <div class="level-row">
+            <div class="level"><small>LV</small> <span id="level">7</span></div>
+            <div class="total-exp"><span id="total-exp">2,480</span> EXP</div>
+          </div>
+          <div class="xp-track" aria-label="升級進度"><div class="xp-fill" id="xp-fill"></div></div>
+          <div class="resource-grid">
+            <div class="resource">
+              <div class="resource-label">FOCUS / 專注</div>
+              <div class="resource-value">78%</div>
+            </div>
+            <div class="resource">
+              <div class="resource-label">ENERGY / 能量</div>
+              <div class="resource-value">65%</div>
+            </div>
+            <div class="resource">
+              <div class="resource-label">COMPLETED / 完成</div>
+              <div class="resource-value" id="completed-count">0</div>
+            </div>
+            <div class="resource">
+              <div class="resource-label">STREAK / 連續</div>
+              <div class="resource-value">07 DAYS</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel domains" id="domains-panel">
+          <div class="section-kicker">Domain synchronization</div>
+          <h2>五域同步</h2>
+          <div class="domain-orbit" aria-hidden="true">
+            <span class="domain-node"></span>
+            <span class="domain-node"></span>
+            <span class="domain-node"></span>
+            <span class="domain-node"></span>
+            <span class="domain-node"></span>
+            <div class="completion-number"><span id="orbit-rate">0%</span><small>SYNC RATE</small></div>
+          </div>
+          <div class="domain-list" id="domain-list"></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const TYPES = {
+      meeting: { label: "召集議會", exp: 120, domain: 0 },
+      urgent: { label: "緊急訊號", exp: 200, domain: 1 },
+      policy: { label: "頒布聖令", exp: 100, domain: 2 },
+      training: { label: "講師培育", exp: 80, domain: 3 },
+      community: { label: "跨域協作", exp: 70, domain: 4 },
+      task: { label: "支線任務", exp: 60, domain: 0 }
+    };
+
+    const DOMAINS = [
+      { name: "秘法圖書館", color: "#72e7ff" },
+      { name: "火線前哨站", color: "#ff7d8b" },
+      { name: "議政神殿", color: "#ffc875" },
+      { name: "英雄孵化場", color: "#73edb2" },
+      { name: "跨域結界網", color: "#9881ff" }
+    ];
+
+    const DEFAULT_MISSIONS = [
+      { id: 1, name: "核心五體週例會", type: "meeting", note: "今天 14:00 · 欣儀 / 黃蘋協同" },
+      { id: 2, name: "人事案緊急處置", type: "urgent", note: "今天必須完成" },
+      { id: 3, name: "隨喜制度政策確認", type: "policy", note: "本週內完成" },
+      { id: 4, name: "回覆欣儀報告信", type: "task", note: "約 15 分鐘" },
+      { id: 5, name: "課程教材設計審核", type: "task", note: "欣儀協同 · 本週" },
+      { id: 6, name: "提案投稿簡報準備", type: "urgent", note: "主線任務 · 本月截止" },
+      { id: 7, name: "新講師評估面談", type: "training", note: "下午 15:00" }
+    ];
+
+    const STORAGE_KEY = "sanctuary-orbit-v1";
+    let state = loadState();
+    let activeFilter = "all";
+    let toastTimer;
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (saved && Array.isArray(saved.missions) && Array.isArray(saved.done)) return saved;
+      } catch (error) {
+        console.warn("Unable to restore saved mission state.", error);
+      }
+      return {
+        missions: DEFAULT_MISSIONS.map(mission => ({ ...mission })),
+        done: [],
+        nextId: 8,
+        baseExp: 2480,
+        domainProgress: [0, 0, 0, 0, 0]
+      };
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function escapeHTML(value) {
+      const node = document.createElement("div");
+      node.textContent = value;
+      return node.innerHTML;
+    }
+
+    function render() {
+      const visible = state.missions.filter(mission => activeFilter === "all" || mission.type === activeFilter);
+      const list = document.getElementById("mission-list");
+      list.innerHTML = visible.map(missionTemplate).join("");
+
+      const hasNoMissions = state.missions.length === 0;
+      document.getElementById("empty-state").classList.toggle("show", hasNoMissions);
+      list.hidden = hasNoMissions;
+
+      const total = state.missions.length + state.done.length;
+      const rate = total ? Math.round((state.done.length / total) * 100) : 0;
+      const earned = state.done.reduce((sum, mission) => sum + TYPES[mission.type].exp, 0);
+      const level = 7 + Math.floor((state.baseExp - 2480) / 500);
+      const levelProgress = ((state.baseExp - 2480) % 500) / 5;
+
+      document.getElementById("mission-count").textContent = state.missions.length;
+      document.getElementById("hero-rate").textContent = rate + "%";
+      document.getElementById("hero-exp").textContent = earned.toLocaleString();
+      document.getElementById("hero-remain").textContent = state.missions.length;
+      document.getElementById("orbit-rate").textContent = rate + "%";
+      document.getElementById("completed-count").textContent = state.done.length;
+      document.getElementById("level").textContent = level;
+      document.getElementById("total-exp").textContent = state.baseExp.toLocaleString();
+      document.getElementById("xp-fill").style.width = levelProgress + "%";
+
+      renderDone();
+      renderDomains();
+      bindMissionButtons();
+      saveState();
+    }
+
+    function missionTemplate(mission) {
+      const type = TYPES[mission.type];
+      return `
+        <article class="mission ${mission.type}" data-id="${mission.id}">
+          <span class="threat" aria-hidden="true"></span>
+          <div class="mission-main">
+            <h3 class="mission-title">${escapeHTML(mission.name)}</h3>
+            <div class="mission-meta">
+              <span class="type-tag">${type.label}</span>
+              <span>${escapeHTML(mission.note || "剛剛加入序列")}</span>
+            </div>
+          </div>
+          <div class="reward">+${type.exp} EXP</div>
+          <button class="complete-button" type="button" data-complete="${mission.id}" aria-label="完成「${escapeHTML(mission.name)}」">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="m5 12 4 4L19 6"></path>
+            </svg>
+          </button>
+        </article>
+      `;
+    }
+
+    function renderDone() {
+      const section = document.getElementById("completed-section");
+      section.hidden = state.done.length === 0;
+      document.getElementById("done-list").innerHTML = state.done.slice().reverse().map(mission => `
+        <div class="done-item">
+          <span class="check">✓</span>
+          <span class="done-name">${escapeHTML(mission.name)}</span>
+          <span>+${TYPES[mission.type].exp}</span>
+          <button class="undo-button" type="button" data-undo="${mission.id}">復原</button>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-undo]").forEach(button => {
+        button.addEventListener("click", () => undoMission(Number(button.dataset.undo)));
+      });
+    }
+
+    function renderDomains() {
+      document.getElementById("domain-list").innerHTML = DOMAINS.map((domain, index) => `
+        <div class="domain-row">
+          <span class="domain-color" style="--domain-color:${domain.color}"></span>
+          <span class="domain-name">${domain.name}</span>
+          <span class="domain-progress">${Math.round(state.domainProgress[index] * 100)}%</span>
+        </div>
+      `).join("");
+    }
+
+    function bindMissionButtons() {
+      document.querySelectorAll("[data-complete]").forEach(button => {
+        button.addEventListener("click", () => completeMission(Number(button.dataset.complete)));
+      });
+    }
+
+    function completeMission(id) {
+      const mission = state.missions.find(item => item.id === id);
+      const card = document.querySelector(`[data-id="${id}"]`);
+      if (!mission || !card) return;
+      const type = TYPES[mission.type];
+      card.classList.add("done");
+      setTimeout(() => {
+        state.missions = state.missions.filter(item => item.id !== id);
+        state.done.push(mission);
+        state.baseExp += type.exp;
+        state.domainProgress[type.domain] = Math.min(1, state.domainProgress[type.domain] + 0.25);
+        showToast(`訊號已回應 · +${type.exp} EXP`);
+        render();
+      }, 220);
+    }
+
+    function undoMission(id) {
+      const mission = state.done.find(item => item.id === id);
+      if (!mission) return;
+      const type = TYPES[mission.type];
+      state.done = state.done.filter(item => item.id !== id);
+      state.missions.push(mission);
+      state.baseExp = Math.max(2480, state.baseExp - type.exp);
+      state.domainProgress[type.domain] = Math.max(0, state.domainProgress[type.domain] - 0.25);
+      showToast("任務已回到序列");
+      render();
+    }
+
+    function addMission(event) {
+      event.preventDefault();
+      const input = document.getElementById("mission-input");
+      const name = input.value.trim();
+      if (!name) {
+        input.focus();
+        showToast("請先輸入任務名稱");
+        return;
+      }
+      state.missions.unshift({
+        id: state.nextId++,
+        name,
+        type: document.getElementById("mission-type").value,
+        note: "剛剛加入序列"
+      });
+      input.value = "";
+      activeFilter = "all";
+      updateFilterUI();
+      showToast("新任務已加入航行序列");
+      render();
+    }
+
+    function resetToday() {
+      const confirmed = window.confirm("確定要重設今日的完成紀錄嗎？已完成任務會回到序列。");
+      if (!confirmed) return;
+      state.missions = [...state.done, ...state.missions].sort((a, b) => a.id - b.id);
+      state.done = [];
+      state.baseExp = 2480;
+      state.domainProgress = [0, 0, 0, 0, 0];
+      showToast("今日航行紀錄已重設");
+      render();
+    }
+
+    function updateFilterUI() {
+      document.querySelectorAll(".filter").forEach(button => {
+        button.classList.toggle("active", button.dataset.filter === activeFilter);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("show");
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function setDate() {
+      const now = new Date();
+      const week = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+      document.getElementById("today-label").textContent = week[now.getDay()] + " · 今日航行";
+      document.getElementById("full-date").textContent =
+        `${now.getFullYear()} / ${String(now.getMonth() + 1).padStart(2, "0")} / ${String(now.getDate()).padStart(2, "0")}`;
+    }
+
+    document.getElementById("mission-form").addEventListener("submit", addMission);
+    document.getElementById("reset-today").addEventListener("click", resetToday);
+    document.getElementById("focus-mission").addEventListener("click", () => {
+      document.getElementById("missions-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => document.getElementById("mission-input").focus(), 500);
+    });
+    document.getElementById("scroll-domains").addEventListener("click", () => {
+      document.getElementById("domains-panel").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        updateFilterUI();
+        render();
+      });
+    });
+
+    setDate();
+    render();
+  </script>
+</body>
+</html>

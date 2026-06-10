@@ -3,52 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>身強體壯功教練｜回訓與制度入口</title>
-
+  <title>本靈吉光萬花筒記錄</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #fbfbfc;
-      --white: #ffffff;
-      --text: #202124;
-      --muted: rgba(60,60,67,.68);
-      --line: rgba(0,0,0,.06);
-
-      --blue: #70d7f5;
-      --purple: #b58cff;
-      --pink: #f3a8ff;
-      --yellow: #fff3a8;
-      --green: #b8f5cf;
-      --red: #f0a4a4;
-
-      --glass: rgba(255,255,255,.42);
-      --glass-strong: rgba(255,255,255,.62);
-      --shadow: 0 28px 90px rgba(170,180,220,.10);
-
-      --radius-xl: 38px;
-      --radius-lg: 26px;
-      --max: 1240px;
+      --primary: #7c3aed;
+      --primary-deep: #5b21b6;
+      --ink: #22212a;
+      --muted: rgba(34, 33, 42, .62);
+      --line: rgba(124, 58, 237, .13);
+      --surface: rgba(255, 255, 255, .76);
+      --surface-strong: #ffffff;
+      --soft-violet: #ede9fe;
+      --soft-pink: #fce7f3;
+      --soft-cyan: #e0f7fa;
+      --shadow: 0 24px 70px rgba(92, 64, 142, .13);
+      --radius: 28px;
+      --max: 1120px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
+      min-height: 100vh;
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      color: var(--text);
-      line-height: 1.75;
-      overflow-x: hidden;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", Roboto, Helvetica, Arial, sans-serif;
       background:
-        radial-gradient(circle at 10% 12%, rgba(255,215,120,.16), transparent 24%),
-        radial-gradient(circle at 85% 10%, rgba(178,132,255,.16), transparent 24%),
-        radial-gradient(circle at 82% 72%, rgba(91,229,255,.12), transparent 22%),
-        radial-gradient(circle at 20% 80%, rgba(120,255,196,.10), transparent 18%),
-        linear-gradient(180deg, #fbfbfc 0%, #f7f7f8 42%, #fbfbfd 100%);
+        radial-gradient(circle at 12% 0%, rgba(252, 231, 243, .82), transparent 32%),
+        radial-gradient(circle at 88% 14%, rgba(224, 247, 250, .9), transparent 28%),
+        linear-gradient(135deg, #fff 0%, #fbf8ff 44%, #f5fbff 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, transparent 0 54%, rgba(124, 58, 237, .055) 54% 55%, transparent 55% 100%),
+        linear-gradient(145deg, transparent 0 62%, rgba(14, 165, 233, .05) 62% 63%, transparent 63% 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, transparent 72%);
     }
 
     a {
@@ -56,1356 +53,557 @@
       text-decoration: none;
     }
 
-    .container {
-      width: min(92%, var(--max));
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* 七光系漂浮光場 */
-    .light-field {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .light {
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(20px);
-      opacity: .42;
-      animation: floatLight 24s ease-in-out infinite;
-    }
-
-    .l1 {
-      width: 180px;
-      height: 24px;
-      background: rgba(255,221,120,.55);
-      top: 14%;
-      left: -40px;
-    }
-
-    .l2 {
-      width: 140px;
-      height: 20px;
-      background: rgba(194,140,255,.55);
-      top: 28%;
-      right: 12%;
-      animation-delay: 3s;
-    }
-
-    .l3 {
-      width: 200px;
-      height: 24px;
-      background: rgba(120,240,255,.42);
-      bottom: 22%;
-      left: 12%;
-      animation-delay: 6s;
-    }
-
-    .l4 {
-      width: 120px;
-      height: 18px;
-      background: rgba(120,255,180,.36);
-      top: 70%;
-      right: 18%;
-      animation-delay: 9s;
-    }
-
-    .l5 {
-      width: 160px;
-      height: 20px;
-      background: rgba(255,160,220,.36);
-      top: 54%;
-      left: 42%;
-      animation-delay: 12s;
-    }
-
-    .l6 {
-      width: 120px;
-      height: 16px;
-      background: rgba(255,255,255,.42);
-      top: 40%;
-      right: 30%;
-      animation-delay: 15s;
-    }
-
-    .l7 {
-      width: 150px;
-      height: 22px;
-      background: rgba(140,180,255,.32);
-      bottom: 12%;
-      right: -20px;
-      animation-delay: 18s;
-    }
-
-    @keyframes floatLight {
-      0% {
-        transform: translateY(0) translateX(0);
-      }
-      50% {
-        transform: translateY(-24px) translateX(16px);
-      }
-      100% {
-        transform: translateY(0) translateX(0);
-      }
-    }
-
-    /* 導覽列 */
-    .topbar {
+    .navbar {
       position: sticky;
       top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(28px);
-      background: rgba(251,251,253,.68);
-      border-bottom: 1px solid rgba(255,255,255,.56);
-    }
-
-    .topbar-inner {
+      z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 16px;
+      width: min(100% - 36px, var(--max));
+      margin: 0 auto;
       padding: 18px 0;
+      backdrop-filter: blur(24px);
     }
 
-    .brand {
-      font-size: .94rem;
-      font-weight: 400;
-      letter-spacing: .08em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: rgba(70,48,95,.82);
-    }
-
-    .brand-mark {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--purple), var(--pink), var(--blue));
-      box-shadow: 0 0 36px rgba(181,140,255,.34);
-    }
-
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .nav a {
-      padding: 8px 12px;
-      border-radius: 999px;
-      color: rgba(60,60,67,.62);
-      font-size: .9rem;
-      font-weight: 300;
-      transition: .5s ease;
-    }
-
-    .nav a:hover {
-      background: rgba(255,255,255,.56);
-      color: var(--text);
-    }
-
-    .nav a.active {
-      background: rgba(255,255,255,.74);
-      color: rgba(70,48,95,.88);
-    }
-
-    /* Hero */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 120px 0 90px;
-    }
-
-    .breath-orb {
-      position: absolute;
-      right: 8%;
-      top: 18%;
-      width: min(42vw, 520px);
-      height: min(42vw, 520px);
-      border-radius: 46% 54% 58% 42% / 50% 44% 56% 50%;
-      border: 3px solid transparent;
-      background:
-        linear-gradient(var(--bg), var(--bg)) padding-box,
-        linear-gradient(135deg, var(--blue), var(--purple), var(--pink), var(--yellow), var(--blue)) border-box;
-      opacity: .56;
-      animation: morph 16s ease-in-out infinite alternate;
-      z-index: 1;
-    }
-
-    .breath-orb::before,
-    .breath-orb::after {
+    .navbar::before {
       content: "";
-      position: absolute;
-      inset: 10%;
-      border-radius: inherit;
-      border: 1px solid rgba(140,190,255,.38);
-      transform: rotate(42deg);
+      position: fixed;
+      inset: 0 0 auto;
+      height: 74px;
+      z-index: -1;
+      background: rgba(255, 255, 255, .58);
+      border-bottom: 1px solid rgba(124, 58, 237, .08);
+      backdrop-filter: blur(24px);
     }
 
-    .breath-orb::after {
-      inset: 18%;
-      transform: rotate(-38deg);
-      border-color: rgba(240,168,255,.34);
+    .logo {
+      color: var(--primary-deep);
+      font-size: 15px;
+      font-weight: 800;
     }
 
-    @keyframes morph {
-      from {
-        border-radius: 46% 54% 58% 42% / 50% 44% 56% 50%;
-        transform: rotate(0deg) scale(1);
-      }
-      to {
-        border-radius: 58% 42% 44% 56% / 42% 58% 46% 54%;
-        transform: rotate(8deg) scale(1.04);
-      }
-    }
-
-    .hero-card {
-      position: relative;
-      z-index: 2;
-      max-width: 980px;
-      border-radius: 52px;
-      padding: clamp(42px, 6vw, 86px);
-      background: linear-gradient(180deg, rgba(255,255,255,.58), rgba(255,255,255,.32));
-      border: 1px solid rgba(255,255,255,.82);
-      box-shadow:
-        0 40px 90px rgba(160,180,255,.08),
-        0 10px 30px rgba(255,255,255,.35);
-      backdrop-filter: blur(42px);
-    }
-
-    .eyebrow {
-      color: rgba(91,140,200,.78);
-      font-size: .92rem;
-      font-weight: 300;
-      letter-spacing: .12em;
-      margin-bottom: 24px;
-      display: inline-block;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(3.6rem, 8vw, 7.5rem);
-      line-height: .94;
-      letter-spacing: -.08em;
-      max-width: 1100px;
-      font-weight: 200;
-    }
-
-    .hero-line {
-      display: block;
-      opacity: 0;
-      transform: translateY(34px);
-      animation: rise 1.6s cubic-bezier(.22,1,.36,1) forwards;
-    }
-
-    .hero-line:nth-child(2) {
-      animation-delay: .28s;
-    }
-
-    .hero-line:nth-child(3) {
-      animation-delay: .56s;
-    }
-
-    .hero-desc {
-      max-width: 760px;
-      margin: 34px 0 0;
-      color: rgba(60,60,67,.68);
-      font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-      line-height: 1.95;
-      font-weight: 300;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: rise 1.8s cubic-bezier(.22,1,.36,1) .8s forwards;
-    }
-
-    .hero-actions {
+    .nav-links {
       display: flex;
-      gap: 14px;
       flex-wrap: wrap;
-      margin-top: 42px;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: rise 1.8s cubic-bezier(.22,1,.36,1) 1.05s forwards;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .btn {
+    .nav-links a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
       border-radius: 999px;
-      padding: 14px 24px;
-      font-weight: 300;
-      border: 1px solid rgba(255,255,255,.75);
-      cursor: pointer;
-      transition: all .75s cubic-bezier(.22,1,.36,1);
-      font-size: .98rem;
-      backdrop-filter: blur(20px);
+      color: rgba(34, 33, 42, .68);
+      font-size: 14px;
+      font-weight: 800;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
     }
 
-    .btn-primary {
-      background: rgba(36,36,38,.9);
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] {
       color: white;
-      box-shadow: 0 18px 48px rgba(0,0,0,.12);
+      background: var(--primary);
+      transform: translateY(-1px);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 60px rgba(0,0,0,.16);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,.46);
-      color: rgba(40,40,44,.78);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,.78);
-      transform: translateY(-4px);
-    }
-
-    .scroll-hint {
-      margin-top: 42px;
-      color: rgba(60,60,67,.52);
-      font-size: .9rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      animation: rise 1.6s cubic-bezier(.22,1,.36,1) 1.28s forwards;
-    }
-
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--purple);
-      animation: pulse 3.2s ease-in-out infinite;
-    }
-
-    section {
-      padding: 110px 0;
+    .page {
+      width: min(100% - 36px, var(--max));
+      margin: 0 auto;
+      padding: 46px 0 72px;
       position: relative;
-      z-index: 2;
     }
 
-    .reveal {
+    header {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      color: var(--primary-deep);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1, h2 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-size: clamp(34px, 6vw, 68px);
+      line-height: 1.06;
+      font-weight: 800;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid rgba(255, 255, 255, .78);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      padding: clamp(22px, 3vw, 34px);
+    }
+
+    .panel h2 {
+      font-size: 24px;
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    label, .metric-title {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 0 14px;
+      background: rgba(255, 255, 255, .82);
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+    }
+
+    input[type="date"]:focus {
+      border-color: rgba(124, 58, 237, .44);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, .08);
+    }
+
+    .metric {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .radio-group {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 7px;
+      border-radius: 18px;
+      background: rgba(124, 58, 237, .07);
+    }
+
+    .radio-item input {
+      position: absolute;
       opacity: 0;
-      transform: translateY(48px);
-      transition: all 1.6s cubic-bezier(.22,1,.36,1);
+      pointer-events: none;
     }
 
-    .reveal.visible {
+    .radio-item label {
+      display: grid;
+      place-items: center;
+      min-height: 46px;
+      margin: 0;
+      border-radius: 13px;
+      color: rgba(34, 33, 42, .68);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: center;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .radio-item input:checked + label {
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      color: white;
+      box-shadow: 0 10px 26px rgba(124, 58, 237, .22);
+    }
+
+    .radio-item label:hover { transform: translateY(-1px); }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 16px;
+      min-height: 48px;
+      padding: 0 18px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 8px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary-deep), #9333ea 58%, #ec4899);
+      box-shadow: 0 18px 36px rgba(124, 58, 237, .24);
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-btn {
+      min-height: 40px;
+      color: rgba(34, 33, 42, .72);
+      background: rgba(255, 255, 255, .7);
+      border: 1px solid rgba(124, 58, 237, .1);
+      font-size: 14px;
+    }
+
+    .filter-btn.active {
+      color: white;
+      background: var(--primary);
+      box-shadow: 0 12px 24px rgba(124, 58, 237, .18);
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 330px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .6);
+      border: 1px solid rgba(124, 58, 237, .1);
+      padding: 16px;
+    }
+
+    .history {
+      margin-top: 24px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: center;
+      border-bottom: 1px solid rgba(124, 58, 237, .09);
+    }
+
+    th {
+      color: var(--primary-deep);
+      background: rgba(124, 58, 237, .06);
+      font-weight: 800;
+    }
+
+    tbody tr:hover td { background: rgba(255, 255, 255, .52); }
+
+    .total {
+      color: var(--primary-deep);
+      font-weight: 900;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 28px 12px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      max-width: min(360px, calc(100vw - 44px));
+      padding: 14px 18px;
+      border-radius: 18px;
+      color: white;
+      background: rgba(91, 33, 182, .94);
+      box-shadow: 0 18px 45px rgba(91, 33, 182, .22);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      font-weight: 700;
+    }
+
+    .toast.show {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .section-head {
-      margin-bottom: 42px;
-    }
-
-    .section-title {
-      margin: 0 0 16px;
-      font-size: clamp(2.2rem, 4vw, 4.6rem);
-      line-height: 1.08;
-      letter-spacing: -.065em;
-      font-weight: 200;
-    }
-
-    .section-subtitle {
-      margin: 0;
-      max-width: 840px;
-      color: var(--muted);
-      font-size: 1.06rem;
-      font-weight: 300;
-      line-height: 1.9;
-    }
-
-    .grid {
-      display: grid;
-      gap: 26px;
-    }
-
-    .grid-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .grid-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .card {
-      background: rgba(255,255,255,.42);
-      border: 1px solid rgba(255,255,255,.65);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 20px 60px rgba(180,190,220,.08);
-      backdrop-filter: blur(34px);
-      padding: 34px;
-      transition: all 1s cubic-bezier(.22,1,.36,1);
-    }
-
-    .card:hover {
-      background: rgba(255,255,255,.62);
-      transform: translateY(-6px);
-      box-shadow: 0 32px 90px rgba(180,190,220,.14);
-    }
-
-    .card-solid {
-      background: rgba(255,255,255,.56);
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.46);
-      color: rgba(91,110,180,.82);
-      font-size: .86rem;
-      font-weight: 300;
-      margin-bottom: 16px;
-      border: 1px solid rgba(255,255,255,.66);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 1.24rem;
-      letter-spacing: -.03em;
-      font-weight: 300;
-    }
-
-    .card p,
-    .card li {
-      color: var(--muted);
-      margin: 0;
-      font-weight: 300;
-    }
-
-    .key-card {
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .key-sentence {
-      font-size: clamp(1.9rem, 3.8vw, 3.7rem);
-      line-height: 1.08;
-      letter-spacing: -.06em;
-      margin: 0;
-      color: var(--text);
-      font-weight: 200;
-    }
-
-    .manifesto {
-      text-align: center;
-      padding: clamp(48px, 7vw, 90px);
-      background:
-        radial-gradient(circle at 50% 40%, rgba(181,140,255,.22), transparent 34%),
-        radial-gradient(circle at 30% 70%, rgba(112,215,245,.18), transparent 28%),
-        rgba(255,255,255,.38);
-      color: var(--text);
-      overflow: hidden;
-    }
-
-    .manifesto h2 {
-      margin: 0;
-      font-size: clamp(2.2rem, 5vw, 5.4rem);
-      line-height: 1.08;
-      letter-spacing: -.065em;
-      font-weight: 200;
-    }
-
-    .manifesto p {
-      margin: 24px auto 0;
-      max-width: 780px;
-      color: var(--muted);
-      font-size: 1.08rem;
-      font-weight: 300;
-      line-height: 1.9;
-    }
-
-    .timeline {
-      display: grid;
-      gap: 18px;
-    }
-
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 140px 1fr auto;
-      align-items: center;
-      gap: 22px;
-      background: rgba(255,255,255,.42);
-      border: 1px solid rgba(255,255,255,.66);
-      box-shadow: 0 16px 42px rgba(180,190,220,.07);
-      border-radius: 30px;
-      padding: 24px;
-      backdrop-filter: blur(30px);
-    }
-
-    .date {
-      color: rgba(122,92,255,.78);
-      font-size: 1.05rem;
-      font-weight: 300;
-      letter-spacing: -.01em;
-    }
-
-    .timeline-item h3 {
-      margin: 0 0 6px;
-      font-size: 1.22rem;
-      font-weight: 300;
-    }
-
-    .timeline-item p {
-      margin: 0;
-      color: var(--muted);
-      font-weight: 300;
-    }
-
-    .pathway {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .path-step {
-      background: rgba(255,255,255,.44);
-      border: 1px solid rgba(255,255,255,.66);
-      border-radius: 28px;
-      padding: 24px;
-      min-height: 220px;
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(28px);
-    }
-
-    .path-step::after {
-      content: "";
-      position: absolute;
-      right: -30px;
-      top: -30px;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(181,140,255,.20), transparent 68%);
-    }
-
-    .path-step span {
-      display: inline-flex;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255,255,255,.54);
-      color: rgba(122,92,255,.86);
-      font-size: .82rem;
-      font-weight: 300;
-      margin-bottom: 16px;
-      border: 1px solid rgba(255,255,255,.7);
-    }
-
-    .path-step h3 {
-      margin: 0 0 8px;
-      font-size: 1.08rem;
-      font-weight: 300;
-    }
-
-    .path-step p {
-      margin: 0;
-      color: var(--muted);
-      font-size: .95rem;
-      font-weight: 300;
-    }
-
-    .blueprint-grid,
-    .split-grid,
-    .map-layout {
-      display: grid;
-      gap: 26px;
-    }
-
-    .blueprint-grid {
-      grid-template-columns: 1.05fr .95fr;
-    }
-
-    .split-grid {
-      grid-template-columns: repeat(2,minmax(0,1fr));
-    }
-
-    .map-layout {
-      grid-template-columns: .82fr 1.18fr;
-      align-items: start;
-    }
-
-    .blueprint-lead {
-      font-size: clamp(1.8rem, 3vw, 3.7rem);
-      line-height: 1.1;
-      letter-spacing: -.06em;
-      color: var(--text);
-      margin: 0 0 22px;
-      font-weight: 200;
-    }
-
-    .concept-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 20px;
-    }
-
-    .concept-item,
-    .detail-box {
-      background: rgba(255,255,255,.38);
-      border: 1px solid rgba(255,255,255,.62);
-      border-radius: 22px;
-      padding: 18px;
-      backdrop-filter: blur(22px);
-    }
-
-    .concept-item strong,
-    .detail-box strong {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--text);
-      font-weight: 300;
-    }
-
-    .concept-item p {
-      color: var(--muted);
-      margin: 0;
-    }
-
-    .compare-table {
-      display: grid;
-      gap: 16px;
-    }
-
-    .compare-row {
-      display: grid;
-      grid-template-columns: 140px 1fr 1fr;
-      gap: 18px;
-      padding: 24px;
-      border-radius: 30px;
-      background: rgba(255,255,255,.42);
-      border: 1px solid rgba(255,255,255,.66);
-      box-shadow: 0 16px 42px rgba(180,190,220,.07);
-      backdrop-filter: blur(30px);
-    }
-
-    .compare-row h3 {
-      margin: 0;
-      font-size: 1.08rem;
-      font-weight: 300;
-    }
-
-    .compare-row p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: .95rem;
-    }
-
-    .compare-label {
-      color: rgba(122,92,255,.78);
-      font-weight: 300;
-    }
-
-    .split-card {
-      min-height: 380px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .split-card .big-number {
-      font-size: clamp(3rem, 6vw, 6rem);
-      line-height: .9;
-      letter-spacing: -.06em;
-      font-weight: 200;
-      color: rgba(122,92,255,.18);
-    }
-
-    .levels-panel {
-      display: grid;
-      gap: 16px;
-    }
-
-    .level-btn {
-      width: 100%;
-      text-align: left;
-      border: 1px solid rgba(255,255,255,.66);
-      border-radius: 26px;
-      background: rgba(255,255,255,.42);
-      padding: 22px 20px;
-      cursor: pointer;
-      transition: all .8s cubic-bezier(.22,1,.36,1);
-      color: var(--text);
-      box-shadow: 0 14px 36px rgba(180,190,220,.06);
-      backdrop-filter: blur(26px);
-    }
-
-    .level-btn:hover {
-      transform: translateY(-3px);
-      background: rgba(255,255,255,.62);
-    }
-
-    .level-btn.active {
-      background: linear-gradient(180deg, rgba(181,140,255,.18), rgba(255,255,255,.50));
-      border-color: rgba(181,140,255,.28);
-    }
-
-    .level-btn .stage {
-      display: block;
-      color: var(--muted);
-      font-size: .86rem;
-      margin-bottom: 4px;
-      font-weight: 300;
-    }
-
-    .level-btn .name {
-      display: block;
-      font-size: 1.2rem;
-      font-weight: 300;
-      margin-bottom: 4px;
-    }
-
-    .level-btn .meta {
-      color: var(--muted);
-      font-size: .92rem;
-      font-weight: 300;
-    }
-
-    .detail-stage {
-      display: inline-flex;
-      border-radius: 999px;
-      padding: 7px 12px;
-      background: rgba(255,255,255,.46);
-      font-weight: 300;
-      font-size: .9rem;
-      margin-bottom: 14px;
-    }
-
-    .detail-title {
-      margin: 0 0 12px;
-      font-size: clamp(2rem, 3vw, 3.2rem);
-      letter-spacing: -.055em;
-      line-height: 1.06;
-      font-weight: 200;
-    }
-
-    .detail-desc {
-      margin: 0 0 22px;
-      color: var(--muted);
-      font-weight: 300;
-    }
-
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 16px;
-    }
-
-    .detail-box ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      font-weight: 300;
-    }
-
-    .accordion {
-      display: grid;
-      gap: 14px;
-    }
-
-    .accordion-item {
-      background: rgba(255,255,255,.42);
-      border: 1px solid rgba(255,255,255,.66);
-      border-radius: 26px;
-      overflow: hidden;
-      box-shadow: 0 14px 36px rgba(180,190,220,.06);
-      backdrop-filter: blur(28px);
-    }
-
-    .accordion-btn {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-align: left;
-      gap: 16px;
-      padding: 22px 24px;
-      font-size: 1rem;
-      font-weight: 300;
-    }
-
-    .accordion-content {
-      display: none;
-      color: var(--muted);
-      padding: 0 24px 24px;
-      font-weight: 300;
-      line-height: 1.9;
-    }
-
-    .accordion-item.active .accordion-content {
-      display: block;
-    }
-
-    .notice-box {
-      background: linear-gradient(180deg, rgba(255,190,190,.18), rgba(255,255,255,.44));
-      border: 1px solid rgba(240,164,164,.22);
-    }
-
-    .notice-box h3 {
-      color: rgba(160,80,80,.9);
-    }
-
-    footer {
-      padding: 80px 0 100px;
-      text-align: center;
-      color: rgba(60,60,67,.48);
-      font-size: .95rem;
-      font-weight: 300;
-      position: relative;
-      z-index: 2;
-    }
-
-    @keyframes rise {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes pulse {
-      0%,100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.45);
-        opacity: .45;
-      }
-    }
-
-    @media (max-width: 1080px) {
-      .grid-3,
-      .grid-2,
-      .map-layout,
-      .detail-grid,
-      .pathway,
-      .blueprint-grid,
-      .split-grid,
-      .compare-row {
-        grid-template-columns: 1fr;
-      }
-
-      .timeline-item {
-        grid-template-columns: 1fr;
-        align-items: start;
-      }
-
-      .path-step {
-        min-height: auto;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .topbar-inner {
-        flex-direction: column;
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .page { padding-top: 42px; }
+    }
+
+    @media (max-width: 620px) {
+      .page { width: min(100% - 24px, var(--max)); }
+      .navbar {
+        width: min(100% - 24px, var(--max));
         align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 0;
       }
 
-      .nav {
-        gap: 4px;
-      }
-
-      .hero {
-        padding: 90px 0 70px;
-      }
-
-      .hero-card,
-      .card {
-        padding: 26px;
-        border-radius: 32px;
-      }
-
-      h1 {
-        font-size: 3rem;
-        letter-spacing: -.06em;
-      }
-
-      section {
-        padding: 76px 0;
-      }
-
-      .breath-orb {
-        width: 280px;
-        height: 280px;
-        right: -80px;
-        top: 14%;
-        opacity: .34;
-      }
+      .navbar::before { height: 118px; }
+      .radio-group { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chart-wrap { height: 280px; }
+      .panel { border-radius: 22px; }
     }
   </style>
 </head>
-
 <body>
-  <div class="light-field">
-    <span class="light l1"></span>
-    <span class="light l2"></span>
-    <span class="light l3"></span>
-    <span class="light l4"></span>
-    <span class="light l5"></span>
-    <span class="light l6"></span>
-    <span class="light l7"></span>
-  </div>
+  <nav class="navbar">
+    <div class="logo">本靈吉光萬花筒記錄</div>
+    <ul class="nav-links">
+      <li><a href="index.html" aria-current="page">首頁</a></li>
+      <li><a href="daily-progress.html">每日進度</a></li>
+      <li><a href="continuing_education.html">回訓入口</a></li>
+    </ul>
+  </nav>
 
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand"><span class="brand-mark"></span>身強體壯功教練｜回訓與制度入口</div>
-      <nav class="nav">
-        <a href="index.html" class="active">首頁</a>
-        <a href="daily-progress.html">每日進度</a>
-        <a href="#core">核心要務</a>
-        <a href="#dates">時間日期</a>
-        <a href="#map">教練地圖</a>
-        <a href="#blueprint">重構藍圖</a>
-        <a href="#black">黑衣資格</a>
-        <a href="#faq">FAQ</a>
-        <a href="#notice">公告全文</a>
-      </nav>
-    </div>
-  </header>
+  <main class="page">
+    <header>
+      <div class="eyebrow">本靈吉光萬花筒</div>
+      <h1>本靈吉光萬花筒記錄</h1>
+      <p class="lead">用八個指標記錄每日光感狀態，留下清楚的量化軌跡，讓週、月、年變化一眼看見。</p>
+    </header>
 
-  <main>
-    <section class="hero">
-      <div class="breath-orb"></div>
-      <div class="container">
-        <div class="hero-card">
-          <div class="eyebrow">給身強體壯功教練的回訓與制度入口網站</div>
-          <h1>
-            <span class="hero-line">教練不是頭銜。</span>
-            <span class="hero-line">是三脈報恩</span>
-            <span class="hero-line">的通路。</span>
-          </h1>
-          <p class="hero-desc">
-            血脈、靈脈、法脈，透過回訓凝聚法魂、補充光糧、校準教練水位，讓教練格成為變化氣質的修煉。
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#dates">查看回訓場次</a>
-            <a class="btn btn-secondary" href="#map">查看教練地圖</a>
+    <section class="layout" aria-label="本靈吉光萬花筒記錄工具">
+      <div class="panel">
+        <h2>今日萬花筒狀態</h2>
+        <form id="logForm">
+          <div class="field">
+            <label for="logDate">紀錄日期</label>
+            <input type="date" id="logDate" required />
           </div>
-          <div class="scroll-hint"><span class="pulse-dot"></span>向下滑動，進入回訓制度入口</div>
+          <div id="metricsContainer"></div>
+          <button class="submit-btn" type="submit">儲存今日記錄</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>萬花筒趨勢分析</h2>
+        <div class="tools" role="group" aria-label="圖表範圍">
+          <button class="filter-btn active" type="button" data-range="week">週變化</button>
+          <button class="filter-btn" type="button" data-range="month">月變化</button>
+          <button class="filter-btn" type="button" data-range="year">年變化</button>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="trendChart"></canvas>
         </div>
       </div>
     </section>
 
-    <section id="core" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">三句話，先掌握核心。</h2>
-          <p class="section-subtitle">讓初階教練不必讀完整份公告，也能先掌握這次回訓的精神與任務。</p>
-        </div>
-
-        <div class="grid grid-3">
-          <div class="card key-card">
-            <div class="pill"><span class="dot"></span>核心 01</div>
-            <p class="key-sentence">教練是三脈報恩通路。</p>
-            <p>血脈、靈脈、法脈，透過教練法位成為可行、可修、可承擔的生命通路。</p>
-          </div>
-
-          <div class="card key-card">
-            <div class="pill"><span class="dot"></span>核心 02</div>
-            <p class="key-sentence">回訓不是補課，是補充光糧。</p>
-            <p>回訓是法位校準、法魂凝聚與教練使命義務感的年度補給。</p>
-          </div>
-
-          <div class="card key-card">
-            <div class="pill"><span class="dot"></span>核心 03</div>
-            <p class="key-sentence">教練格，是變化氣質的修煉。</p>
-            <p>從功法、法理、素質、實作與承擔中，讓教練格成為生命真實的變化。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <div class="container">
-        <div class="manifesto card">
-          <h2>回訓，是教練法位的年度校準。</h2>
-          <p>班會中，大愛光老師帶領整體初階教練更新法平台，進入教練分階。每一位教練法位夥伴，一年必參與二次含以上。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="dates" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">2026 回訓時間日期。</h2>
-          <p class="section-subtitle">請依場次完成報名與付款。費用：2000 元／次。地點：桃園慈場，桃園市中山東路 29 號 13 樓。</p>
-        </div>
-
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="date">05 / 23<br>週六</div>
-            <div>
-              <h3>第一場次｜第一日</h3>
-              <p>時間：14:00–17:30｜主軸：進階教練，功法分階啟動</p>
-            </div>
-            <a class="btn btn-primary" href="https://edu.hochi.org.tw/HCourseDetail.aspx?Batch=CB202604280002" target="_blank">立即報名</a>
-          </div>
-
-          <div class="timeline-item">
-            <div class="date">05 / 24<br>週日</div>
-            <div>
-              <h3>第一場次｜功法分階</h3>
-              <p>時間：09:00–17:30｜以十八式操練為基底，確認一至三階功法水位。</p>
-            </div>
-            <a class="btn btn-primary" href="#" onclick="alert('請替換為 05/23-24 EDU 報名連結'); return false;">立即報名</a>
-          </div>
-
-          <div class="timeline-item">
-            <div class="date">08 / 30<br>週日</div>
-            <div>
-              <h3>第二場次｜奠定教練格</h3>
-              <p>時間：09:00–17:30｜聚焦教練格、水位與修煉成果凝聚。</p>
-            </div>
-            <a class="btn btn-primary" href="#" onclick="alert('請替換為 08/30 EDU 報名連結'); return false;">立即報名</a>
-          </div>
-
-          <div class="timeline-item">
-            <div class="date">10 / 25<br>週日</div>
-            <div>
-              <h3>第三場次｜教練實務</h3>
-              <p>時間：09:00–17:30｜建構護持網，深化教練實務與法脈教練體。</p>
-            </div>
-            <a class="btn btn-primary" href="#" onclick="alert('請替換為 10/25 EDU 報名連結'); return false;">立即報名</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="path" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">教練可循路徑。</h2>
-          <p class="section-subtitle">把制度先後順序視覺化：從通過檢覈，到回訓補充光糧，最後建立教練體系。</p>
-        </div>
-
-        <div class="pathway card">
-          <div class="path-step"><span>01</span><h3>通過教練檢覈</h3><p>取得進入教練法位與回訓軌道的基本資格。</p></div>
-          <div class="path-step"><span>02</span><h3>進入教練分階</h3><p>一階儲備教練、二階準教練、三階初階教練依地圖定位。</p></div>
-          <div class="path-step"><span>03</span><h3>參與年度回訓</h3><p>一年至少二次，凝聚法慈場與教練使命義務感。</p></div>
-          <div class="path-step"><span>04</span><h3>變化氣質教練格</h3><p>以儀軌、素質、點線面體、意氣力愛光提升武格報親恩。</p></div>
-          <div class="path-step"><span>05</span><h3>建構教練體系</h3><p>共同運作身強體壯功學程與晨光玉成下半場課程。</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="blueprint" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">成長地圖重構藍圖。</h2>
-          <p class="section-subtitle">把「功」與「責」拆開來看，讓修煉水位回歸純粹，讓組織職能回歸專業，降低能量衝突與行政耗損。</p>
-        </div>
-
-        <div class="blueprint-grid">
-          <div class="card">
-            <div class="pill"><span class="dot"></span>核心理念</div>
-            <p class="blueprint-lead">功責分離，能責對等。</p>
-            <p>本次回訓與分階制度，本質上是一場組織架構的功能解構工程。分階的目的，是讓每位教練找到適合自己的軸線。</p>
-          </div>
-
-          <div class="card">
-            <div class="pill"><span class="dot"></span>舊制痛點</div>
-            <div class="concept-list">
-              <div class="concept-item"><strong>能責失衡</strong><p>高水位不必然等於能承擔教學、行政與數位系統管理。</p></div>
-              <div class="concept-item"><strong>行政與數位耗損</strong><p>開課、Zoom、錄音轉譯、AI 處理、報名系統等重疊義務，使教練能量分散。</p></div>
-              <div class="concept-item"><strong>心理能量過載</strong><p>若把分階看成考試，容易產生壓力、抗拒與受傷感。</p></div>
-              <div class="concept-item"><strong>組織支撐脆弱</strong><p>功能不清時，容易只靠少數核心人員支撐整體體系。</p></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="level-compare" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">1–7 階水位與職能對照。</h2>
-          <p class="section-subtitle">用一張表看懂：每一層不是高低標籤，而是「修煉水位」與「組織責任」的對位。</p>
-        </div>
-
-        <div class="compare-table">
-          <div class="compare-row">
-            <div><div class="compare-label">一、二階</div><h3>地基與推廣</h3></div>
-            <div><strong>修煉水位定位</strong><p>保護層。專注個人修煉、基本推廣與法脈連結。</p></div>
-            <div><strong>組織責任</strong><p>基礎執行義務。無須承擔複雜行政、資訊系統與高階教學義務。</p></div>
-          </div>
-
-          <div class="compare-row">
-            <div><div class="compare-label">三、四階</div><h3>專業教練職能</h3></div>
-            <div><strong>修煉水位定位</strong><p>核心層。具備專業教學、開課、護持與穩定對位能力。</p></div>
-            <div><strong>組織責任</strong><p>需承擔 Zoom、AI 錄音轉譯、報名系統、行政對接。</p></div>
-          </div>
-
-          <div class="compare-row">
-            <div><div class="compare-label">五至七階</div><h3>傳承與請法</h3></div>
-            <div><strong>修煉水位定位</strong><p>精英層。涉及 18 式傳承特殊規格與高水位感應。</p></div>
-            <div><strong>組織責任</strong><p>參與高階課程與請法機制，承擔法脈傳承與高階預成責任。</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="map" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">身強體壯功學校地圖。</h2>
-          <p class="section-subtitle">點選階段，確認自己目前的制度位置、責任義務與修煉方向。</p>
-        </div>
-
-        <div class="map-layout">
-          <div class="levels-panel" id="levelButtons"></div>
-          <div class="card card-solid">
-            <div class="detail-stage" id="detailStage"></div>
-            <h3 class="detail-title" id="detailTitle"></h3>
-            <p class="detail-desc" id="detailDesc"></p>
-            <div class="detail-grid">
-              <div class="detail-box"><strong>定位</strong><ul id="detailRole"></ul></div>
-              <div class="detail-box"><strong>責任與義務</strong><ul id="detailDuty"></ul></div>
-              <div class="detail-box"><strong>制度狀態</strong><ul id="detailStatus"></ul></div>
-              <div class="detail-box"><strong>修煉方向</strong><ul id="detailPath"></ul></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="black" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">黑衣資格，不等於修煉完成。</h2>
-          <p class="section-subtitle">取得資格是進入教練法位；修煉教練格，才是持續向上的玉成階梯。</p>
-        </div>
-
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="pill"><span class="dot"></span>取得資格層次</div>
-            <h3>通過檢覈，可正式穿上黑衣。</h3>
-            <p>通過功法檢覈、達標後，可正式穿上黑衣，具備以黑衣教練身分護持同修的榮幸。</p>
-          </div>
-
-          <div class="card">
-            <div class="pill"><span class="dot"></span>修煉教練格層次</div>
-            <h3>取得資格後，才是真正玉成的開始。</h3>
-            <p>取得資格後，仍需依教練格準則，在時間、功法、法理及個人素質上持續往上修。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="course" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">課程內容，實作導向。</h2>
-          <p class="section-subtitle">課程分兩項目，注重分級確認與建構護持網。</p>
-        </div>
-
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="pill"><span class="dot"></span>項目一</div>
-            <h3>功法精進｜教練分階</h3>
-            <p>延續教練檢覈新制，以十八式操練為基底，評估一至三階功法純熟力、蓄力、塑形力、成型力、流暢力。</p>
-          </div>
-
-          <div class="card">
-            <div class="pill"><span class="dot"></span>項目二</div>
-            <h3>教練凝聚｜素質培育</h3>
-            <p>凝聚教練魂，解壓靈，提靈格，遵循法軌，建構法脈教練體。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="prepare" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">報名與準備事項。</h2>
-          <p class="section-subtitle">快速查詢。</p>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-item active"><button class="accordion-btn"><span>報名方式</span><span>＋</span></button><div class="accordion-content">EDU 帳號登入 → 點選「課程報名」→ 選擇身強體壯功初階教練回訓 → 點選「加入報名清單」鈕，並完成結帳付款。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>報名資格與費用</span><span>＋</span></button><div class="accordion-content">報名資格：通過教練檢覈者。費用：2000 元／次。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>服裝</span><span>＋</span></button><div class="accordion-content">教練法服、和氣褲。十八式功法實作時，不須著鞋襪。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>攜帶物品</span><span>＋</span></button><div class="accordion-content">法筆、法位名牌、識別證。</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="faq" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">FAQ。</h2>
-          <p class="section-subtitle">先回答最可能被問到的問題，降低溝通成本。</p>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-item active"><button class="accordion-btn"><span>為什麼一定要回訓？</span><span>＋</span></button><div class="accordion-content">因為回訓是教練法位的年度校準，也是補充光糧、凝聚法魂與更新法平台的重要軌道。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>一年至少要參加幾次？</span><span>＋</span></button><div class="accordion-content">一年必參與二次（含）以上。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>如果不足次數會怎樣？</span><span>＋</span></button><div class="accordion-content">若不足次數，經查核確認無不可抗因素時，得取消教練資格。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>誰可以報名？</span><span>＋</span></button><div class="accordion-content">通過教練檢覈者。</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="notice" class="reveal">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">公告全文閱讀。</h2>
-          <p class="section-subtitle">此區取代下載專區，以折疊／開展方式提供完整公告內容。</p>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-item active"><button class="accordion-btn"><span>班會宗旨</span><span>＋</span></button><div class="accordion-content">此班會是專屬「身強體壯功教練」精進靈性功法、提教練格與連接法魂，建構教練結構體，共同精研法、掌法流。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>注意事項</span><span>＋</span></button><div class="accordion-content">班會中，大愛光老師帶領整體初階教練更新法平台，進入教練分階，請教練法位的每一位夥伴，一年必參與二次（含）以上。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>三大目標</span><span>＋</span></button><div class="accordion-content">一、精進教練格。二、接上法魂。三、教練分階。</div></div>
-          <div class="accordion-item"><button class="accordion-btn"><span>時間、地點與祝福</span><span>＋</span></button><div class="accordion-content">第一次：2026 年 5 月 23 日與 5 月 24 日。第二次：2026 年 8 月 30 日。第三次：2026 年 10 月 25 日。地點：桃園慈場，桃園市中山東路 29 號 13 樓。大愛光祝福您！</div></div>
-        </div>
-
-        <div class="card notice-box" style="margin-top:26px;">
-          <h3>年度必參提醒</h3>
-          <p>教練一年至少參與二次。若不足次數且無不可抗因素，得取消教練資格。</p>
-        </div>
-      </div>
+    <section class="panel history" aria-label="歷史數據查找">
+      <h2>歷史數據查找</h2>
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>速度</th>
+            <th>強度</th>
+            <th>變化</th>
+            <th>溫度</th>
+            <th>開心</th>
+            <th>境界</th>
+            <th>續航力</th>
+            <th>催功</th>
+            <th>總分</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      身強體壯功初階教練｜回訓與制度入口<br />
-      教練是三脈報恩通路 · 回訓是補充光糧 · 教練格是變化氣質的修煉
-    </div>
-  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
+    const metrics = ['速度', '強度', '變化', '溫度', '開心', '境界', '續航力', '催功'];
     const levels = [
-      {
-        stage: "一階",
-        name: "儲備教練",
-        meta: "2026/03/22 已考完試並公告",
-        desc: "一階為教練地圖的起始資格層，象徵已進入教練培育軌道，開始承接教練身分所需的基本責任與義務。",
-        role: ["作為教練培育的起點", "建立對制度、儀軌與規格的基本承接", "進入修煉成果可被整理與辨識的層次"],
-        duty: ["守住一切照規格的基本原則", "持續參與回訓與玉成，不停留在通過考試", "開始累積修煉成果：接上什麼、煉出什麼、行出什麼"],
-        status: ["已於 2026 年 3 月 22 日完成考試並公告", "屬現行制度中明確開啟的第一層", "是後續二階、三階銜接的重要基礎"],
-        path: ["以儀軌、素質、點線面體、意氣力愛光為核心", "透過回訓凝聚自身水位", "將取得資格逐步走向建立教練格"]
-      },
-      {
-        stage: "二階",
-        name: "準教練",
-        meta: "尚未開課與開放考試",
-        desc: "二階是制度中的銜接層，目的在於讓教練從已取得資格，進一步朝向更穩定的教練格與承擔能力發展。",
-        role: ["扮演從儲備教練走向成熟教練的中介階段", "補足制度深度與實務承接能力", "形成更清楚的教練水位辨識"],
-        duty: ["持續校準功法、法理與修為素質", "承接回訓所凝聚出的共同標準", "為更成熟的實務護持打下穩定基礎"],
-        status: ["目前尚未開課", "目前尚未開放考試", "未來將成為地圖中重要的進階銜接層"],
-        path: ["從會做，進到會承擔、會辨識、會穩定呈現", "從資格層，走向更清楚的教練格層", "使制度分層更完整、更有地圖感"]
-      },
-      {
-        stage: "三階",
-        name: "初階教練",
-        meta: "2020–2025 年十八式功法通過者",
-        desc: "三階初階教練為 2020 至 2025 年考試通過之教練，因當時考的是十八式功法，故依地圖中的課程深度與廣度訂為三階。",
-        role: ["作為現行地圖中較成熟的已通過教練層", "承接歷年十八式功法訓練成果", "在制度中具有較高的深度與廣度代表性"],
-        duty: ["透過回訓重新凝聚並校準自身修煉成果", "依制度重新定位自己的水位與角色", "在教練格、實務與使命感上持續往上修"],
-        status: ["屬於 2020–2025 年考試通過教練", "依課程深度與廣度重新訂為三階", "須透過回訓統整舊制與新地圖之間的對位"],
-        path: ["將既有經驗重新接回制度地圖", "從歷史資格走向當代水位辨識", "深化武格報親恩與教練使命義務感"]
-      }
+      { score: 1, text: '水下下 25%' },
+      { score: 2, text: '水下 50%' },
+      { score: 3, text: '水上 75%' },
+      { score: 4, text: '水上上 100%' }
     ];
+    const storageKey = 'kaleidoscopeLogs';
+    const dateInput = document.getElementById('logDate');
+    const metricsContainer = document.getElementById('metricsContainer');
+    const form = document.getElementById('logForm');
+    const tbody = document.querySelector('#historyTable tbody');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const toast = document.getElementById('toast');
+    let db = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    let chart;
+    let activeRange = 'week';
 
-    const levelButtons = document.getElementById("levelButtons");
-    const detailStage = document.getElementById("detailStage");
-    const detailTitle = document.getElementById("detailTitle");
-    const detailDesc = document.getElementById("detailDesc");
-    const detailRole = document.getElementById("detailRole");
-    const detailDuty = document.getElementById("detailDuty");
-    const detailStatus = document.getElementById("detailStatus");
-    const detailPath = document.getElementById("detailPath");
+    dateInput.valueAsDate = new Date();
 
-    function renderList(target, items) {
-      target.innerHTML = "";
-      items.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        target.appendChild(li);
+    metrics.forEach((metric) => {
+      const group = document.createElement('div');
+      group.className = 'metric';
+      group.innerHTML = `<div class="metric-title">${metric}</div><div class="radio-group"></div>`;
+      const radioGroup = group.querySelector('.radio-group');
+
+      levels.forEach((level) => {
+        const id = `${metric}-${level.score}`;
+        const item = document.createElement('div');
+        item.className = 'radio-item';
+        item.innerHTML = `
+          <input type="radio" id="${id}" name="${metric}" value="${level.score}" required>
+          <label for="${id}">${level.text}</label>
+        `;
+        radioGroup.appendChild(item);
       });
-    }
 
-    function renderDetail(level) {
-      detailStage.textContent = `${level.stage}｜${level.meta}`;
-      detailTitle.textContent = level.name;
-      detailDesc.textContent = level.desc;
-      renderList(detailRole, level.role);
-      renderList(detailDuty, level.duty);
-      renderList(detailStatus, level.status);
-      renderList(detailPath, level.path);
-    }
-
-    function setActive(index) {
-      document.querySelectorAll(".level-btn").forEach((btn, i) => {
-        btn.classList.toggle("active", i === index);
-      });
-    }
-
-    levels.forEach((level, index) => {
-      const btn = document.createElement("button");
-      btn.className = `level-btn ${index === 0 ? "active" : ""}`;
-      btn.innerHTML = `<span class="stage">${level.stage}</span><span class="name">${level.name}</span><span class="meta">${level.meta}</span>`;
-      btn.addEventListener("click", () => {
-        setActive(index);
-        renderDetail(level);
-      });
-      levelButtons.appendChild(btn);
+      metricsContainer.appendChild(group);
     });
 
-    renderDetail(levels[0]);
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
 
-    document.querySelectorAll(".accordion-item").forEach(item => {
-      const btn = item.querySelector(".accordion-btn");
-      btn.addEventListener("click", () => {
-        const isActive = item.classList.contains("active");
-        item.parentElement.querySelectorAll(".accordion-item").forEach(i => i.classList.remove("active"));
-        if (!isActive) item.classList.add("active");
+    function saveDb() {
+      localStorage.setItem(storageKey, JSON.stringify(db));
+    }
+
+    function updateTable() {
+      tbody.innerHTML = '';
+
+      if (!db.length) {
+        tbody.innerHTML = `<tr><td class="empty" colspan="10">尚無紀錄</td></tr>`;
+        return;
+      }
+
+      db.forEach((item) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          ${metrics.map((metric) => `<td>${item.scores[metric]}</td>`).join('')}
+          <td class="total">${item.total}</td>
+        `;
+        tbody.appendChild(row);
       });
+    }
+
+    function getRangeSize(range) {
+      if (range === 'month') return 30;
+      if (range === 'year') return 365;
+      return 7;
+    }
+
+    function updateChart(range = activeRange) {
+      activeRange = range;
+      filterButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.range === range);
+      });
+
+      const filteredData = [...db]
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(-getRangeSize(range));
+
+      const ctx = document.getElementById('trendChart');
+      const labels = filteredData.map((item) => item.date);
+      const totals = filteredData.map((item) => item.total);
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: '本靈吉光萬花筒綜合總分（滿分 32 分）',
+            data: totals,
+            borderColor: '#7c3aed',
+            backgroundColor: 'rgba(124, 58, 237, .12)',
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#7c3aed',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            fill: true,
+            tension: .38
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#22212a', font: { weight: 700 } } }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: 'rgba(34, 33, 42, .6)' } },
+            y: {
+              min: 8,
+              max: 32,
+              ticks: { stepSize: 4, color: 'rgba(34, 33, 42, .6)' },
+              grid: { color: 'rgba(124, 58, 237, .08)' }
+            }
+          }
+        }
+      });
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const date = dateInput.value;
+      const log = { date, scores: {}, total: 0 };
+
+      metrics.forEach((metric) => {
+        const value = Number(document.querySelector(`input[name="${metric}"]:checked`).value);
+        log.scores[metric] = value;
+        log.total += value;
+      });
+
+      db = db.filter((item) => item.date !== date);
+      db.push(log);
+      db.sort((a, b) => new Date(b.date) - new Date(a.date));
+      saveDb();
+      updateTable();
+      updateChart(activeRange);
+      showToast('記錄儲存成功');
     });
 
-    const reveals = document.querySelectorAll(".reveal");
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("visible");
-      });
-    }, { threshold: .12 });
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => updateChart(button.dataset.range));
+    });
 
-    reveals.forEach(el => observer.observe(el));
+    updateTable();
+    updateChart();
   </script>
 </body>
 </html>

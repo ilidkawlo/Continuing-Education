@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>啟動進度每日記錄表</title>
+  <title>本靈吉光萬花筒記錄</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     :root {
@@ -384,35 +384,36 @@
 </head>
 <body>
   <nav class="navbar">
-    <div class="logo">我的學習紀錄</div>
+    <div class="logo">本靈吉光萬花筒記錄</div>
     <ul class="nav-links">
       <li><a href="index.html">首頁</a></li>
       <li><a href="daily-progress.html" aria-current="page">每日進度</a></li>
+      <li><a href="continuing_education.html">回訓入口</a></li>
     </ul>
   </nav>
 
   <main class="page">
     <header>
-      <div class="eyebrow">每日啟動狀態</div>
-      <h1>啟動進度每日記錄表</h1>
-      <p class="lead">用八個指標記錄每日狀態，留下清楚的量化軌跡，讓週、月、年變化一眼看見。</p>
+      <div class="eyebrow">本靈吉光萬花筒</div>
+      <h1>本靈吉光萬花筒記錄</h1>
+      <p class="lead">用八個指標記錄每日光感狀態，留下清楚的量化軌跡，讓週、月、年變化一眼看見。</p>
     </header>
 
-    <section class="layout" aria-label="啟動進度記錄工具">
+    <section class="layout" aria-label="本靈吉光萬花筒記錄工具">
       <div class="panel">
-        <h2>今日狀態輸入</h2>
+        <h2>今日萬花筒狀態</h2>
         <form id="logForm">
           <div class="field">
             <label for="logDate">紀錄日期</label>
             <input type="date" id="logDate" required />
           </div>
           <div id="metricsContainer"></div>
-          <button class="submit-btn" type="submit">儲存今日數據</button>
+          <button class="submit-btn" type="submit">儲存今日記錄</button>
         </form>
       </div>
 
       <div class="panel">
-        <h2>量化趨勢分析</h2>
+        <h2>萬花筒趨勢分析</h2>
         <div class="tools" role="group" aria-label="圖表範圍">
           <button class="filter-btn active" type="button" data-range="week">週變化</button>
           <button class="filter-btn" type="button" data-range="month">月變化</button>
@@ -456,7 +457,7 @@
       { score: 3, text: '水上 75%' },
       { score: 4, text: '水上上 100%' }
     ];
-    const storageKey = 'progressLogs';
+    const storageKey = 'kaleidoscopeLogs';
     const dateInput = document.getElementById('logDate');
     const metricsContainer = document.getElementById('metricsContainer');
     const form = document.getElementById('logForm');
@@ -546,7 +547,7 @@
         data: {
           labels,
           datasets: [{
-            label: '每日綜合總分（滿分 32 分）',
+            label: '本靈吉光萬花筒綜合總分（滿分 32 分）',
             data: totals,
             borderColor: '#7c3aed',
             backgroundColor: 'rgba(124, 58, 237, .12)',
@@ -594,7 +595,7 @@
       saveDb();
       updateTable();
       updateChart(activeRange);
-      showToast('數據儲存成功');
+      showToast('記錄儲存成功');
     });
 
     filterButtons.forEach((button) => {
