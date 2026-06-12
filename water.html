@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大愛水｜請法與執行手冊</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&family=Inter:wght@500;700;900&display=swap');
+
+    :root {
+      --bg: #f4f5f2;
+      --paper: #ffffff;
+      --ink: #202225;
+      --muted: #73777f;
+      --line: #d7d9d6;
+      --blue: #2448ff;
+      --blue-soft: #e7ecff;
+      --gray: #8d9699;
+      --black: #1e1f20;
+      --radius: 34px;
+      --frame: 18px;
+      --max: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 84% 10%, rgba(36, 72, 255, 0.13), transparent 22%),
+        linear-gradient(120deg, transparent 0 22%, rgba(255,255,255,.9) 22.2% 22.55%, transparent 22.75%),
+        linear-gradient(150deg, transparent 0 60%, rgba(255,255,255,.75) 60.1% 60.35%, transparent 60.55%),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.8;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .26;
+      background-image:
+        radial-gradient(rgba(0,0,0,.12) .55px, transparent .55px);
+      background-size: 4px 4px;
+      mix-blend-mode: multiply;
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-frame {
+      width: min(calc(100% - 44px), 1480px);
+      margin: 24px auto;
+      border: var(--frame) solid var(--black);
+      border-radius: 42px;
+      background: rgba(255,255,255,.56);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 22px 60px rgba(0,0,0,.08);
+    }
+
+    .topbar {
+      min-height: 98px;
+      padding: 30px clamp(24px, 5vw, 64px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(244,245,242,.72);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand-kicker {
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+
+    .brand {
+      display: grid;
+      gap: 6px;
+    }
+
+    .brand-title {
+      font-size: clamp(28px, 4vw, 54px);
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      line-height: .95;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: clamp(14px, 2vw, 28px);
+      font-family: "Inter", "Noto Sans TC", sans-serif;
+      font-weight: 900;
+      letter-spacing: .045em;
+      font-size: 14px;
+    }
+
+    .nav a {
+      position: relative;
+      padding: 6px 0;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 3px;
+      background: var(--blue);
+      transition: width .22s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .hero {
+      min-height: calc(100vh - 146px);
+      padding: clamp(54px, 7vw, 104px) clamp(24px, 5vw, 78px) clamp(64px, 8vw, 120px);
+      position: relative;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: var(--blue);
+      filter: blur(.1px);
+      opacity: .96;
+      z-index: -1;
+    }
+
+    .hero::before {
+      width: clamp(120px, 22vw, 280px);
+      height: clamp(120px, 22vw, 280px);
+      right: 14%;
+      top: 18%;
+      box-shadow: 0 20px 46px rgba(36,72,255,.22);
+    }
+
+    .hero::after {
+      width: 12px;
+      height: 12px;
+      left: 34%;
+      bottom: 18%;
+      box-shadow:
+        48px 0 0 var(--blue),
+        96px 0 0 var(--blue),
+        144px 0 0 var(--blue),
+        192px 0 0 var(--blue),
+        240px 0 0 var(--blue),
+        288px 0 0 var(--blue);
+    }
+
+    .orb-line {
+      position: absolute;
+      left: -8%;
+      top: 58%;
+      width: 120%;
+      height: 2px;
+      background: rgba(255,255,255,.8);
+      transform: rotate(-14deg);
+      z-index: -2;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: clamp(28px, 5vw, 84px);
+      align-items: end;
+    }
+
+    .hero-copy {
+      max-width: 980px;
+    }
+
+    .eyebrow {
+      font-family: "Inter", "Noto Sans TC", sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(70px, 13vw, 190px);
+      line-height: .88;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+    }
+
+    .hero-subtitle {
+      margin-top: 24px;
+      display: inline;
+      padding: 0 .18em .06em;
+      background: var(--paper);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      font-size: clamp(28px, 5vw, 74px);
+      line-height: 1.25;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+    }
+
+    .hero-side {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 28px;
+      padding-bottom: 16px;
+    }
+
+    .hero-note {
+      font-size: clamp(17px, 1.5vw, 22px);
+      font-weight: 800;
+      line-height: 1.8;
+      max-width: 440px;
+    }
+
+    .scroll-cue {
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      background: rgba(255,255,255,.7);
+    }
+
+    section {
+      padding: clamp(78px, 9vw, 132px) clamp(24px, 5vw, 78px);
+      border-top: 1px solid var(--line);
+      position: relative;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(180px, .32fr) minmax(0, 1fr);
+      gap: clamp(28px, 6vw, 92px);
+      align-items: start;
+      margin-bottom: clamp(42px, 6vw, 86px);
+    }
+
+    .section-label {
+      font-family: "Inter", "Noto Sans TC", sans-serif;
+      font-weight: 900;
+      letter-spacing: .06em;
+      font-size: 18px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 104px);
+      line-height: .95;
+      letter-spacing: -0.065em;
+      font-weight: 900;
+    }
+
+    .lead {
+      font-size: clamp(22px, 3.8vw, 56px);
+      line-height: 1.35;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      max-width: 1020px;
+    }
+
+    .lead .mark {
+      background: var(--paper);
+      padding: 0 .18em .05em;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    .text-block {
+      max-width: 820px;
+      margin-left: auto;
+      font-size: clamp(16px, 1.45vw, 20px);
+      font-weight: 700;
+      color: #2d3033;
+    }
+
+    .text-block p {
+      margin: 0 0 28px;
+    }
+
+    .blue-panel {
+      background: #08aeea;
+      color: var(--black);
+    }
+
+    .blue-panel .section-title,
+    .blue-panel .section-label {
+      color: var(--black);
+    }
+
+    .flow-list {
+      border-top: 1.5px solid rgba(0,0,0,.48);
+      max-width: 1100px;
+      margin-left: auto;
+    }
+
+    .flow-item {
+      display: grid;
+      grid-template-columns: minmax(0, .7fr) 120px;
+      align-items: center;
+      gap: 28px;
+      min-height: 150px;
+      border-bottom: 1.5px solid rgba(0,0,0,.48);
+      transition: background .18s ease, padding-left .18s ease;
+      padding: 28px 0;
+    }
+
+    .flow-item:hover {
+      background: rgba(255,255,255,.23);
+      padding-left: 20px;
+    }
+
+    .flow-kicker {
+      font-size: 15px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .flow-title {
+      font-family: "Inter", "Noto Sans TC", sans-serif;
+      font-size: clamp(42px, 7vw, 96px);
+      line-height: .92;
+      font-weight: 900;
+      letter-spacing: -0.075em;
+    }
+
+    .arrow {
+      justify-self: end;
+      color: var(--paper);
+      font-size: clamp(48px, 7vw, 76px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.22em;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+      max-width: 1080px;
+      margin-left: auto;
+    }
+
+    .card {
+      background: rgba(255,255,255,.78);
+      border-bottom: 4px solid var(--blue);
+      min-height: 250px;
+      padding: clamp(28px, 4vw, 46px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 14px 30px rgba(0,0,0,.04);
+    }
+
+    .card-no {
+      color: var(--blue);
+      font-family: "Inter", sans-serif;
+      font-size: clamp(44px, 6vw, 86px);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -.07em;
+    }
+
+    .card h3 {
+      margin: 18px 0 14px;
+      font-size: clamp(22px, 2.3vw, 34px);
+      line-height: 1.25;
+      letter-spacing: -.03em;
+    }
+
+    .card p {
+      margin: 0;
+      color: #42464a;
+      font-weight: 700;
+    }
+
+    .steps {
+      display: grid;
+      gap: 18px;
+      max-width: 980px;
+      margin-left: auto;
+      counter-reset: step;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: "Inter", sans-serif;
+      font-size: clamp(50px, 7vw, 90px);
+      line-height: .9;
+      font-weight: 500;
+      letter-spacing: -.08em;
+      color: var(--ink);
+    }
+
+    .step h3 {
+      margin: 0 0 10px;
+      font-size: clamp(22px, 2.2vw, 32px);
+      line-height: 1.35;
+      letter-spacing: -.03em;
+    }
+
+    .step p {
+      margin: 0;
+      font-weight: 700;
+      color: #43474b;
+    }
+
+    .faq {
+      display: grid;
+      gap: 16px;
+      max-width: 1080px;
+      margin-left: auto;
+    }
+
+    details {
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 24px 28px;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "＋";
+      color: var(--blue);
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+    }
+
+    details[open] summary::after {
+      content: "－";
+    }
+
+    details .answer {
+      padding: 0 28px 28px;
+      font-weight: 700;
+      color: #41454a;
+      max-width: 860px;
+    }
+
+    .warning {
+      background: var(--black);
+      color: var(--paper);
+    }
+
+    .warning .section-label,
+    .warning .section-title {
+      color: var(--paper);
+    }
+
+    .warning-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      max-width: 1120px;
+      margin-left: auto;
+    }
+
+    .warning-card {
+      border: 1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.06);
+      padding: 32px;
+      border-radius: 24px;
+      min-height: 260px;
+    }
+
+    .warning-card .tag {
+      display: inline-block;
+      background: var(--blue);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 18px;
+    }
+
+    .warning-card h3 {
+      margin: 0 0 14px;
+      font-size: 26px;
+      line-height: 1.3;
+    }
+
+    .warning-card p {
+      margin: 0;
+      color: rgba(255,255,255,.74);
+      font-weight: 700;
+    }
+
+    .footer {
+      padding: 54px clamp(24px, 5vw, 78px);
+      background: var(--paper);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 30px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-logo {
+      font-size: clamp(34px, 5vw, 62px);
+      font-weight: 900;
+      letter-spacing: -.06em;
+      line-height: .95;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+
+    .print-note {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --frame: 10px;
+      }
+
+      .site-frame {
+        width: calc(100% - 20px);
+        margin: 10px auto;
+        border-radius: 28px;
+      }
+
+      .topbar {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .hero-grid,
+      .section-head,
+      .cards,
+      .warning-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-subtitle {
+        white-space: normal;
+      }
+
+      .flow-item {
+        grid-template-columns: 1fr 70px;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .site-frame {
+        width: 100%;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .topbar {
+        position: static;
+      }
+
+      section,
+      .hero {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="site-frame">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="回到首頁">
+        <span class="brand-kicker">請法・守則・執行流程</span>
+        <span class="brand-title">大愛水</span>
+      </a>
+      <nav class="nav" aria-label="主選單">
+        <a href="#about">ABOUT</a>
+        <a href="#flow">FLOW</a>
+        <a href="#rules">RULES</a>
+        <a href="#steps">STEPS</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="top">
+      <span class="orb-line" aria-hidden="true"></span>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Love・Water・Light</div>
+          <h1>大愛水</h1>
+          <div class="hero-subtitle">請法與執行手冊</div>
+        </div>
+        <aside class="hero-side">
+          <p class="hero-note">
+            這是一份把「法理、請法規格、生成流程、保存與飲用方式」整理成清楚閱讀動線的手冊。
+          </p>
+          <a class="scroll-cue" href="#about" aria-label="往下閱讀">↓</a>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="section-head">
+        <div class="section-label">ABOUT</div>
+        <h2 class="section-title">先明白<br>它不是一般的水。</h2>
+      </div>
+
+      <div class="lead">
+        <span class="mark">大愛水不是個別存在的一瓶水，</span><br>
+        <span class="mark">而是光團共愿與法脈體結構形成後，</span><br>
+        <span class="mark">所請下的生命系統。</span>
+      </div>
+
+      <div class="text-block" style="margin-top: 68px;">
+        <p>
+          大愛水的核心不是「這瓶水很神奇」，而是請法者、被護持者與請法團隊之間，是否形成足夠的愛、護持與規格。
+        </p>
+        <p>
+          這份手冊把原始問答與守則重新整理為「先懂法理 → 確認團隊 → 準備流程 → 生成子水 → 保存飲用 → 守則提醒」的閱讀順序。
+        </p>
+      </div>
+    </section>
+
+    <section class="blue-panel" id="flow">
+      <div class="section-head">
+        <div class="section-label">FLOW</div>
+        <h2 class="section-title">從請法<br>到飲用。</h2>
+      </div>
+
+      <div class="flow-list">
+        <div class="flow-item">
+          <div>
+            <div class="flow-kicker">01｜確認規格</div>
+            <div class="flow-title">Team</div>
+          </div>
+          <div class="arrow">»»</div>
+        </div>
+        <div class="flow-item">
+          <div>
+            <div class="flow-kicker">02｜稟告呈師</div>
+            <div class="flow-title">Apply</div>
+          </div>
+          <div class="arrow">»»</div>
+        </div>
+        <div class="flow-item">
+          <div>
+            <div class="flow-kicker">03｜請母水</div>
+            <div class="flow-title">Mother Water</div>
+          </div>
+          <div class="arrow">»»</div>
+        </div>
+        <div class="flow-item">
+          <div>
+            <div class="flow-kicker">04｜生成子水</div>
+            <div class="flow-title">Child Water</div>
+          </div>
+          <div class="arrow">»»</div>
+        </div>
+        <div class="flow-item">
+          <div>
+            <div class="flow-kicker">05｜保存與飲用</div>
+            <div class="flow-title">Use</div>
+          </div>
+          <div class="arrow">»»</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rules">
+      <div class="section-head">
+        <div class="section-label">RULES</div>
+        <h2 class="section-title">法軌不是限制，<br>是讓護持成形的骨架。</h2>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div>
+            <div class="card-no">01</div>
+            <h3>七體光團共愿</h3>
+            <p>請法不是個人行動，而是母團、光團與七體結構共同形成的護持。</p>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <div class="card-no">02</div>
+            <h3>已與接水者連接</h3>
+            <p>對接水者的病、苦、困，需要有直接了解與互信，才能真正以母體身分連線。</p>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <div class="card-no">03</div>
+            <h3>呈師核可後進行</h3>
+            <p>稟告內容需包含接水者狀況、請法團隊、日期、時間與地點，核可後再進行。</p>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <div class="card-no">04</div>
+            <h3>不可人情將就</h3>
+            <p>規格不是爭取來的，而是團隊自己要符合。法軌清楚，效能才會穩定。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="steps">
+      <div class="section-head">
+        <div class="section-label">STEPS</div>
+        <h2 class="section-title">執行時，<br>照著這個順序走。</h2>
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div>
+            <h3>先確認請法團隊</h3>
+            <p>由固定且被核可的請法團隊進行。若夥伴有需要，先稟告，經確認後再請法。</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>請法詞要讓生命被舒服地稱呼</h3>
+            <p>期別、本靈光、姓名、法位或合適稱呼，都要以「這位生命被稱得舒服」為原則。</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>備水要固定容量</h3>
+            <p>水需在固定容器與固定量中操作，不是持續流動的水。</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>生成子水依序做光</h3>
+            <p>站位如請母水時，導師在頭，依第一道光、第二道光、第三道光順時鐘進行。</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>數量要守規格</h3>
+            <p>首次接法團隊第一次生成子水，先以一瓶為主；第二次起至多三瓶。增加數量需稟告。</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>完成後清楚標示</h3>
+            <p>子水生成後，瓶身要貼名字，避免混淆。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="section-head">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">常見問題，<br>先抓住原則。</h2>
+      </div>
+
+      <div class="faq">
+        <details open>
+          <summary>除了被護持者外，其他人可以喝大愛水嗎？</summary>
+          <div class="answer">
+            大愛水是依光團共愿與被護持者需求請下的，不是所有人都可以任意飲用的水。母水與子水皆需依請法對象與規格使用。
+          </div>
+        </details>
+
+        <details>
+          <summary>母水可以再給其他人生成子水嗎？</summary>
+          <div class="answer">
+            母水是針對請法者生命狀況所請，屬於高度客製化護持。若其他人有需求，應重新依規格請法。
+          </div>
+        </details>
+
+        <details>
+          <summary>大愛水需要冰嗎？</summary>
+          <div class="answer">
+            可以冰，也可以不冰。冰後可能產生氣泡、吸力、顏色變化等狀況，不必直接視為壞掉；不冰也可保持沁涼感。
+          </div>
+        </details>
+
+        <details>
+          <summary>可以混熱水喝嗎？</summary>
+          <div class="answer">
+            原則是不摻混、不做其他改變。若覺得太涼，可含在口裡久一點，再慢慢喝下去。
+          </div>
+        </details>
+
+        <details>
+          <summary>每天可以喝多少？</summary>
+          <div class="answer">
+            以順其自然為原則。可以盡量喝，但不要勉強猛灌；身體會知道需要多少。
+          </div>
+        </details>
+
+        <details>
+          <summary>沒喝完的子水可以怎麼處理？</summary>
+          <div class="answer">
+            可用於澆花或植物，仍以感謝與尊重的心對待。
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="warning">
+      <div class="section-head">
+        <div class="section-label">CAUTION</div>
+        <h2 class="section-title">不合法軌案例，<br>請務必避免。</h2>
+      </div>
+
+      <div class="warning-grid">
+        <article class="warning-card">
+          <span class="tag">CASE 01</span>
+          <h3>非請水人飲用子水</h3>
+          <p>子水是請水人的處方，非請水人不應因為「多出來」或「可惜」而飲用。</p>
+        </article>
+
+        <article class="warning-card">
+          <span class="tag">CASE 02</span>
+          <h3>改變子水喝法</h3>
+          <p>不可因習慣喝溫水，就將子水加入熱水。此層級的法需照原訂規則。</p>
+        </article>
+
+        <article class="warning-card">
+          <span class="tag">CASE 03</span>
+          <h3>湊團接法</h3>
+          <p>未依七體真光團規格組成，只是湊團，會影響法軌與傳法時間，需由守護體與總領把關。</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <div class="footer-logo">大愛水</div>
+        <div class="print-note">請法與執行手冊｜適合線上閱讀、列印與內部教學使用</div>
+      </div>
+      <div class="footer-links">
+        <a href="#about">ABOUT</a>
+        <a href="#flow">FLOW</a>
+        <a href="#rules">RULES</a>
+        <a href="#steps">STEPS</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
