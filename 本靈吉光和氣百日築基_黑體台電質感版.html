@@ -151,6 +151,45 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.11;b
 th{background:#f1f5f9;color:#050505;font-weight:900}
 .toast{border-radius:28px;box-shadow:0 28px 80px rgba(15,23,42,.18)}
 .toast h4{color:#050505;font-weight:900;letter-spacing:-.04em}
+
+/* === Compact interactive workspace === */
+.record-toolbar{
+  position:sticky;top:12px;z-index:12;display:grid;grid-template-columns:auto minmax(180px,240px) 1fr auto;
+  gap:12px;align-items:center;margin:0 0 22px;padding:12px 14px;border:1px solid rgba(15,23,42,.1);
+  border-radius:18px;background:rgba(255,255,255,.76);box-shadow:0 18px 50px rgba(15,23,42,.1);backdrop-filter:blur(22px)
+}
+.record-toolbar label{font-size:13px;font-weight:900;color:#050505}
+.record-date-input{width:100%;border:1px solid rgba(15,23,42,.12);border-radius:12px;padding:10px 12px;background:#fff;color:#111827;font-weight:800}
+.record-context{min-width:0;color:#64748b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.record-context strong{color:#0068d9}
+.item-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.record-item{height:100%}
+.history-item .actions{margin-top:8px}
+.dialog-trigger{display:inline-flex;align-items:center;justify-content:center}
+.glass-dialog{
+  width:min(980px,calc(100% - 28px));max-height:min(86vh,820px);margin:auto;padding:0;border:1px solid rgba(255,255,255,.66);
+  border-radius:24px;background:rgba(247,250,253,.8);color:#111827;box-shadow:0 36px 120px rgba(15,23,42,.28);
+  backdrop-filter:blur(30px) saturate(145%);overflow:hidden
+}
+.glass-dialog::backdrop{background:rgba(8,15,28,.34);backdrop-filter:blur(14px)}
+.dialog-shell{display:grid;grid-template-rows:auto minmax(0,1fr) auto;max-height:min(86vh,820px)}
+.dialog-head,.dialog-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;background:rgba(255,255,255,.5)}
+.dialog-head{border-bottom:1px solid rgba(15,23,42,.08)}.dialog-foot{border-top:1px solid rgba(15,23,42,.08);justify-content:flex-end}
+.dialog-head h2{font-size:22px;color:#050505}.dialog-body{padding:20px;overflow:auto}
+.icon-btn{width:42px;height:42px;padding:0;border-radius:50%;font-size:23px;line-height:1}
+.setup-steps{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:18px}
+.compact-panel{padding:18px;border:1px solid rgba(15,23,42,.09);border-radius:18px;background:rgba(255,255,255,.58)}
+.compact-panel ol{padding-left:20px;display:grid;gap:10px;color:#64748b;line-height:1.55}
+.compact-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.full-table{display:none}
+@media(max-width:900px){
+  .record-toolbar{top:0;grid-template-columns:auto 1fr auto;border-radius:0;margin-left:-3%;margin-right:-3%}
+  .record-context{grid-column:1 / -1;grid-row:2}.item-list{grid-template-columns:1fr}.setup-steps{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .record-toolbar{grid-template-columns:1fr auto}.record-toolbar label{grid-column:1 / -1}.record-context{display:none}
+  .record-toolbar .btn{padding:10px 12px}.water-options{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
@@ -179,6 +218,13 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
     <button class="nav-btn" onclick="showView('export')">備份資料</button>
   </nav>
 
+  <div class="record-toolbar">
+    <label for="recordDate">記錄日期</label>
+    <input class="record-date-input" type="date" id="recordDate">
+    <div class="record-context" id="recordContext">正在填寫：<strong>今日</strong></div>
+    <button class="btn" id="toolbarSaveButton" onclick="saveRecord()">儲存此日期</button>
+  </div>
+
   <section class="dashboard">
     <div class="panel">
       <div class="panel-title">
@@ -202,7 +248,7 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
       <div class="message" id="dailyMessage">開始今日記錄，讓水位慢慢上升。</div>
       <div class="actions">
         <button class="btn" onclick="showView('today')">開始今日記錄</button>
-        <button class="btn secondary" onclick="saveRecord()">儲存今日</button>
+        <button class="btn secondary save-record-label" onclick="saveRecord()">儲存此日期</button>
       </div>
     </div>
   </section>
@@ -210,8 +256,8 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
   <section id="todayView">
     <div class="form-area">
       <div class="form-card">
-        <h2>今日任務</h2>
-        <p class="small-note">每天固定：煉和氣後照片一張、100字內心得、三組指標評分。</p>
+        <h2 id="taskTitle">今日任務</h2>
+        <p class="small-note">所選日期固定記錄：煉和氣後照片一張、100字內心得、三組指標評分。</p>
         <div class="daily-grid">
           <label class="upload-box">
             <strong>上傳今日煉和氣後照片</strong>
@@ -229,9 +275,9 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
         </div>
       </div>
       <aside class="form-card check-panel">
-        <h3>今日防呆檢核</h3>
+        <h3>記錄完成檢核</h3>
         <div class="check-list">
-          <div class="check done" id="checkDate"><span class="mark">✓</span><span>日期是今天</span></div>
+          <div class="check done" id="checkDate"><span class="mark">✓</span><span id="checkDateText">記錄日期已選擇</span></div>
           <div class="check" id="checkPhoto"><span class="mark">・</span><span>已上傳煉和氣後照片</span></div>
           <div class="check" id="checkNote"><span class="mark">・</span><span>心得已填寫且 100 字內</span></div>
           <div class="check" id="checkAll"><span class="mark">・</span><span>十七項皆有水位</span></div>
@@ -239,7 +285,7 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
         </div>
         <div class="actions">
           <button class="btn" onclick="showView('metrics')">填寫水位評分</button>
-          <button class="btn secondary" onclick="saveRecord()">儲存今日</button>
+          <button class="btn secondary save-record-label" onclick="saveRecord()">儲存此日期</button>
         </div>
       </aside>
     </div>
@@ -265,7 +311,7 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
         </table>
         <div class="actions">
           <button class="btn" onclick="nextGroup()">下一組</button>
-          <button class="btn secondary" onclick="showFullTable()">完整17項表格</button>
+          <button class="btn secondary dialog-trigger" onclick="showFullTable()">完整17項表格</button>
         </div>
       </aside>
     </div>
@@ -288,7 +334,7 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
       <div class="actions">
         <button class="btn" onclick="exportData()">匯出 JSON 備份</button>
         <button class="btn secondary" onclick="document.getElementById('importFile').click()">匯入 JSON 備份</button>
-        <button class="btn danger" onclick="clearToday()">清除今日資料</button>
+        <button class="btn danger" onclick="requestClearSelected()">清除所選日期</button>
       </div>
       <input type="file" id="importFile" accept="application/json" class="hidden">
       <div class="upload-box" style="margin-top:18px">
@@ -297,31 +343,28 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
         <input class="sync-input" id="sheetUrlInput" type="url" placeholder="https://script.google.com/macros/s/......../exec">
         <div class="actions">
           <button class="btn" onclick="saveSheetUrl()">儲存後台 URL</button>
-          <button class="btn secondary" onclick="syncTodayToSheet()">同步今日</button>
+          <button class="btn secondary" onclick="syncTodayToSheet()">同步所選日期</button>
           <button class="btn secondary" onclick="syncAllToSheet()">同步全部</button>
           <button class="btn secondary" onclick="fetchFromSheet()">從雲端取回</button>
         </div>
         <div class="sync-status" id="syncStatus">尚未設定 Google Sheets 後台。</div>
       </div>
-      <div class="sync-grid">
-        <div class="sync-box">
-          <strong>建立 Google Sheets 後台</strong>
-          <p class="small-note">1. 建立一份 Google Sheets。2. 擴充功能 → Apps Script。3. 貼上右側程式並部署成 Web App。4. 存取權選「任何知道連結的人」。5. 把 Web App URL 貼回上方。</p>
-        </div>
-        <div class="sync-box">
-          <strong>Apps Script 程式碼</strong>
-          <textarea id="appsScriptCode" class="script-code" readonly></textarea>
-          <div class="actions">
-            <button class="btn secondary" onclick="copyAppsScript()">複製程式碼</button>
-          </div>
-        </div>
+      <div class="compact-actions">
+        <button class="btn secondary" onclick="openDialog('backendDialog')">查看 Google Sheets 設定教學</button>
       </div>
     </div>
   </section>
 
-  <section class="full-table">
-    <details id="fullTableDetails">
-      <summary>展開完整十七項記錄表</summary>
+  <section class="full-table" aria-hidden="true"></section>
+</div>
+
+<dialog class="glass-dialog" id="fullTableDialog">
+  <div class="dialog-shell">
+    <div class="dialog-head">
+      <h2>完整十七項記錄表</h2>
+      <button class="btn secondary icon-btn" onclick="closeDialog('fullTableDialog')" aria-label="關閉">×</button>
+    </div>
+    <div class="dialog-body">
       <div class="table-wrap">
         <table>
           <thead><tr><th>水位</th><th>覺知</th><th>病痛消失</th><th>症狀消失</th><th>身靈活</th><th>心開放</th><th>靈覺醒</th><th>速度</th><th>強度</th><th>變化</th><th>溫度</th><th>開心</th><th>境界</th><th>續航</th><th>催功</th><th>各法新法能</th><th>生活專長新功能</th><th>工作職能新功能</th></tr></thead>
@@ -333,9 +376,46 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
           </tbody>
         </table>
       </div>
-    </details>
-  </section>
-</div>
+    </div>
+    <div class="dialog-foot"><button class="btn" onclick="closeDialog('fullTableDialog')">完成</button></div>
+  </div>
+</dialog>
+
+<dialog class="glass-dialog" id="backendDialog">
+  <div class="dialog-shell">
+    <div class="dialog-head">
+      <h2>Google Sheets 後台設定</h2>
+      <button class="btn secondary icon-btn" onclick="closeDialog('backendDialog')" aria-label="關閉">×</button>
+    </div>
+    <div class="dialog-body setup-steps">
+      <div class="compact-panel">
+        <ol>
+          <li>建立一份 Google Sheets。</li>
+          <li>開啟「擴充功能 → Apps Script」。</li>
+          <li>貼上右側程式並部署成 Web App。</li>
+          <li>存取權選擇「任何知道連結的人」。</li>
+          <li>將 Web App URL 貼回備份頁面。</li>
+        </ol>
+      </div>
+      <div class="compact-panel">
+        <textarea id="appsScriptCode" class="script-code" readonly></textarea>
+        <div class="compact-actions"><button class="btn secondary" onclick="copyAppsScript()">複製程式碼</button></div>
+      </div>
+    </div>
+    <div class="dialog-foot"><button class="btn" onclick="closeDialog('backendDialog')">完成</button></div>
+  </div>
+</dialog>
+
+<dialog class="glass-dialog" id="confirmDialog">
+  <div class="dialog-shell">
+    <div class="dialog-head"><h2 id="confirmTitle">確認操作</h2></div>
+    <div class="dialog-body"><p id="confirmText"></p></div>
+    <div class="dialog-foot">
+      <button class="btn secondary" onclick="closeDialog('confirmDialog')">取消</button>
+      <button class="btn danger" id="confirmActionButton">確認清除</button>
+    </div>
+  </div>
+</dialog>
 
 <div class="toast" id="toast"><h4 id="toastTitle">水位上升</h4><p id="toastText">你已經看見自己，這就是啟動。</p></div>
 
@@ -344,6 +424,8 @@ const STORAGE_KEY="foundation100_records_v1";
 const START_KEY="foundation100_start_date";
 const SHEET_URL_KEY="foundation100_sheet_web_app_url";
 const LAST_SYNC_KEY="foundation100_last_sheet_sync";
+const DRAFTS_KEY="foundation100_drafts_v1";
+const RECORD_DATE_KEY="foundation100_selected_record_date";
 const groups=[
  {name:"啟動進度",hint:"對應速度、強度、變化、溫度、開心、境界、續航、催功。",items:["速度","強度","變化","溫度","開心","境界","續航","催功"]},
  {name:"身心靈轉化",hint:"對應覺知、病痛消失、症狀消失、身靈活、心開放、靈覺醒。",items:["覺知","病痛消失","症狀消失","身靈活","心開放","靈覺醒"]},
@@ -469,20 +551,19 @@ let currentGroup=0,saved=false,photoData="";
 const today=new Date(); const todayKey=formatDate(today);
 const allItems=groups.flatMap(g=>g.items);
 let records=loadRecords();
-let state=records[todayKey]?.metrics || {};
+let drafts=loadDrafts();
+let currentRecordKey=localStorage.getItem(RECORD_DATE_KEY)||todayKey;
+let state={};
 
 document.getElementById("todayText").textContent=`${today.getFullYear()} 年 ${String(today.getMonth()+1).padStart(2,"0")} 月 ${String(today.getDate()).padStart(2,"0")} 日`;
 const startDateInput=document.getElementById("startDate");
 startDateInput.value=localStorage.getItem(START_KEY)||todayKey;
 startDateInput.addEventListener("change",()=>{localStorage.setItem(START_KEY,startDateInput.value);renderDashboard();});
+const recordDateInput=document.getElementById("recordDate");
+recordDateInput.value=currentRecordKey;
+recordDateInput.addEventListener("change",()=>loadRecordForDate(recordDateInput.value||todayKey));
 
-if(records[todayKey]){
-  document.getElementById("noteInput").value=records[todayKey].note||"";
-  photoData=records[todayKey].photo||"";
-  saved=true;
-  if(photoData) showPhoto(photoData);
-}
-document.getElementById("noteInput").addEventListener("input",()=>{saved=false;updateNoteCounter();renderAverage();});
+document.getElementById("noteInput").addEventListener("input",()=>{saved=false;persistCurrentDraft();updateNoteCounter();renderAverage();});
 document.getElementById("photoInput").addEventListener("change",handlePhoto);
 document.getElementById("importFile").addEventListener("change",importData);
 document.getElementById("sheetUrlInput").value=localStorage.getItem(SHEET_URL_KEY)||"";
@@ -491,7 +572,44 @@ renderSyncStatus();
 
 function formatDate(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
 function loadRecords(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
+function loadDrafts(){try{return JSON.parse(localStorage.getItem(DRAFTS_KEY)||"{}")}catch(e){return{}}}
 function persistRecords(){localStorage.setItem(STORAGE_KEY,JSON.stringify(records));}
+function persistDrafts(){localStorage.setItem(DRAFTS_KEY,JSON.stringify(drafts));}
+function persistCurrentDraft(){
+  const note=document.getElementById("noteInput").value;
+  const hasContent=note.trim()||photoData||Object.keys(state).length;
+  if(hasContent) drafts[currentRecordKey]={note,photo:photoData,metrics:{...state},updatedAt:new Date().toISOString()};
+  else delete drafts[currentRecordKey];
+  persistDrafts();
+}
+function loadRecordForDate(dateKey){
+  currentRecordKey=dateKey||todayKey;
+  localStorage.setItem(RECORD_DATE_KEY,currentRecordKey);
+  recordDateInput.value=currentRecordKey;
+  const record=records[currentRecordKey];
+  const draft=drafts[currentRecordKey];
+  const source=draft||record||{};
+  state={...(source.metrics||{})};
+  photoData=source.photo||"";
+  saved=!!record&&!draft;
+  document.getElementById("noteInput").value=source.note||"";
+  document.getElementById("photoInput").value="";
+  if(photoData) showPhoto(photoData); else hidePhoto();
+  renderRecordContext();
+  renderAll();
+}
+function renderRecordContext(){
+  const isToday=currentRecordKey===todayKey;
+  const record=records[currentRecordKey];
+  const draft=drafts[currentRecordKey];
+  const dateLabel=isToday?"今日":currentRecordKey;
+  const status=draft?"有未儲存草稿":record?"已有紀錄":"新記錄";
+  document.getElementById("recordContext").innerHTML=`正在填寫：<strong>${dateLabel}</strong>｜${status}`;
+  document.getElementById("taskTitle").textContent=isToday?"今日任務":`${currentRecordKey} 任務`;
+  document.getElementById("checkDateText").textContent=`記錄日期：${dateLabel}`;
+  document.querySelectorAll(".save-record-label").forEach(el=>el.textContent=isToday?"儲存今日":"儲存此日期");
+  document.getElementById("toolbarSaveButton").textContent=isToday?"儲存今日":"儲存此日期";
+}
 function showView(view){
   ["today","metrics","history","export"].forEach(v=>document.getElementById(v+"View").classList.toggle("hidden",v!==view));
   document.querySelectorAll(".nav-btn").forEach(btn=>btn.classList.remove("active"));
@@ -499,7 +617,7 @@ function showView(view){
   if(view==="history") renderHistory();
 }
 function getDayInfo(){
-  const start=new Date(startDateInput.value+"T00:00:00"); const now=new Date(todayKey+"T00:00:00");
+  const start=new Date(startDateInput.value+"T00:00:00"); const now=new Date(currentRecordKey+"T00:00:00");
   const day=Math.max(1,Math.min(100,Math.floor((now-start)/(1000*60*60*24))+1));
   let stage="7–14 天｜起始覺察期";
   if(day>=14&&day<21) stage="14–21 天｜穩定成形期";
@@ -536,7 +654,7 @@ function renderItems(){
   group.items.forEach(item=>{const currentValue=state[item]; const card=document.createElement("div");card.className="record-item"; if(currentValue>=100)card.classList.add("completed-100"); else if(currentValue>=75)card.classList.add("completed-75");
     card.innerHTML=`<div class="item-head"><div class="item-name">${item}</div><div class="item-status">${currentValue?currentValue+"%":"尚未填寫"}</div></div>`;
     const wrap=document.createElement("div");wrap.className="water-options";
-    values.forEach(opt=>{const btn=document.createElement("button");btn.className="water-btn"+(currentValue===opt.value?" active":"");btn.dataset.value=opt.value;btn.innerHTML=`<strong>${opt.score}｜${opt.value}%</strong><span>${opt.label}</span>`;btn.onclick=()=>{state[item]=opt.value;saved=false;renderAll();reward(opt.value,item)};wrap.appendChild(btn)});
+    values.forEach(opt=>{const btn=document.createElement("button");btn.className="water-btn"+(currentValue===opt.value?" active":"");btn.dataset.value=opt.value;btn.innerHTML=`<strong>${opt.score}｜${opt.value}%</strong><span>${opt.label}</span>`;btn.onclick=()=>{state[item]=opt.value;saved=false;persistCurrentDraft();renderAll();reward(opt.value,item)};wrap.appendChild(btn)});
     card.appendChild(wrap); itemList.appendChild(card);
   });
 }
@@ -555,12 +673,14 @@ function setCheck(id,done){const el=document.getElementById(id); if(!el)return; 
 function reward(value,item){if(value===50)showToast("已經看見自己",`${item} 來到 50%，這就是今日啟動。`); if(value===75)showToast("水位上升",`${item} 已到水上，今日能量正在穩定。`); if(value===100)showToast("吉光印記完成",`${item} 到達水上上，收下一枚今日光印。`)}
 function showToast(title,text){const toast=document.getElementById("toast");document.getElementById("toastTitle").textContent=title;document.getElementById("toastText").textContent=text;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2600)}
 function nextGroup(){currentGroup=(currentGroup+1)%groups.length;renderAll();document.getElementById("metricsView").scrollIntoView({behavior:"smooth"})}
-function showFullTable(){document.getElementById("fullTableDetails").open=true;document.getElementById("fullTableDetails").scrollIntoView({behavior:"smooth"})}
+function openDialog(id){const dialog=document.getElementById(id);if(dialog&&!dialog.open)dialog.showModal()}
+function closeDialog(id){const dialog=document.getElementById(id);if(dialog?.open)dialog.close()}
+function showFullTable(){openDialog("fullTableDialog")}
 function updateNoteCounter(){document.getElementById("noteCountText").textContent=document.getElementById("noteInput").value.length}
 function handlePhoto(e){
   const file=e.target.files[0]; if(!file)return;
-  resizePhoto(file).then(src=>{photoData=src;saved=false;showPhoto(photoData);renderAverage();showToast("照片已放入","今日煉和氣後照片已準備儲存。")})
-    .catch(()=>{const reader=new FileReader(); reader.onload=()=>{photoData=reader.result;saved=false;showPhoto(photoData);renderAverage();showToast("照片已放入","今日煉和氣後照片已準備儲存。")}; reader.readAsDataURL(file)});
+  resizePhoto(file).then(src=>{photoData=src;saved=false;showPhoto(photoData);persistCurrentDraft();renderAverage();showToast("照片已放入",`${currentRecordKey} 的照片已準備儲存。`)})
+    .catch(()=>{const reader=new FileReader(); reader.onload=()=>{photoData=reader.result;saved=false;showPhoto(photoData);persistCurrentDraft();renderAverage();showToast("照片已放入",`${currentRecordKey} 的照片已準備儲存。`)}; reader.readAsDataURL(file)});
 }
 function resizePhoto(file){
   return new Promise((resolve,reject)=>{
@@ -576,34 +696,38 @@ function resizePhoto(file){
   });
 }
 function showPhoto(src){document.getElementById("photoPreview").style.display="block";document.getElementById("photoImg").src=src}
+function hidePhoto(){document.getElementById("photoPreview").style.display="none";document.getElementById("photoImg").removeAttribute("src")}
 function startVoice(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){showToast("此瀏覽器不支援語音輸入","可先用手機鍵盤的麥克風輸入。");return}
   const rec=new SR(); rec.lang="zh-TW"; rec.interimResults=false; rec.maxAlternatives=1;
-  rec.onresult=e=>{const text=e.results[0][0].transcript; const area=document.getElementById("noteInput"); area.value=(area.value+" "+text).trim().slice(0,100); saved=false;updateNoteCounter();renderAverage();};
+  rec.onresult=e=>{const text=e.results[0][0].transcript; const area=document.getElementById("noteInput"); area.value=(area.value+" "+text).trim().slice(0,100); saved=false;persistCurrentDraft();updateNoteCounter();renderAverage();};
   rec.start(); showToast("語音輸入啟動","請開始說今日心得，系統會轉成文字。");
 }
 function saveRecord(){
   const note=document.getElementById("noteInput").value.trim(); const missing=allItems.filter(item=>!state[item]);
-  if(!photoData){showToast("還缺今日照片","請先上傳一張煉和氣後照片。");return}
-  if(!note){showToast("還缺今日心得","請輸入 100 字內心得。");return}
+  if(!photoData){showToast("還缺記錄照片","請先上傳一張煉和氣後照片。");return}
+  if(!note){showToast("還缺記錄心得","請輸入 100 字內心得。");return}
   if(missing.length){showToast("還有水位尚未完成",`目前還有 ${missing.length} 項未填，可以慢慢補上。`);return}
-  records[todayKey]={date:todayKey,day:getDayInfo().day,stage:getDayInfo().stage,photo:photoData,note,metrics:{...state},savedAt:new Date().toISOString()};
-  persistRecords(); saved=true; renderAll(); showToast("今日紀錄已儲存","本日吉光已留下紀錄，明天再一起看見變化。");
-  if(getSheetUrl()) syncRecordToSheet(records[todayKey],"今日紀錄已同步到 Google Sheets。",true);
+  records[currentRecordKey]={date:currentRecordKey,day:getDayInfo().day,stage:getDayInfo().stage,photo:photoData,note,metrics:{...state},savedAt:new Date().toISOString()};
+  delete drafts[currentRecordKey];
+  persistRecords();persistDrafts();saved=true;renderRecordContext();renderAll();
+  showToast("紀錄已儲存",`${currentRecordKey} 的內文、照片與水位已保留。`);
+  if(getSheetUrl()) syncRecordToSheet(records[currentRecordKey],`${currentRecordKey} 已同步到 Google Sheets。`,true);
 }
 function renderHistory(){
   const box=document.getElementById("historyList"); const arr=Object.values(records).sort((a,b)=>b.date.localeCompare(a.date));
   if(!arr.length){box.innerHTML='<p class="small-note">尚未有歷史紀錄，完成今日儲存後會出現在這裡。</p>';return}
-  box.innerHTML=arr.map(r=>{const a=Math.round(avg(Object.values(r.metrics||{}))||0);return `<div class="history-item"><div class="history-top"><span>Day ${r.day}｜${r.date}</span><span>${a}%</span></div><div style="display:flex;gap:12px;align-items:center">${r.photo?`<img class="history-img" src="${r.photo}" alt="紀錄照片">`:""}<div><div class="history-note">${r.note||""}</div><div class="small-note">${r.stage||""}</div></div></div></div>`}).join("");
+  box.innerHTML=arr.map(r=>{const a=Math.round(avg(Object.values(r.metrics||{}))||0);return `<div class="history-item"><div class="history-top"><span>Day ${r.day}｜${r.date}</span><span>${a}%</span></div><div style="display:flex;gap:12px;align-items:center">${r.photo?`<img class="history-img" src="${r.photo}" alt="紀錄照片">`:""}<div><div class="history-note">${r.note||""}</div><div class="small-note">${r.stage||""}</div></div></div><div class="actions"><button class="btn secondary" onclick="selectRecordDate('${r.date}')">查看／編輯此日</button></div></div>`}).join("");
 }
+function selectRecordDate(dateKey){loadRecordForDate(dateKey);showView("today");window.scrollTo({top:0,behavior:"smooth"})}
 function exportData(){
   const blob=new Blob([JSON.stringify({startDate:startDateInput.value,records},null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`百日築基備份_${todayKey}.json`;a.click();URL.revokeObjectURL(a.href);
 }
 function importData(e){
   const file=e.target.files[0]; if(!file)return; const reader=new FileReader();
-  reader.onload=()=>{try{const data=JSON.parse(reader.result); if(data.startDate){startDateInput.value=data.startDate;localStorage.setItem(START_KEY,data.startDate)} if(data.records){records=data.records;persistRecords();showToast("匯入完成","備份資料已放回本機。");renderAll();renderHistory()}}catch(err){showToast("匯入失敗","檔案格式不是正確 JSON。")}};
+  reader.onload=()=>{try{const data=JSON.parse(reader.result); if(data.startDate){startDateInput.value=data.startDate;localStorage.setItem(START_KEY,data.startDate)} if(data.records){records=data.records;persistRecords();loadRecordForDate(currentRecordKey);showToast("匯入完成","備份資料已放回本機。");renderHistory()}}catch(err){showToast("匯入失敗","檔案格式不是正確 JSON。")}};
   reader.readAsText(file);
 }
 function getSheetUrl(){return (localStorage.getItem(SHEET_URL_KEY)||"").trim()}
@@ -619,9 +743,9 @@ function renderSyncStatus(text){
 }
 function setSyncStatus(text){renderSyncStatus(text)}
 function syncTodayToSheet(){
-  const record=records[todayKey];
-  if(!record){showToast("今日尚未儲存","請先完成並儲存今日紀錄。");return}
-  syncRecordToSheet(record,"今日紀錄已同步到 Google Sheets。",false);
+  const record=records[currentRecordKey];
+  if(!record){showToast("所選日期尚未儲存",`請先儲存 ${currentRecordKey} 的紀錄。`);return}
+  syncRecordToSheet(record,`${currentRecordKey} 已同步到 Google Sheets。`,false);
 }
 function syncAllToSheet(){
   const url=getSheetUrl(); if(!url){showToast("尚未設定後台","請先貼上 Google Apps Script Web App URL。");return}
@@ -652,7 +776,7 @@ function fetchFromSheet(){
   setSyncStatus("正在從 Google Sheets 取回資料...");
   window[callbackName]=data=>{
     try{
-      if(data&&data.records){records={...records,...data.records}; persistRecords(); if(records[todayKey]){state=records[todayKey].metrics||{};document.getElementById("noteInput").value=records[todayKey].note||"";photoData=records[todayKey].photo||"";if(photoData)showPhoto(photoData)} renderAll(); renderHistory(); markSynced("已從 Google Sheets 取回並合併資料。")}
+      if(data&&data.records){records={...records,...data.records}; persistRecords(); loadRecordForDate(currentRecordKey); renderHistory(); markSynced("已從 Google Sheets 取回並合併資料。")}
       else throw new Error("empty");
     }catch(err){syncFailed()}
     finally{delete window[callbackName]; script.remove()}
@@ -667,10 +791,22 @@ function copyAppsScript(){
   code.select(); code.setSelectionRange(0,99999);
   navigator.clipboard?.writeText(code.value).then(()=>showToast("已複製","Apps Script 程式碼已複製。")).catch(()=>document.execCommand("copy")&&showToast("已複製","Apps Script 程式碼已複製。"));
 }
-function clearToday(){if(!confirm("確定清除今日資料？"))return; delete records[todayKey]; persistRecords(); state={};photoData="";saved=false;document.getElementById("noteInput").value="";document.getElementById("photoPreview").style.display="none";renderAll();showToast("今日已清除","可以重新填寫今日資料。")}
+function requestClearSelected(){
+  document.getElementById("confirmTitle").textContent="清除所選日期";
+  document.getElementById("confirmText").textContent=`確定清除 ${currentRecordKey} 的已儲存紀錄與草稿？這個動作不會影響其他日期。`;
+  document.getElementById("confirmActionButton").onclick=clearSelectedRecord;
+  openDialog("confirmDialog");
+}
+function clearSelectedRecord(){
+  const clearedDate=currentRecordKey;
+  delete records[clearedDate];delete drafts[clearedDate];persistRecords();persistDrafts();
+  closeDialog("confirmDialog");loadRecordForDate(clearedDate);
+  showToast("所選日期已清除",`${clearedDate} 可以重新填寫，其他日期未受影響。`);
+}
 document.getElementById("weatherSelect").addEventListener("change",e=>{const themes={sunny:["#fff8dc","#f5d46b","#f8b778"],rainy:["#e8eef2","#a8bfd1","#9a8faa"],cloudy:["#f8f5f0","#f5d46b","#a8bfd1"],overcast:["#efedf0","#c9b8c9","#d8c3a5"],foggy:["#f4f6f2","#b8c7b1","#d9ddd4"]}; const t=themes[e.target.value]; const root=document.documentElement; root.style.setProperty("--weather-1",t[0]);root.style.setProperty("--weather-2",t[1]);root.style.setProperty("--weather-3",t[2]); showToast("天氣色彩已切換","今日記錄會使用新的天氣光感。")});
 function renderAll(){renderTabs();renderItems();updateNoteCounter();renderAverage();renderDashboard()}
-renderAll();
+document.querySelectorAll(".glass-dialog").forEach(dialog=>dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close()}));
+loadRecordForDate(currentRecordKey);
 </script>
 </body>
 </html>
