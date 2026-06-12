@@ -162,6 +162,8 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
 .record-date-input{width:100%;border:1px solid rgba(15,23,42,.12);border-radius:12px;padding:10px 12px;background:#fff;color:#111827;font-weight:800}
 .record-context{min-width:0;color:#64748b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .record-context strong{color:#0068d9}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.header-actions .btn{padding:9px 13px;min-height:40px}
 .item-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
 .record-item{height:100%}
 .history-item .actions{margin-top:8px}
@@ -185,6 +187,7 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
 @media(max-width:900px){
   .record-toolbar{top:0;grid-template-columns:auto 1fr auto;border-radius:0;margin-left:-3%;margin-right:-3%}
   .record-context{grid-column:1 / -1;grid-row:2}.item-list{grid-template-columns:1fr}.setup-steps{grid-template-columns:1fr}
+  .header-actions{justify-content:flex-start}
 }
 @media(max-width:560px){
   .record-toolbar{grid-template-columns:1fr auto}.record-toolbar label{grid-column:1 / -1}.record-context{display:none}
@@ -208,6 +211,10 @@ th{background:#f1f5f9;color:#050505;font-weight:900}
       <select class="weather-select" id="weatherSelect">
         <option value="sunny">晴天｜暖金色</option><option value="rainy">雨天｜霧藍色</option><option value="cloudy">多雲｜柔黃色</option><option value="overcast">陰天｜淡紫灰</option><option value="foggy">霧天｜霧白綠</option>
       </select>
+      <div class="header-actions">
+        <button class="btn secondary" onclick="goHome()">首頁</button>
+        <button class="btn secondary" onclick="refreshApp()">重新整理</button>
+      </div>
     </div>
   </header>
 
@@ -615,6 +622,16 @@ function showView(view){
   document.querySelectorAll(".nav-btn").forEach(btn=>btn.classList.remove("active"));
   const index={today:0,metrics:1,history:2,export:3}[view]; document.querySelectorAll(".nav-btn")[index].classList.add("active");
   if(view==="history") renderHistory();
+}
+function goHome(){
+  showView("today");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function refreshApp(){
+  persistCurrentDraft();
+  const url=new URL(window.location.href);
+  url.searchParams.set("refresh",Date.now());
+  window.location.replace(url.toString());
 }
 function getDayInfo(){
   const start=new Date(startDateInput.value+"T00:00:00"); const now=new Date(currentRecordKey+"T00:00:00");
