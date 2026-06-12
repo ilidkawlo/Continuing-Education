@@ -193,7 +193,16 @@
       align-items: center;
       overflow: hidden;
       border-bottom: 1px solid var(--line);
-      background: #050812 url("assets/sanctuary-orbit-hero.png") center right / cover no-repeat;
+      background: #050812;
+    }
+    .hero-visual {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      object-fit: cover;
+      object-position: center right;
     }
     .hero::before {
       content: "";
@@ -233,6 +242,23 @@
       background: currentColor;
       box-shadow: 0 0 10px currentColor;
     }
+    .hero-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+    }
+    .hero-home::before {
+      content: "⌂";
+      color: var(--cyan);
+      font-size: 15px;
+    }
+    .hero-home:hover { color: var(--cyan); }
     h1 {
       max-width: 620px;
       margin: 0;
@@ -362,7 +388,7 @@
 
     .composer {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 145px auto;
+      grid-template-columns: minmax(0, 1fr) 128px auto;
       gap: 10px;
       padding: 18px 28px;
       border-bottom: 1px solid var(--line);
@@ -380,7 +406,11 @@
     .field { padding: 0 15px; }
     .field::placeholder { color: #66718a; }
     .field:hover, .select:hover { border-color: rgba(169, 189, 255, 0.25); }
-    .select { padding: 0 34px 0 12px; color: var(--ink-soft); }
+    .select {
+      padding: 0 30px 0 11px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
     .composer .primary-button { min-height: 46px; }
 
     .filters {
@@ -480,8 +510,12 @@
       font: 600 12px/1 "Space Grotesk", sans-serif;
       white-space: nowrap;
     }
-    .complete-button {
-      width: 38px;
+    .mission-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .edit-button, .complete-button {
       height: 38px;
       display: grid;
       place-items: center;
@@ -492,13 +526,32 @@
       cursor: pointer;
       transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
     }
+    .edit-button {
+      width: auto;
+      grid-auto-flow: column;
+      gap: 6px;
+      padding: 0 11px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .complete-button { width: 38px; border-radius: 50%; }
+    .edit-button:hover {
+      color: var(--cyan);
+      border-color: rgba(114, 231, 255, 0.35);
+      background: var(--cyan-soft);
+      transform: scale(1.06);
+    }
     .complete-button:hover {
       color: #06121c;
       border-color: var(--cyan);
       background: var(--cyan);
       transform: scale(1.06);
     }
-    .complete-button svg { width: 16px; height: 16px; }
+    .edit-button svg, .complete-button svg { width: 16px; height: 16px; }
 
     .empty {
       display: none;
@@ -539,6 +592,31 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+    .completed-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0;
+      border: 0;
+      color: var(--ink-soft);
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+    }
+    .completed-chevron {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--cyan);
+      transition: transform 180ms ease;
+    }
+    .completed.collapsed .completed-chevron { transform: rotate(-90deg); }
+    .completed.collapsed .done-list { display: none; }
     .text-button {
       padding: 0;
       border: 0;
@@ -702,6 +780,140 @@
     .domain-name { font-size: 11px; }
     .domain-progress { color: var(--muted); font: 500 10px/1 "Space Grotesk", sans-serif; }
 
+    .journal {
+      margin-bottom: 70px;
+    }
+    .journal-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .journal-summary {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .journal-summary strong { color: var(--ink); }
+    .backup-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 9px;
+    }
+    .compact-button {
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.025);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+    .compact-button:hover {
+      color: var(--cyan);
+      border-color: var(--line-hot);
+      background: var(--cyan-soft);
+    }
+    .journal-note-wrap {
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.012);
+    }
+    .journal-note-wrap label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .journal-note {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--ink);
+      background: rgba(4, 8, 18, 0.58);
+      line-height: 1.7;
+    }
+    .journal-note::placeholder { color: #66718a; }
+    .journal-note-status {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: right;
+    }
+    .journal-list {
+      display: grid;
+      gap: 12px;
+      padding: 22px 28px 28px;
+    }
+    .journal-entry {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr) auto;
+      gap: 20px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.022);
+    }
+    .journal-date {
+      color: var(--cyan);
+      font: 600 14px/1.25 "Space Grotesk", sans-serif;
+    }
+    .journal-date span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font: 500 9px/1 "Noto Sans TC", sans-serif;
+      letter-spacing: 0.1em;
+    }
+    .journal-entry-body { min-width: 0; }
+    .journal-task-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .journal-task {
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: rgba(114, 231, 255, 0.06);
+      font-size: 10px;
+    }
+    .journal-empty { color: var(--muted); font-size: 11px; }
+    .journal-entry-note {
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+    .journal-stats {
+      min-width: 92px;
+      text-align: right;
+    }
+    .journal-stats strong {
+      display: block;
+      color: var(--gold);
+      font: 600 18px/1 "Space Grotesk", sans-serif;
+    }
+    .journal-stats span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+
     .toast {
       position: fixed;
       left: 50%;
@@ -727,6 +939,68 @@
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
     .toast::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
 
+    .edit-dialog {
+      width: min(520px, calc(100% - 28px));
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid rgba(114, 231, 255, 0.25);
+      border-radius: 20px;
+      color: var(--ink);
+      background: rgba(8, 13, 27, 0.96);
+      box-shadow: 0 28px 100px rgba(0, 0, 0, 0.68), inset 0 1px rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(28px);
+    }
+    .edit-dialog::backdrop {
+      background: rgba(2, 5, 12, 0.76);
+      backdrop-filter: blur(8px);
+    }
+    .edit-dialog-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 25px 26px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .edit-dialog h2 { margin-top: 7px; font-size: 24px; }
+    .dialog-close {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .dialog-close:hover { color: var(--ink); border-color: var(--line-hot); }
+    .edit-form {
+      display: grid;
+      gap: 18px;
+      padding: 24px 26px 26px;
+    }
+    .edit-field {
+      display: grid;
+      gap: 8px;
+    }
+    .edit-field label {
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .edit-field .field, .edit-field .select { min-height: 48px; }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
     @keyframes breathe { 50% { opacity: 0.35; transform: scale(0.78); } }
     @keyframes rotate { to { transform: rotate(360deg); } }
 
@@ -743,8 +1017,8 @@
       .hero {
         min-height: 640px;
         align-items: end;
-        background-position: 64% center;
       }
+      .hero-visual { object-position: 64% center; }
       .hero::before {
         background:
           linear-gradient(0deg, #050812 0%, rgba(5, 8, 18, 0.88) 42%, rgba(5, 8, 18, 0.17) 78%),
@@ -760,15 +1034,25 @@
       .readout-value { font-size: 23px; }
       .dashboard { padding-top: 24px; }
       .panel-head { align-items: flex-start; padding: 24px 20px 18px; }
-      .composer { grid-template-columns: 1fr auto; padding: 16px 20px; }
-      .composer .select { grid-column: 1; }
+      .composer { grid-template-columns: minmax(0, 1fr) auto; padding: 16px 20px; }
+      .composer .select { width: 128px; grid-column: 1; justify-self: start; }
       .composer .primary-button { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; }
       .filters { padding-inline: 20px; }
       .mission-list { padding-inline: 12px; }
       .mission { grid-template-columns: 6px minmax(0, 1fr) auto; gap: 10px; padding-right: 10px; }
       .reward { display: none; }
+      .mission-actions { gap: 5px; }
+      .edit-button { height: 36px; padding-inline: 9px; }
+      .complete-button { width: 36px; height: 36px; }
       .completed { padding-inline: 20px; }
       .side-stack { grid-template-columns: 1fr; }
+      .journal-toolbar { align-items: flex-start; flex-direction: column; padding-inline: 20px; }
+      .backup-actions { justify-content: flex-start; }
+      .journal-note-wrap, .journal-list { padding-inline: 20px; }
+      .journal-entry { grid-template-columns: 1fr auto; gap: 14px; }
+      .journal-date { grid-column: 1; }
+      .journal-entry-body { grid-column: 1 / -1; grid-row: 2; }
+      .journal-stats { grid-column: 2; grid-row: 1; }
     }
     @media (max-width: 430px) {
       .brand .eyebrow { display: none; }
@@ -778,9 +1062,11 @@
       .signal { letter-spacing: 0.13em; }
       .mission-readout { grid-template-columns: 1fr 1fr; }
       .readout:nth-child(3) { display: none; }
-      .composer { grid-template-columns: 1fr; }
-      .composer .select, .composer .primary-button { grid-column: 1; grid-row: auto; }
+      .composer { grid-template-columns: minmax(0, 1fr) auto; }
+      .composer .select { width: 118px; grid-column: 1; grid-row: 2; }
+      .composer .primary-button { grid-column: 2; grid-row: 1 / span 2; }
       .panel-count { display: none; }
+      .edit-dialog-head, .edit-form { padding-inline: 20px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
@@ -798,7 +1084,7 @@
         <div class="brand-mark" aria-hidden="true"></div>
         <div>
           <div class="eyebrow">Sanctuary orbital command</div>
-          <div class="brand-name">聖域軌道站 · 旖力 ILID</div>
+          <div class="brand-name">聖域軌道站 · ILID</div>
         </div>
       </div>
       <div class="top-status">
@@ -813,9 +1099,11 @@
 
   <main>
     <section class="hero">
+      <img class="hero-visual" src="assets/sanctuary-orbit-hero.png" alt="" aria-hidden="true">
       <div class="shell">
         <div class="hero-content">
           <div class="signal">Transmission 07 · Online</div>
+          <a class="hero-home" href="index.html">首頁</a>
           <h1>穿越今日<span>抵達更遠之境</span></h1>
           <p class="hero-copy">每一項完成，都在校準你的軌道。聚焦當下最重要的一件事，讓聖域的五個領域重新同步。</p>
           <div class="hero-actions">
@@ -882,7 +1170,10 @@
 
         <div class="completed" id="completed-section" hidden>
           <div class="completed-head">
-            <span>已完成任務</span>
+            <button class="completed-title" type="button" id="toggle-completed" aria-expanded="true" aria-controls="done-list">
+              <span class="completed-chevron" aria-hidden="true">⌄</span>
+              <span>已完成任務（<span id="done-count">0</span>）</span>
+            </button>
             <button class="text-button" type="button" id="reset-today">重設今日紀錄</button>
           </div>
           <div class="done-list" id="done-list"></div>
@@ -895,7 +1186,7 @@
           <div class="profile-top">
             <div class="avatar" aria-hidden="true">IL</div>
             <div>
-              <h2 class="profile-name">旖力 Ilid</h2>
+              <h2 class="profile-name">Ilid</h2>
               <div class="profile-role">靈境大守護者 · 動功負責人</div>
             </div>
           </div>
@@ -939,7 +1230,67 @@
         </section>
       </aside>
     </div>
+
+    <section class="shell panel journal" id="journal-panel">
+      <div class="panel-head">
+        <div>
+          <div class="section-kicker">Mission archive</div>
+          <h2>工作日誌</h2>
+        </div>
+        <div class="panel-count">累積 <strong id="journal-days">0</strong> 天</div>
+      </div>
+      <div class="journal-toolbar">
+        <div class="journal-summary" id="journal-summary">每日完成的任務會自動封存於此。</div>
+        <div class="backup-actions">
+          <button class="compact-button" type="button" id="export-journal">下載備份 JSON</button>
+          <button class="compact-button" type="button" id="import-journal">匯入備份</button>
+          <input type="file" id="import-file" accept="application/json,.json" hidden>
+        </div>
+      </div>
+      <div class="journal-note-wrap">
+        <label for="journal-note">今日工作筆記</label>
+        <textarea class="journal-note" id="journal-note" maxlength="1000" placeholder="記下今日決策、進度、阻礙或明日接續事項..."></textarea>
+        <div class="journal-note-status" id="journal-note-status">自動儲存</div>
+      </div>
+      <div class="journal-list" id="journal-list"></div>
+    </section>
   </main>
+
+  <dialog class="edit-dialog" id="edit-dialog">
+    <div class="edit-dialog-head">
+      <div>
+        <div class="section-kicker">Mission calibration</div>
+        <h2>修改任務</h2>
+      </div>
+      <button class="dialog-close" type="button" id="edit-close" aria-label="關閉修改視窗">×</button>
+    </div>
+    <form class="edit-form" id="edit-form">
+      <input type="hidden" id="edit-id">
+      <div class="edit-field">
+        <label for="edit-name">任務名稱</label>
+        <input class="field" id="edit-name" maxlength="48" autocomplete="off" required>
+      </div>
+      <div class="edit-field">
+        <label for="edit-type">任務分類</label>
+        <select class="select" id="edit-type">
+          <option value="task">支線任務</option>
+          <option value="meeting">召集議會</option>
+          <option value="urgent">緊急訊號</option>
+          <option value="policy">頒布聖令</option>
+          <option value="training">講師培育</option>
+          <option value="community">跨域協作</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label for="edit-note">備註</label>
+        <input class="field" id="edit-note" maxlength="60" autocomplete="off" placeholder="例如：今天 15:00、約 20 分鐘">
+      </div>
+      <div class="dialog-actions">
+        <button class="ghost-button" type="button" id="edit-cancel">取消</button>
+        <button class="primary-button" type="submit">儲存修改</button>
+      </div>
+    </form>
+  </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -972,27 +1323,80 @@
     ];
 
     const STORAGE_KEY = "sanctuary-orbit-v1";
+    const BACKUP_VERSION = 2;
+    const todayKey = getDateKey(new Date());
     let state = loadState();
     let activeFilter = "all";
     let toastTimer;
+    let noteTimer;
+
+    function getDateKey(date) {
+      return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+      ].join("-");
+    }
 
     function loadState() {
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (saved && Array.isArray(saved.missions) && Array.isArray(saved.done)) return saved;
+        if (saved && Array.isArray(saved.missions) && Array.isArray(saved.done)) {
+          return normalizeState(saved);
+        }
       } catch (error) {
         console.warn("Unable to restore saved mission state.", error);
       }
-      return {
+      return normalizeState({
         missions: DEFAULT_MISSIONS.map(mission => ({ ...mission })),
         done: [],
         nextId: 8,
         baseExp: 2480,
-        domainProgress: [0, 0, 0, 0, 0]
+        domainProgress: [0, 0, 0, 0, 0],
+        currentDate: todayKey,
+        journal: {}
+      });
+    }
+
+    function normalizeState(saved) {
+      const normalized = {
+        missions: Array.isArray(saved.missions) ? saved.missions : [],
+        done: Array.isArray(saved.done) ? saved.done : [],
+        nextId: Number(saved.nextId) || 1,
+        baseExp: Number(saved.baseExp) || 2480,
+        domainProgress: Array.isArray(saved.domainProgress) ? saved.domainProgress.slice(0, 5) : [0, 0, 0, 0, 0],
+        currentDate: saved.currentDate || todayKey,
+        journal: saved.journal && typeof saved.journal === "object" ? saved.journal : {}
+      };
+      while (normalized.domainProgress.length < 5) normalized.domainProgress.push(0);
+      syncJournalEntry(normalized, normalized.currentDate);
+      if (normalized.currentDate !== todayKey) {
+        normalized.currentDate = todayKey;
+        normalized.done = [];
+        normalized.domainProgress = [0, 0, 0, 0, 0];
+      }
+      syncJournalEntry(normalized, todayKey);
+      return normalized;
+    }
+
+    function syncJournalEntry(targetState = state, dateKey = todayKey) {
+      const previous = targetState.journal[dateKey] || {};
+      const isCurrentDay = dateKey === targetState.currentDate;
+      const completed = isCurrentDay
+        ? targetState.done.map(mission => ({ ...mission }))
+        : (Array.isArray(previous.completed) ? previous.completed : []);
+      targetState.journal[dateKey] = {
+        date: dateKey,
+        completed,
+        note: typeof previous.note === "string" ? previous.note : "",
+        earnedExp: completed.reduce((sum, mission) => sum + (TYPES[mission.type]?.exp || 0), 0),
+        remainingCount: isCurrentDay ? targetState.missions.length : (Number(previous.remainingCount) || 0),
+        updatedAt: new Date().toISOString()
       };
     }
 
     function saveState() {
+      syncJournalEntry();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
@@ -1029,6 +1433,7 @@
 
       renderDone();
       renderDomains();
+      renderJournal();
       bindMissionButtons();
       saveState();
     }
@@ -1046,11 +1451,20 @@
             </div>
           </div>
           <div class="reward">+${type.exp} EXP</div>
-          <button class="complete-button" type="button" data-complete="${mission.id}" aria-label="完成「${escapeHTML(mission.name)}」">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="m5 12 4 4L19 6"></path>
-            </svg>
-          </button>
+          <div class="mission-actions">
+            <button class="edit-button" type="button" data-edit="${mission.id}" aria-label="修改「${escapeHTML(mission.name)}」">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+              </svg>
+              <span>編輯</span>
+            </button>
+            <button class="complete-button" type="button" data-complete="${mission.id}" aria-label="完成「${escapeHTML(mission.name)}」">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                <path d="m5 12 4 4L19 6"></path>
+              </svg>
+            </button>
+          </div>
         </article>
       `;
     }
@@ -1058,6 +1472,7 @@
     function renderDone() {
       const section = document.getElementById("completed-section");
       section.hidden = state.done.length === 0;
+      document.getElementById("done-count").textContent = state.done.length;
       document.getElementById("done-list").innerHTML = state.done.slice().reverse().map(mission => `
         <div class="done-item">
           <span class="check">✓</span>
@@ -1082,10 +1497,152 @@
       `).join("");
     }
 
+    function renderJournal() {
+      syncJournalEntry();
+      const entries = Object.values(state.journal)
+        .filter(entry => entry && entry.date)
+        .sort((a, b) => b.date.localeCompare(a.date));
+      const completedTotal = entries.reduce((sum, entry) => sum + (entry.completed?.length || 0), 0);
+      const expTotal = entries.reduce((sum, entry) => sum + (Number(entry.earnedExp) || 0), 0);
+      document.getElementById("journal-days").textContent = entries.length;
+      document.getElementById("journal-summary").innerHTML =
+        `已封存 <strong>${completedTotal}</strong> 項工作，累積 <strong>${expTotal.toLocaleString()} EXP</strong>。`;
+      document.getElementById("journal-list").innerHTML = entries.map(journalEntryTemplate).join("");
+
+      const note = document.getElementById("journal-note");
+      if (document.activeElement !== note) {
+        note.value = state.journal[todayKey]?.note || "";
+      }
+    }
+
+    function journalEntryTemplate(entry) {
+      const completed = Array.isArray(entry.completed) ? entry.completed : [];
+      const taskList = completed.length
+        ? completed.map(mission => `<span class="journal-task">${escapeHTML(mission.name)}</span>`).join("")
+        : `<span class="journal-empty">尚無已完成工作</span>`;
+      const note = entry.note
+        ? `<div class="journal-entry-note">${escapeHTML(entry.note)}</div>`
+        : "";
+      return `
+        <article class="journal-entry">
+          <div class="journal-date">
+            ${formatJournalDate(entry.date)}
+            <span>${entry.date === todayKey ? "TODAY / 今日" : "ARCHIVED / 已封存"}</span>
+          </div>
+          <div class="journal-entry-body">
+            <div class="journal-task-list">${taskList}</div>
+            ${note}
+          </div>
+          <div class="journal-stats">
+            <strong>+${Number(entry.earnedExp || 0).toLocaleString()}</strong>
+            <span>${completed.length} 項完成 · ${Number(entry.remainingCount) || 0} 項待續</span>
+          </div>
+        </article>
+      `;
+    }
+
+    function formatJournalDate(dateKey) {
+      const [year, month, day] = dateKey.split("-").map(Number);
+      const date = new Date(year, month - 1, day);
+      const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+      return `${month}月${day}日 · 週${weekdays[date.getDay()]}`;
+    }
+
+    function updateJournalNote() {
+      const status = document.getElementById("journal-note-status");
+      state.journal[todayKey].note = document.getElementById("journal-note").value;
+      status.textContent = "儲存中...";
+      clearTimeout(noteTimer);
+      noteTimer = setTimeout(() => {
+        saveState();
+        renderJournal();
+        status.textContent = "已自動儲存";
+      }, 350);
+    }
+
+    function exportJournal() {
+      saveState();
+      const backup = {
+        format: "sanctuary-orbit-work-journal",
+        version: BACKUP_VERSION,
+        exportedAt: new Date().toISOString(),
+        state
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `聖域工作日誌備份_${todayKey}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+      showToast("工作日誌備份已下載");
+    }
+
+    async function importJournal(file) {
+      if (!file) return;
+      try {
+        const backup = JSON.parse(await file.text());
+        const importedState = backup?.state || backup;
+        if (!importedState || !Array.isArray(importedState.missions) || !Array.isArray(importedState.done)) {
+          throw new Error("Invalid backup structure");
+        }
+        const confirmed = window.confirm("匯入會以備份內容取代目前的任務與工作日誌，確定繼續嗎？");
+        if (!confirmed) return;
+        state = normalizeState(importedState);
+        activeFilter = "all";
+        updateFilterUI();
+        saveState();
+        render();
+        showToast("工作日誌備份已匯入");
+      } catch (error) {
+        console.warn("Unable to import journal backup.", error);
+        showToast("備份檔格式無法辨識");
+      } finally {
+        document.getElementById("import-file").value = "";
+      }
+    }
+
     function bindMissionButtons() {
+      document.querySelectorAll("[data-edit]").forEach(button => {
+        button.addEventListener("click", () => openEditDialog(Number(button.dataset.edit)));
+      });
       document.querySelectorAll("[data-complete]").forEach(button => {
         button.addEventListener("click", () => completeMission(Number(button.dataset.complete)));
       });
+    }
+
+    function openEditDialog(id) {
+      const mission = state.missions.find(item => item.id === id);
+      if (!mission) return;
+      document.getElementById("edit-id").value = mission.id;
+      document.getElementById("edit-name").value = mission.name;
+      document.getElementById("edit-type").value = mission.type;
+      document.getElementById("edit-note").value = mission.note || "";
+      document.getElementById("edit-dialog").showModal();
+      document.getElementById("edit-name").focus();
+      document.getElementById("edit-name").select();
+    }
+
+    function closeEditDialog() {
+      document.getElementById("edit-dialog").close();
+    }
+
+    function updateMission(event) {
+      event.preventDefault();
+      const id = Number(document.getElementById("edit-id").value);
+      const mission = state.missions.find(item => item.id === id);
+      const name = document.getElementById("edit-name").value.trim();
+      if (!mission || !name) {
+        document.getElementById("edit-name").focus();
+        return;
+      }
+      mission.name = name;
+      mission.type = document.getElementById("edit-type").value;
+      mission.note = document.getElementById("edit-note").value.trim() || "尚未設定備註";
+      closeEditDialog();
+      showToast("任務資料已重新校準");
+      render();
     }
 
     function completeMission(id) {
@@ -1096,7 +1653,7 @@
       card.classList.add("done");
       setTimeout(() => {
         state.missions = state.missions.filter(item => item.id !== id);
-        state.done.push(mission);
+        state.done.push({ ...mission, completedAt: new Date().toISOString() });
         state.baseExp += type.exp;
         state.domainProgress[type.domain] = Math.min(1, state.domainProgress[type.domain] + 0.25);
         showToast(`訊號已回應 · +${type.exp} EXP`);
@@ -1141,9 +1698,10 @@
     function resetToday() {
       const confirmed = window.confirm("確定要重設今日的完成紀錄嗎？已完成任務會回到序列。");
       if (!confirmed) return;
+      const earnedToday = state.done.reduce((sum, mission) => sum + (TYPES[mission.type]?.exp || 0), 0);
       state.missions = [...state.done, ...state.missions].sort((a, b) => a.id - b.id);
       state.done = [];
-      state.baseExp = 2480;
+      state.baseExp = Math.max(2480, state.baseExp - earnedToday);
       state.domainProgress = [0, 0, 0, 0, 0];
       showToast("今日航行紀錄已重設");
       render();
@@ -1153,6 +1711,12 @@
       document.querySelectorAll(".filter").forEach(button => {
         button.classList.toggle("active", button.dataset.filter === activeFilter);
       });
+    }
+
+    function toggleCompleted() {
+      const section = document.getElementById("completed-section");
+      const collapsed = section.classList.toggle("collapsed");
+      document.getElementById("toggle-completed").setAttribute("aria-expanded", String(!collapsed));
     }
 
     function showToast(message) {
@@ -1172,7 +1736,22 @@
     }
 
     document.getElementById("mission-form").addEventListener("submit", addMission);
+    document.getElementById("journal-note").addEventListener("input", updateJournalNote);
+    document.getElementById("export-journal").addEventListener("click", exportJournal);
+    document.getElementById("import-journal").addEventListener("click", () => {
+      document.getElementById("import-file").click();
+    });
+    document.getElementById("import-file").addEventListener("change", event => {
+      importJournal(event.target.files[0]);
+    });
+    document.getElementById("edit-form").addEventListener("submit", updateMission);
+    document.getElementById("edit-close").addEventListener("click", closeEditDialog);
+    document.getElementById("edit-cancel").addEventListener("click", closeEditDialog);
+    document.getElementById("edit-dialog").addEventListener("click", event => {
+      if (event.target === event.currentTarget) closeEditDialog();
+    });
     document.getElementById("reset-today").addEventListener("click", resetToday);
+    document.getElementById("toggle-completed").addEventListener("click", toggleCompleted);
     document.getElementById("focus-mission").addEventListener("click", () => {
       document.getElementById("missions-panel").scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(() => document.getElementById("mission-input").focus(), 500);
